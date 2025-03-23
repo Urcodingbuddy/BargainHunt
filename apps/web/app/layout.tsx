@@ -31,7 +31,6 @@ export default function RootLayout({
             [&::-webkit-scrollbar-thumb]:border-[#1a1a1a]
             [&::-webkit-scrollbar-thumb]:hover:bg-primary`}>
         <ScraperProvider>
-         <Branding />
          {children}
         </ScraperProvider>
       </body>
