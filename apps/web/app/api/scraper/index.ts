@@ -18,9 +18,9 @@ async function scrapeAmazon(searchParams: string) {
     const searchUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, '+'))}`;
     const BROWSER_WS = String(process.env.BRIGHT_DATA_BROWSER_WS_01);
 
-    console.log("Connecting to Bright Data Browser...");
+    console.log("Connecting to Scraping Browser...");
     const browser = await puppeteer.connect({ browserWSEndpoint: BROWSER_WS });
-    console.log("Connected to Bright Data Browser...");
+    console.log("Connected to Scraping Browser...");
     const page = await browser.newPage();
     page.setDefaultNavigationTimeout(2 * 60 * 1000);
     await page.goto(searchUrl, { waitUntil: "domcontentloaded" });
@@ -66,9 +66,9 @@ async function scrapeAmazon(searchParams: string) {
 async function scrapeFlipkart(searchParams: string) {
     const searchUrl = `https://www.flipkart.com/search?q=${encodeURIComponent(searchParams)}`;
     const BROWSER_WS = String(process.env.BRIGHT_DATA_BROWSER_WS_02);
-    console.log("Connecting to Bright Data Browser...");
+    console.log("Connecting to Scraping Browser...");
     const browser = await puppeteer.connect({ browserWSEndpoint: BROWSER_WS });
-    console.log("Connected to Bright Data Browser...");
+    console.log("Connected to Scraping Browser...");
     const page = await browser.newPage();
     page.setDefaultNavigationTimeout(2 * 60 * 1000);
     await page.goto(searchUrl, { waitUntil: "domcontentloaded" });

@@ -9,7 +9,7 @@ export async function scrapeAndStoreProduct(searchParams: string) {
             throw new Error("No data received from scrapeProduct");
         }
         // Remove else block to simplify flow
-        // console.log("Data Scraped Successfully",scrapedData);
+        console.log("Data Scraped Successfully",scrapedData);
         return scrapedData; // This will definitely return the data
     } catch (error: any) {
         console.error("Scraping error:", error); // Log the error
