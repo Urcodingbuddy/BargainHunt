@@ -1,0 +1,24 @@
+Scraped Data: {
+  amazon: [
+    {
+      name: 'Samsung Galaxy S24 Ultra 5G AI Smartphone (Titanium Gray, 12GB, 256GB Storage)',
+      rating: '4.1 out of 5 stars',
+      reviews: '436',
+      boughtInPastMonth: '200+ bought in past month',
+      price: '99,389',
+      originalPrice: '₹99,389',
+      discount: 'Only 1 left in stock.',
+      availability: 'In Stock',
+      image: 'https://m.media-amazon.com/images/I/81vxWpPpgNL._AC_UY218_.jpg',
+      link: 'https://www.amazon.in/Samsung-Galaxy-Smartphone-Titanium-Storage/dp/B0CS5XW6TN/ref=sr_1_3?dib=eyJ2IjoiMSJ9.hv6NA5ualu9lei5y5vIe2GRi2BdrHBMlZ_R5vIjglQjeiUxptm3Y8PluyG7zlF9NM0-3hInQV30ScsFShzCILwjEvGLOcK66wMXWWag8Tq64nrDoGy09NPwv84RK_76DWTzxOe2ZOb_AAKXTgwc8uOgZuwsSeLe5_-rWWeQZyq0KiNMKWl-qKVpbakuTiMrRgAgAblKDiDavUpyckw2Is1mjqeCThkWa_nu4oThF63Y.kV7i_LsJGDr4VFdNfu67yL0rlOzY0SZF78g4SpggT6U&dib_tag=se&keywords=Samsung%2BS24%2BUltra&nsdOptOutParam=true&qid=1741033282&sr=8-3'     
+    }
+   ],
+  flipkart: [
+    {
+      name: 'SAMSUNG Galaxy S24 Ultra 5G (Titanium Black, 256 GB)',
+      price: '₹1,02,999',
+      orignalPrice: '₹1,34,999',
+      link: 'https://www.flipkart.com/samsung-galaxy-s24-ultra-5g-titanium-black-256-gb/p/itmfde5d3afe6bda?pid=MOBH3P4UM6ACEC2M&lid=LSTMOBH3P4UM6ACEC2MFDGKEF&marketplace=FLIPKART&q=Samsung+S24+Ultra&store=tyy%2F4io&srno=s_1_2&otracker=search&iid=5e921c21-cd7f-4a01-b92a-01ee9c2e28be.MOBH3P4UM6ACEC2M.SEARCH&ssid=ob1gz50ow00000001741033287963&qH=2a427632a1395e60'
+    }
+   ]
+}
