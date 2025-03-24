@@ -1,14 +1,12 @@
-import type { Metadata } from "next";
-import { Tomorrow } from "next/font/google";
-import "./globals.css";
-import { ScraperProvider } from "./context/ScraperContext";
-import Branding from "./components/Branding";
-import HeroSection from "./components/HeroSection";
-const tomorrow = Tomorrow({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-  variable: "--font-tomorrow",
-});
+import type React from "react"
+import "./globals.css"
+import { Inter } from "next/font/google"
+import type { Metadata } from "next"
+import { Toaster } from "@/components/ui/toaster"
+import { ScraperProvider } from "./ScraperContext"
+
+const inter = Inter({ subsets: ["latin"] })
+
 
 export const metadata: Metadata = {
   title: "BargainHunt | Find the best deals on products",
@@ -17,23 +15,25 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
-      <body className={`${tomorrow.className}
-      [&::-webkit-scrollbar]:w-2
-            [&::-webkit-scrollbar-track]:bg-[#1a11a]
-            [&::-webkit-scrollbar-thumb]:bg-primary/50
-            [&::-webkit-scrollbar-thumb]:rounded-full
-            [&::-webkit-scrollbar-thumb]:border-2
-            [&::-webkit-scrollbar-thumb]:border-[#1a1a1a]
-            [&::-webkit-scrollbar-thumb]:hover:bg-primary`}>
+      <body className={`${inter.className}
+        [&::-webkit-scrollbar]:w-2
+        [&::-webkit-scrollbar-track]:bg-[#1a11a]
+        [&::-webkit-scrollbar-thumb]:bg-primary/50
+        [&::-webkit-scrollbar-thumb]:rounded-full
+        [&::-webkit-scrollbar-thumb]:border-2
+        [&::-webkit-scrollbar-thumb]:border-[#1a1a1a]
+        [&::-webkit-scrollbar-thumb]:hover:bg-primary`
+      }>
         <ScraperProvider>
-         {children}
+        {children}
         </ScraperProvider>
+        <Toaster/>
       </body>
     </html>
-  );
+  )
 }
