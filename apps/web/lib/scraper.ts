@@ -11,8 +11,6 @@ export async function scrapeProduct(searchParams: string) {
     return { amazon: amazonData, flipkart: flipkartData };
 }
 
-// Amazon Scraper
-// @ts-ignore
 async function scrapeAmazon(searchParams: string) {
     const BASE_URL = "https://www.amazon.in/s?k=";
     const searchUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, '+'))}`;

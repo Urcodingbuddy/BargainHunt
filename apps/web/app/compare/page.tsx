@@ -1,361 +1,81 @@
 "use client"
-import React, { useState, useEffect, useCallback } from "react"
-import { useSearchParams } from "next/navigation"
-import Link from "next/link"
+
+import type React from "react"
+
+import { useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
-import { Search, Star, ExternalLink, Mail, Github, Linkedin, Twitter } from "lucide-react"
-import { scrapeAndStoreProduct } from "../api/actions"
-
-// Normalized product type that works with both Amazon and Flipkart data
-type NormalizedProduct = {
-  id: string
-  title: string
-  normalizedTitle?: string
-  image: string
-  rating?: number
-  reviews?: number
-  boughtInPastMonth?: number
-  availability?: string
-  prices: {
-    amazon?: {
-      price: string
-      originalPrice?: string
-      numericValue: number
-      discount?: string
-      link?: string
-    }
-    flipkart?: {
-      price: string
-      originalPrice?: string
-      numericValue: number
-      link?: string
-    }
-  }
-}
-
-// Function to normalize product data from both sources
-const normalizeProductData = (amazonProducts: any[], flipkartProducts: any[]): NormalizedProduct[] => {
-  const normalizedProducts: NormalizedProduct[] = []
-
-  // Process Amazon products
-  amazonProducts.forEach((amazonProduct, index) => {
-    // Create a normalized title for better matching with Flipkart
-    const normalizedTitle = amazonProduct.name?.toLowerCase().replace(/\s+/g, " ").trim().split("|")[0] || "unknown-product"
-    
-    // Handle potential missing or undefined price
-    const priceStr = amazonProduct.price || "0"
-    const numericValue = Number.parseFloat(priceStr.replace(/[₹,]/g, "")) || 0
-    
-    normalizedProducts.push({
-      // Add index to ensure uniqueness even with same name/price
-      id: `amazon-${normalizedTitle.replace(/\s+/g, "-")}-${numericValue}-${index}`,
-      title: amazonProduct.name || "Unknown Product",
-      normalizedTitle,
-      image: amazonProduct.image || "/placeholder.svg",
-      rating: amazonProduct.rating,
-      reviews: amazonProduct.reviews,
-      boughtInPastMonth: amazonProduct.boughtInPastMonth,
-      availability: amazonProduct.availability,
-      prices: {
-        amazon: {
-          price: priceStr,
-          originalPrice: amazonProduct.discount
-            ? (numericValue * (1 + Number.parseFloat(amazonProduct.discount) / 100)).toFixed(2).toString()
-            : undefined,
-          numericValue,
-          discount: amazonProduct.discount,
-          link: amazonProduct.link,
-        },
-      },
-    })
-  })
-
-  // Process Flipkart products and try to match with Amazon products
-  flipkartProducts.forEach((flipkartProduct, index) => {
-    const normalizedFlipkartTitle = flipkartProduct.name?.toLowerCase().replace(/\s+/g, " ").trim().split("|")[0] || "unknown-product"
-    
-    // Handle potential missing or undefined price
-    const priceStr = flipkartProduct.price || "0"
-    const numericValue = Number.parseFloat(priceStr.replace(/[₹,]/g, "")) || 0
-
-    // Try to find a matching Amazon product
-    const matchingProductIndex = normalizedProducts.findIndex(
-      (product) =>
-        product.normalizedTitle &&
-        (product.normalizedTitle.includes(normalizedFlipkartTitle) ||
-          normalizedFlipkartTitle.includes(product.normalizedTitle)),
-    )
-
-    if (matchingProductIndex !== -1 && normalizedProducts[matchingProductIndex]) {
-      // Add Flipkart data to the existing product
-      normalizedProducts[matchingProductIndex].prices.flipkart = {
-        price: priceStr,
-        originalPrice: flipkartProduct.originalPrice,
-        numericValue,
-        link: flipkartProduct.link,
-      }
-    } else {
-      // Create a new product entry for Flipkart
-      normalizedProducts.push({
-        // Add index to ensure uniqueness even with same name/price
-        id: `flipkart-${normalizedFlipkartTitle.replace(/\s+/g, "-")}-${numericValue}-${index}`,
-        title: flipkartProduct.name || "Unknown Product",
-        normalizedTitle: normalizedFlipkartTitle,
-        image: flipkartProduct.image || "/placeholder.svg",
-        prices: {
-          flipkart: {
-            price: priceStr,
-            originalPrice: flipkartProduct.originalPrice,
-            numericValue,
-            link: flipkartProduct.link,
-          },
-        },
-      })
-    }
-  })
-
-  return normalizedProducts
-}
+import { Star, ExternalLink } from "lucide-react"
+import { normalizeProductData, scrapeAndStoreProduct } from "@/lib/api"
+import type { NormalizedProduct } from "@/lib/api"
 
 export default function ComparePage() {
-  const searchParams = useSearchParams()
-  const query = searchParams.get("q") || ""
-  const category = searchParams.get("category") || ""
-
-  const [searchQuery, setSearchQuery] = useState(query)
-  const [products, setProducts] = useState<NormalizedProduct[]>([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const [products, setProducts] = useState(normalizeProductData())
   const [isLoading, setIsLoading] = useState(false)
-  const [hasSearched, setHasSearched] = useState(false)
 
-  // Handle search using the scraping hook
-  const handleSearch = useCallback(async (searchTerm: string) => {
-    if (!searchTerm.trim()) return
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!searchQuery.trim()) return
 
     setIsLoading(true)
 
-    try {
-      // Use the provided scraping hook
-      const response = await scrapeAndStoreProduct(searchTerm)
+    // Simulate search delay
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1500)
 
-      // Check if response is null or has the expected structure
-      if (response) {
-        if (Array.isArray(response)) {
-          // If response is already an array of normalized products
-          setProducts(response)
-        } else if (response.amazon || response.flipkart) {
-          // If response has amazon and flipkart properties, normalize it
-          const normalizedData = normalizeProductData(response.amazon || [], response.flipkart || [])
-          setProducts(normalizedData)
-        } else {
-          // Fallback to empty data if response structure is unexpected
-          setProducts([])
-        }
+    try {
+      // Call the scrapeAndStoreProduct function from api.ts
+      const scrapedProducts = await scrapeAndStoreProduct(searchQuery)
+      
+      // Update products state with scraped and normalized data
+      if (scrapedProducts.length > 0) {
+        setProducts(scrapedProducts)
       } else {
-        // Fallback to empty data if response is null
+        // Optional: Handle case where no products are found
         setProducts([])
       }
     } catch (error) {
-      console.error("Error fetching products:", error)
-      // Fallback to empty data in case of error
-      setProducts([])
+      console.error("Error searching for products:", error)
+      // Optional: Add error handling (e.g., show error message to user)
     } finally {
       setIsLoading(false)
-      setHasSearched(true)
     }
-  }, [])
-
-  // Process search results when the component mounts - only once
-  useEffect(() => {
-    if (query && !hasSearched) {
-      handleSearch(query)
-    }
-  }, [query, handleSearch, hasSearched])
-
-  // Set page title based on search query or category
-  let pageTitle = "Compare Prices"
-  if (query) {
-    pageTitle = `Results for "${query}"`
-  } else if (category) {
-    pageTitle = `${category.charAt(0).toUpperCase() + category.slice(1)}`
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <header className="container mx-auto py-6">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold tracking-tighter">
-            Bargain<span className="text-purple-500">Hunt</span>
-          </Link>
-          <nav className="hidden md:flex items-center space-x-6 text-sm">
-            <Link href="/" className="text-gray-400 hover:text-white transition-colors">
-              Home
-            </Link>
-            <Link href="/compare" className="text-white transition-colors border-b-2 border-purple-500 pb-1">
-              Compare Prices
-            </Link>
-            <Link href="/deals/" className="text-gray-400 hover:text-white transition-colors">
-              Today's Deals
-            </Link>
-            <Link href="/guides/" className="text-gray-400 hover:text-white transition-colors">
-              Buying Guides
-            </Link>
-          </nav>
-          <Button
-            variant="outline"
-            className="border-purple-500 bg-transparent text-purple-500 hover:bg-purple-950 hover:text-white rounded-md"
-            onClick={() => (window.location.href = "/search?open=true")}
-          >
-            <Search className="h-4 w-4 mr-2" />
-            Search
+    <div className="container mx-auto px-4 py-12">
+      <h1 className="text-3xl font-bold mb-8">Compare Prices</h1>
+
+      <form onSubmit={handleSearch} className="mb-8 max-w-xl">
+        <div className="flex gap-2">
+          <Input
+            type="text"
+            placeholder="Search for products to compare..."
+            className="bg-[#111827] border-gray-700 focus-visible:ring-purple-500 rounded-md"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Button type="submit" className="bg-purple-600 hover:bg-purple-700 text-white rounded-md" disabled={isLoading}>
+            {isLoading ? "Searching..." : "Search"}
           </Button>
         </div>
-      </header>
+      </form>
 
-      <main className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold mb-8">{query ? `Results for "${query}"` : pageTitle}</h1>
-
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            handleSearch(searchQuery)
-          }}
-          className="mb-8 max-w-xl"
-        >
-          <div className="flex gap-2">
-            <Input
-              type="text"
-              placeholder="Search for products to compare..."
-              className="bg-[#111827] border-gray-700 focus-visible:ring-purple-500 rounded-md"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <Button type="submit" className="bg-purple-600 hover:bg-purple-700 rounded-md" disabled={isLoading}>
-              {isLoading ? "Searching..." : "Search"}
-            </Button>
-          </div>
-        </form>
-
-        {isLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-6">
-            {products.length > 0 ? (
-              products.map((product) => <ProductComparisonCard key={product.id} product={product} />)
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-gray-400 text-lg">No products found matching your search criteria.</p>
-              </div>
-            )}
-          </div>
-        )}
-      </main>
-
-      <footer className="border-t border-gray-800 py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="space-y-4">
-              <Link href="/" className="text-xl font-bold tracking-tighter">
-                Bargain<span className="text-purple-500">Hunt</span>
-              </Link>
-              <p className="text-gray-400 text-sm">
-                Your trusted companion for finding the best deals across Amazon and Flipkart.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium mb-4">Categories</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Electronics
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Home & Kitchen
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Fashion
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Books & Media
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Beauty & Personal Care
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-medium mb-4">Resources</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Buying Guides
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Deal Alerts
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Price History
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Coupon Codes
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Shopping Tips
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-medium mb-4">Contact Developer</h3>
-              <ul className="space-y-4 text-sm text-gray-400">
-                <li className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  <a href="mailto:anshpethe110@gmail.com" className="hover:text-white">
-                    anshpethe110@gmail.com
-                  </a>
-                </li>
-                <li>
-                  <div className="flex space-x-4">
-                    <a href="#" className="text-gray-400 hover:text-white">
-                      <Github className="h-5 w-5" />
-                    </a>
-                    <a href="#" className="text-gray-400 hover:text-white">
-                      <Linkedin className="h-5 w-5" />
-                    </a>
-                    <a href="#" className="text-gray-400 hover:text-white">
-                      <Twitter className="h-5 w-5" />
-                    </a>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-12 pt-6 text-sm text-gray-400">
-            <p>© {new Date().getFullYear()} BargainHunt. All rights reserved.</p>
-          </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
         </div>
-      </footer>
+      ) : (
+        <div className="grid grid-cols-1 gap-6">
+          {products.map((product) => (
+            <ProductComparisonCard key={product.id} product={product} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -413,7 +133,7 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
 
                 {product.boughtInPastMonth && (
                   <div className="text-sm text-gray-400 mb-2">
-                    <span className="text-white">{product.boughtInPastMonth}</span> bought in past month
+                    <span className="text-white">{product.boughtInPastMonth}</span>
                   </div>
                 )}
               </div>
@@ -421,12 +141,12 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
               {/* Price Comparison - Right Side */}
               <div className="md:w-1/2 grid grid-cols-2 gap-4">
                 {/* Amazon Price */}
-                {product.prices.amazon && (
+                {product.prices.amazon ? (
                   <div className="relative">
                     <div className="bg-[#1F2937] p-4 rounded-lg">
                       <h4 className="text-lg font-bold mb-2">Amazon</h4>
                       {product.prices.amazon.originalPrice && (
-                        <div className="text-sm text-gray-400 line-through">₹{product.prices.amazon.originalPrice}</div>
+                        <div className="text-sm text-gray-400 line-through">{product.prices.amazon.originalPrice}</div>
                       )}
                       <div className={`text-2xl font-bold ${bestPrice === "amazon" ? "text-green-500" : "text-white"}`}>
                         {product.prices.amazon.price}
@@ -451,10 +171,14 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
                       </a>
                     </Button>
                   </div>
+                ) : (
+                  <div className="bg-[#1F2937] p-4 rounded-lg flex items-center justify-center">
+                    <p className="text-gray-400">Not available on Amazon</p>
+                  </div>
                 )}
 
                 {/* Flipkart Price */}
-                {product.prices.flipkart && (
+                {product.prices.flipkart ? (
                   <div className="relative">
                     <div className="bg-[#1F2937] p-4 rounded-lg">
                       <h4 className="text-lg font-bold mb-2">Flipkart</h4>
@@ -485,11 +209,10 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
                       </a>
                     </Button>
                   </div>
-                )}
-
-                {/* If neither Amazon nor Flipkart price is available */}
-                {!product.prices.amazon && !product.prices.flipkart && (
-                  <div className="col-span-2 text-center py-4 text-gray-400">No price information available</div>
+                ) : (
+                  <div className="bg-[#1F2937] p-4 rounded-lg flex items-center justify-center">
+                    <p className="text-gray-400">Not available on Flipkart</p>
+                  </div>
                 )}
               </div>
             </div>
@@ -499,3 +222,4 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
     </Card>
   )
 }
+

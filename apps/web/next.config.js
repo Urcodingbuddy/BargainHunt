@@ -1,12 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverActions: true,
-  },
-  images: {
-    domains: ['images.unsplash.com','m.media-amazon.com','rukminim2.flixcart.com'],
-    
-  }
+    reactStrictMode: true,
+    transpilePackages: ["ui"],
+    images: {
+      remotePatterns: [
+        {
+            protocol: "https",
+            hostname: "images.unsplash.com",
+        },
+        {
+            protocol: "https",
+            hostname: "rukminim2.flixcart.com",
+        },
+        {
+          protocol: "https",
+          hostname: "m.media-amazon.com",
+        }
+    ]
+    },
 };
 
 export default nextConfig;

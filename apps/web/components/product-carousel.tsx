@@ -3,133 +3,106 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
-const carouselImages = [
+const images = [
   {
-    src: "./macbookAir.jpg",
-    alt: "Macbook Air",
+    src: "./macbook-air.jpg",
+    alt: "MacBook Air",
+    title: "MacBook Air M2",
+    description: "The new MacBook Air with M2 chip - Lightweight, powerful, and efficient.",
+  },
+  {
+    src: "./TCL-tv.png",
+    alt: "TCL Android TV",
+    title: "TCL Android TV",
+    description: "Smart TV with stunning 4K resolution and built-in streaming apps.",
+  },
+  {
+    src: "./iphone-16.jpg",
+    alt: "iPhone 16 Pro",
+    title: "iPhone 16 Pro",
+    description: "Built for Apple Intelligence - The most powerful iPhone yet.",
+  },
+  {
+    src: "./boat-earbuds.png",
+    alt: "boAt Earbuds",
+    title: "boAt Airdopes",
+    description: "Wireless earbuds with Dolby Audio for immersive sound experience.",
   },
   {
     src: "./hp-victus-laptop.png",
-    alt: "HP Victus Laptop",
+    alt: "HP Victus Gaming Laptop",
+    title: "HP Victus Gaming Laptop",
+    description: "Powerful gaming laptop with high-performance graphics and cooling.",
   },
-  {
-    src: "./tcl-tv.png",
-    alt: "TCL TV",
-  },
-  {
-    src: "./iphone16pro.jpg",
-    alt: "iPhone 16 Pro",
-  },
-  {
-    src: "./boatearBuds.png",
-    alt: "Boat Ear Buds",
-  }
 ]
 
 export default function ProductCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % carouselImages.length)
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
   }
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + carouselImages.length) % carouselImages.length)
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length)
   }
 
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index)
-  }
-
-  // Auto-play functionality
   useEffect(() => {
-    let interval: NodeJS.Timeout
+    const interval = setInterval(() => {
+      nextSlide()
+    }, 5000)
 
-    if (isAutoPlaying) {
-      interval = setInterval(() => {
-        nextSlide()
-      }, 1500) // Change slide every 3 seconds
-    }
-
-    return () => {
-      if (interval) clearInterval(interval)
-    }
-  }, [currentIndex, isAutoPlaying])
-
-  // Pause auto-play when user interacts with carousel
-  const handleInteraction = () => {
-    setIsAutoPlaying(false)
-    // Resume auto-play after 10 seconds of inactivity
-    setTimeout(() => setIsAutoPlaying(true), 10000)
-  }
+    return () => clearInterval(interval)
+  }, [])
 
   return (
-    <div
-      className="relative w-full h-full"
-      onMouseEnter={() => setIsAutoPlaying(false)}
-      onMouseLeave={() => setIsAutoPlaying(true)}
-    >
-      {/* Main image */}
+    <div className="relative w-full h-full">
+      {/* Carousel Images */}
       <div className="relative w-full h-full overflow-hidden">
-        {carouselImages.map((image, index) => (
+        {images.map((image, index) => (
           <div
             key={index}
-            className={`absolute w-full h-full transition-opacity duration-500 ${
-              index === currentIndex ? "opacity-100" : "opacity-0"
+            className={`absolute inset-0 transition-opacity duration-500 ${
+              index === currentIndex ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
           >
             <img
               src={image.src || "/placeholder.svg"}
               alt={image.alt}
-              
               className="object-cover"
-              
             />
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+              <h3 className="text-xl font-bold">{image.title}</h3>
+              <p className="text-sm text-gray-300">{image.description}</p>
+            </div>
           </div>
         ))}
-        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
       </div>
 
-      {/* Navigation arrows */}
-      <Button
-        variant="outline"
-        size="icon"
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 border-gray-700 hover:bg-black/70 rounded-full h-10 w-10"
-        onClick={() => {
-          prevSlide()
-          handleInteraction()
-        }}
+      {/* Navigation Buttons */}
+      <button
+        onClick={prevSlide}
+        className="absolute cursor-pointer left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-gradient-to-r hover:from-gray-700 hover:to-black hover:border-neutral-800 text-white p-2 rounded-full transition-all duration-300 ease-in-out transform hover:scale-110"
         aria-label="Previous slide"
       >
-        <ChevronLeft className="h-6 w-6" />
-      </Button>
-
-      <Button
-        variant="outline"
-        size="icon"
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 border-gray-700 hover:bg-black/70 rounded-full h-10 w-10"
-        onClick={() => {
-          nextSlide()
-          handleInteraction()
-        }}
+        <ChevronLeft className="h-5 w-5" />
+      </button>
+      <button
+        onClick={nextSlide}
+        className="absolute cursor-pointer right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-gradient-to-r hover:from-black hover:to-gray-700 text-white p-2 rounded-full transition-all duration-300 ease-in-out transform hover:scale-110"
         aria-label="Next slide"
       >
-        <ChevronRight className="h-6 w-6" />
-      </Button>
+        <ChevronRight className="h-5 w-5" />
+      </button>
 
       {/* Indicators */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {carouselImages.map((_, index) => (
+      <div className="absolute bottom-16 left-0 right-0 flex justify-center gap-2">
+        {images.map((_, index) => (
           <button
             key={index}
-            className={`w-2 h-2 rounded-full transition-all ${index === currentIndex ? "bg-white w-4" : "bg-white/50"}`}
-            onClick={() => {
-              goToSlide(index)
-              handleInteraction()
-            }}
+            onClick={() => setCurrentIndex(index)}
+            className={`w-2 h-2 rounded-full transition-colors ${index === currentIndex ? "bg-white" : "bg-white/50"}`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}
