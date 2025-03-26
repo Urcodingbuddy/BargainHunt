@@ -294,7 +294,8 @@ const blogPosts = {
 
 export default function BlogPost({ params }: { params: { slug: string } }) {
   const { toast } = useToast()
-  const post = blogPosts[params.slug]
+  type BlogPostKeys = keyof typeof blogPosts;
+  const post = blogPosts[params.slug as BlogPostKeys];
 
   useEffect(() => {
     if (!post) {
