@@ -16,6 +16,7 @@
     "@repo/ui": "*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.6.2",
     "lucide-react": "^0.484.0",
     "next": "^15.2.1",
     "react": "^19.0.0",
