@@ -11,7 +11,25 @@ const inter = Funnel_Display({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "BargainHunt - Compare Prices",
   description: "Find the best deals across Amazon and Flipkart",
+
+  openGraph: {
+    title: 'BargainHunt - Compare Prices',
+    description: 'Find the best deals across Amazon and Flipkart',
+    url: 'https://bargainhunt.vercel.app',
+    images: [
+      {
+        url: './thumbnail-preview.png', // Add your OG image
+        width: 1200,
+        height: 630,
+        alt: 'A preview of my Next.js app',
+      },
+    ],
+  },
+  icons: {
+    icon: '/favicon.ico', // Favicon
+  },
 }
+
 
 export default function RootLayout({
   children,
