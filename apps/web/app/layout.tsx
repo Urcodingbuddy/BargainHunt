@@ -7,6 +7,8 @@ import { Footer } from "@/components/layout/footer"
 import { Toaster } from "@/components/ui/toaster"
 import { Suspense } from 'react'
 import Head from "next/head"
+import { ShineBorder } from "@/components/ui/shine-border"
+
 const inter = Funnel_Display({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
@@ -60,7 +62,11 @@ export default function RootLayout({
       }>
         <div className="min-h-screen flex flex-col">
           <Header />
-          <main className="flex-1 mx-2 sm:mx-8 md:mx-12 lg:mx-14"><Suspense>{children}</Suspense></main>
+          <ShineBorder
+            className="relative"
+          >
+            <main className="flex-1 mx-2 sm:mx-8 md:mx-12 lg:mx-14 z-200"><Suspense>{children}</Suspense></main>
+          </ShineBorder>
           <Footer />
           <Toaster />
         </div>
