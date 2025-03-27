@@ -40,7 +40,7 @@ export function Header() {
   }, [pathname]);
 
   return (
-    <header className="border-b border-gray-800 h-16 flex items-center justify-center overflow-x-hidden">
+    <header className="border-b border-gray-800 bg-gradient-to-b from-black via-black/100 to-transparent h-16 flex items-center justify-center overflow-x-hidden">
       <div className="@container w-full px-4 mx-2 sm:mx-8 md:mx-12 lg:mx-14 overflow-hidden">
         <div className="flex items-center justify-between h-full">
 
@@ -118,7 +118,7 @@ export function Header() {
       animate={{ height: "220px", opacity: 1 }}
       exit={{ height: 0, opacity: 0 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="absolute flex justify-end border-x border-b right-0 py-3 mx-2 sm:mx-8 md:mx-12 lg:mx-14 top-16 w-40 bg-transparent backdrop-blur-3xl rounded-b-lg shadow-lg overflow-hidden will-change-[height, opacity] z-20"
+      className="absolute z-200 flex justify-end border-x border-b right-0 py-3 mx-2 sm:mx-8 md:mx-12 lg:mx-14 top-16 w-40 bg-transparent backdrop-blur-3xl rounded-b-lg shadow-lg overflow-hidden will-change-[height, opacity] z-20"
     >
 
               <nav className="flex flex-col justify-evenly px-6 items-end w-full h-full space-y-4">
