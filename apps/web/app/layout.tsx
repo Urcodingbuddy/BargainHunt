@@ -5,7 +5,7 @@ import "./globals.css"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { Toaster } from "@/components/ui/toaster"
-
+import { Suspense } from 'react'
 const inter = Funnel_Display({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default function RootLayout({
       }>
         <div className="min-h-screen flex flex-col">
           <Header />
-          <main className="flex-1 mx-15">{children}</main>
+          <main className="flex-1 mx-15"><Suspense>{children}</Suspense></main>
           <Footer />
           <Toaster />
         </div>
