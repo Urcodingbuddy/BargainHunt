@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Github, Linkedin, Twitter } from "lucide-react"
+import { Github, Linkedin, Twitter, MailIcon } from "lucide-react"
 
 export function Footer() {
   return (
@@ -7,7 +7,9 @@ export function Footer() {
       <div className="@container mx-15 px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">BargainHunt</h3>
+            <Link href="/" className="text-xl font-bold">
+              Bargain<span className="text-purple-500">Hunt</span>
+            </Link>
             <p className="text-sm text-gray-400">
               Compare prices across Amazon and Flipkart to find the best deals on your favorite products.
             </p>
@@ -57,23 +59,24 @@ export function Footer() {
               </li>
             </ul>
           </div>
-          <div className="space-y-1">
-            <h4 className="font-medium">Contact Developer</h4>
+          <div className="text-gray-400 space-y-4">
+            <h4 className="font-medium text-white">Contact Developer</h4>
             <p>
-              <Link href="mailto:anshpethe110@gmail.com" className="hover:text-white">
-                anshpethe110@gmail.com
+              <Link href="mailto:anshpethe110@gmail.com" className="hover:text-purple-600 flex items-center space-x-2">
+                <MailIcon className="h-5 w-5" />
+                <span>anshpethe110@gmail.com</span>
               </Link>
             </p>
-            <div className="flex space-x-4 text-gray-400">
-              <Link href="https://github.com/Urcodingbuddy" className="hover:text-white">
+            <div className="flex space-x-6 text-gray-400">
+              <Link href="https://github.com/Urcodingbuddy" className="hover:text-purple-600">
                 <Github className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>
               </Link>
-              <Link href="https://x.com/PetheAnsh" className="hover:text-white">
+              <Link href="https://x.com/PetheAnsh" className="hover:text-purple-600">
                 <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
               </Link>
-              <Link href="https://www.linkedin.com/in/petheansh/" className="hover:text-white">
+              <Link href="https://www.linkedin.com/in/petheansh/" className="hover:text-purple-600">
                 <Linkedin className="h-5 w-5" />
                 <span className="sr-only">LinkedIn</span>
               </Link>
