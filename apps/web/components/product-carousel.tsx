@@ -12,10 +12,10 @@ const images = [
     description: "The new MacBook Air with M2 chip - Lightweight, powerful, and efficient.",
   },
   {
-    src: "./TCL-tv.png",
-    alt: "TCL Android TV",
-    title: "TCL Android TV",
-    description: "Smart TV with stunning 4K resolution and built-in streaming apps.",
+    src: "./Razor-kitty.jpeg",
+    alt: "Razer Kitty Gaming headset",
+    title: "Razer Kraken Kitty V2",
+    description: "Gaming headset with RGB lighting and THX Spatial Audio.",
   },
   {
     src: "./iphone-16.jpg",
@@ -57,9 +57,9 @@ export default function ProductCarousel() {
   }, [])
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full ">
       {/* Carousel Images */}
-      <div className="relative w-full h-full overflow-hidden">
+      <div className="relative w-full h-full ">
         {images.map((image, index) => (
           <div
             key={index}
@@ -70,9 +70,9 @@ export default function ProductCarousel() {
             <img
               src={image.src || "/placeholder.svg"}
               alt={image.alt}
-              className="object-cover"
+              className="w-full h-full object-cover"
             />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/60  to-transparent p-4">
               <h3 className="text-xl font-bold">{image.title}</h3>
               <p className="text-sm text-gray-300">{image.description}</p>
             </div>
