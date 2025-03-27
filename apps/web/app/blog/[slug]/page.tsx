@@ -4,7 +4,7 @@ import { ArrowLeft, BrainCircuit, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import BlogPostClient from "./client"
 
-// This is a static mapping of blog posts
+
 const blogPosts = {
   "browser-extensions-save-money": {
     title: "10 Browser Extensions That Help You Save Money While Shopping Online",
@@ -290,11 +290,8 @@ const blogPosts = {
 }
 
 // Define proper types for the params
-type Params = {
-  slug: string
-}
+type Params = Promise<{ slug: string }>
 
-// This is a server component
 export default async function BlogPost({ params }: { params: Params }) {
   const {slug} = await params
   const post = blogPosts[slug as keyof typeof blogPosts]
