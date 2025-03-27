@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from 'framer-motion';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,6 +13,8 @@ export function Header() {
   const [activeOffset, setActiveOffset] = useState(0);
   const navRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+
+  
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -37,9 +40,10 @@ export function Header() {
   }, [pathname]);
 
   return (
-    <header className="border-b border-gray-800 h-16 flex items-center justify-center">
-      <div className="@container w-full px-4 mx-2 sm:mx-8 md:mx-12 lg:mx-14">
+    <header className="border-b border-gray-800 h-16 flex items-center justify-center overflow-x-hidden">
+      <div className="@container w-full px-4 mx-2 sm:mx-8 md:mx-12 lg:mx-14 overflow-hidden">
         <div className="flex items-center justify-between h-full">
+
           <Link href="/" className="text-xl font-bold">
             Bargain<span className="text-purple-500">Hunt</span>
           </Link>
@@ -107,50 +111,59 @@ export function Header() {
         </div>
 
         {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden absolute flex justify-end border w-40 right-0 mx-2 sm:mx-8 md:mx-12 lg:mx-14 top-16 h-[220px] bg-transparent backdrop-blur-xl rounded-lg shadow-lg z-10"> 
-            <nav className="flex flex-col justify-evenly px-6 items-end w-full h-full space-y-4">
-              <Link
-                href="/"
-                className={`text-sm ${isActive("/") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
-                onClick={closeMenu}
-              >
-                Home
-              </Link>
-              <Link
-                href="/compare"
-                className={`text-sm ${isActive("/compare") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
-                onClick={closeMenu}
-              >
-                Compare
-              </Link>
-              <Link
-                href="/guides"
-                className={`text-sm ${isActive("/guides") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
-                onClick={closeMenu}
-              >
-                Guides
-              </Link>
-              <Link
-                href="/blog"
-                className={` text-sm ${isActive("/blog") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
-                onClick={closeMenu}
-              >
-                Blog
-              </Link>
-              <Link href="/search">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="cursor-pointer bg-purple-600 text-white hover:border-white hover:text-gray-200 border border-transparent flex items-center gap-2"
-              >
-                <Search className="h-5 w-5" />
-                <span>Search</span>
-              </Button>
-            </Link>
-            </nav>
-          </div>
-        )}
+        <AnimatePresence>
+  {isMenuOpen && (
+    <motion.nav
+      initial={{ height: 0, opacity: 0 }}
+      animate={{ height: "220px", opacity: 1 }}
+      exit={{ height: 0, opacity: 0 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className="absolute flex justify-end border-x border-b right-0 py-3 mx-2 sm:mx-8 md:mx-12 lg:mx-14 top-16 w-40 bg-transparent backdrop-blur-3xl rounded-b-lg shadow-lg overflow-hidden will-change-[height, opacity] z-20"
+    >
+
+              <nav className="flex flex-col justify-evenly px-6 items-end w-full h-full space-y-4">
+                <Link
+                  href="/"
+                  className={`text-sm font-semibold ${isActive("/") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
+                  onClick={closeMenu}
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/compare"
+                  className={`text-sm font-semibold ${isActive("/compare") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
+                  onClick={closeMenu}
+                >
+                  Compare
+                </Link>
+                <Link
+                  href="/guides"
+                  className={`text-sm font-semibold ${isActive("/guides") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
+                  onClick={closeMenu}
+                >
+                  Guides
+                </Link>
+                <Link
+                  href="/blog"
+                  className={` text-sm font-semibold ${isActive("/blog") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
+                  onClick={closeMenu}
+                >
+                  Blog
+                </Link>
+                <Link href="/search">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="cursor-pointer bg-purple-600 text-white hover:border-white hover:text-gray-200 border border-transparent flex items-center gap-2"
+                  >
+                    <Search className="h-5 w-5" />
+                    <span>Search</span>
+                  </Button>
+                </Link>
+              </nav>
+            </motion.nav>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   );
