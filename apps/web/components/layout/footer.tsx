@@ -4,7 +4,7 @@ import { Github, Linkedin, Twitter, MailIcon } from "lucide-react"
 export function Footer() {
   return (
     <footer className="border-t border-gray-800 py-8">
-      <div className="@container mx-5 sm:mx-8 md:mx-12 lg:mx-14 px-4">
+      <div className="@container mx-2 sm:mx-8 md:mx-12 lg:mx-14 px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
 
           <div className="space-y-4">
