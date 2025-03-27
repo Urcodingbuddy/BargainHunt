@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { Toaster } from "@/components/ui/toaster"
 import { Suspense } from 'react'
+import Head from "next/head"
 const inter = Funnel_Display({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
@@ -38,6 +39,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <Head>
+        <meta property="og:title" content="BargainHunt" />
+        <meta property="og:type" content="E-commerce Compare" />
+
+        <meta property="og:url" content="https://bargainhunt.vercel.app" />
+
+        <meta property="og:image" content="./thumbnail-preview.png" />
+
+        <meta property="og:description" content="Find the best deals across Amazon and Flipkart" />
+      </Head>
       <body className={`${inter.className}
         [&::-webkit-scrollbar]:w-2
         [&::-webkit-scrollbar-track]:bg-[#1a11a]
