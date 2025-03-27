@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { BrainCircuit, Clock, Cpu, Eye } from "lucide-react"
 import ProductCarousel from "@/components/product-carousel"
+import { BackgroundBeams } from "@/components/ui/backgroundbeams"
 
 export default function Home() {
   const [email, setEmail] = useState("")
@@ -38,7 +39,7 @@ export default function Home() {
 
   return (
     <div className="@container mx-auto px-4 py-12">
-      <section className="mb-20">
+      <section className="mb-20 z-100">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h1 className="text-4xl md:text-6xl font-bold leading-tight">
@@ -67,7 +68,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mb-20">
+      <section className="mb-20 z-100">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold">Featured Guides</h2>
           <Link href="/guides" className="text-purple-500 hover:text-purple-400 text-sm flex items-center gap-2">
@@ -106,7 +107,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mb-20">
+      <section className="mb-20 z-100">
         <h2 className="text-2xl font-bold mb-8">Recent Articles</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           <ArticleCard
@@ -136,7 +137,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={newsletterRef} id="newsletter" className="bg-gray-900 rounded-lg p-8 mb-20">
+      <section ref={newsletterRef} id="newsletter" className="bg-gray-900 rounded-lg p-8 mb-20 z-100">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="space-y-4">
             <h2 className="text-2xl font-bold">Never Miss a Deal</h2>
@@ -164,11 +165,12 @@ export default function Home() {
           </form>
         </div>
       </section>
+      <BackgroundBeams />
     </div>
   )
 }
 
-function FeaturedCard({ title, description, image, date, category, icon, slug = "" }:any) {
+function FeaturedCard({ title, description, image, date, category, icon, slug = "" }: any) {
   return (
     <Card className="bg-gray-900 border-gray-800 overflow-hidden hover:border-purple-500/50 transition-colors rounded-lg">
       <div className="relative h-48">
@@ -197,7 +199,7 @@ function FeaturedCard({ title, description, image, date, category, icon, slug = 
   )
 }
 
-function ArticleCard({ title, description, category, date, slug = "", image }:any) {
+function ArticleCard({ title, description, category, date, slug = "", image }: any) {
   return (
     <Link href={`/blog/${slug}`} className="group">
       <div className="space-y-3">
