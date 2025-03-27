@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { BrainCircuit, Clock, Cpu, Eye } from "lucide-react"
 import ProductCarousel from "@/components/product-carousel"
-import { BackgroundBeams } from "@/components/ui/backgroundbeams"
 
 export default function Home() {
   const [email, setEmail] = useState("")
@@ -165,7 +164,6 @@ export default function Home() {
           </form>
         </div>
       </section>
-      <BackgroundBeams />
     </div>
   )
 }
