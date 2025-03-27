@@ -41,6 +41,7 @@ export default function SearchPage() {
 
   return (
     <div className="container mx-auto px-4 py-12">
+      
       {/* Overlay when search is open */}
       {isSearchOpen && <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40" onClick={closeSearch}></div>}
 
