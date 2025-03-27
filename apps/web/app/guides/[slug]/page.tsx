@@ -281,9 +281,7 @@ const guidePosts = {
 }
 
 // Define proper types for the params
-type Params = {
-  slug: string
-}
+type Params = Promise<{ slug: string }>
 
 // This is a server component
 export default async function GuidePage({ params }: { params: Params }) {
