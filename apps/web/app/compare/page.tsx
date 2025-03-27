@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,42 +10,43 @@ import { Card } from "@/components/ui/card"
 import { Star, ExternalLink } from "lucide-react"
 import { normalizeProductData, scrapeAndStoreProduct } from "@/lib/api"
 import type { NormalizedProduct } from "@/lib/api"
+import { useSearchParams } from "next/navigation"
 
 export default function ComparePage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [products, setProducts] = useState(normalizeProductData())
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)  
+  const searchParams = useSearchParams()
+  
+
+  useEffect(() => {
+    const query = searchParams.get("q");
+    if (query) {
+      setSearchQuery(query);
+      fetchProducts(query); // Automatically fetch products when searchParams change
+    }
+  }, [searchParams]);
+
+  const fetchProducts = async (query: string) => {
+    setIsLoading(true);
+    try {
+      const scrapedProducts = await scrapeAndStoreProduct(query);
+      setProducts(scrapedProducts.length > 0 ? scrapedProducts : []);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      setProducts([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!searchQuery.trim()) return
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
 
-    setIsLoading(true)
-
-    // Simulate search delay
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 1500)
-
-    try {
-      // Call the scrapeAndStoreProduct function from api.ts
-      const scrapedProducts = await scrapeAndStoreProduct(searchQuery)
-      
-      // Update products state with scraped and normalized data
-      if (scrapedProducts.length > 0) {
-        setProducts(scrapedProducts)
-      } else {
-        // Optional: Handle case where no products are found
-        setProducts([])
-      }
-    } catch (error) {
-      console.error("Error searching for products:", error)
-      // Optional: Add error handling (e.g., show error message to user)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
+    fetchProducts(searchQuery);
+  };
+  
   return (
     <div className="container mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold mb-8">Compare Prices</h1>
