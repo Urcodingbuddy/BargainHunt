@@ -88,11 +88,11 @@ export function Header() {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Link href="/search">
+            <Link href="/search" >
               <Button
                 variant="ghost"
                 size="sm"
-                className="bg-purple-600 text-white hover:border-white hover:text-gray-200 border border-transparent flex items-center gap-2"
+                className="cursor-pointer bg-purple-600 text-white hover:border-white hover:text-gray-200 border border-transparent flex items-center gap-2"
               >
                 <Search className="h-5 w-5" />
                 <span>Search</span>
