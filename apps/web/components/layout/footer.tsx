@@ -4,8 +4,9 @@ import { Github, Linkedin, Twitter, MailIcon } from "lucide-react"
 export function Footer() {
   return (
     <footer className="border-t border-gray-800 py-8">
-      <div className="@container mx-15 px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="@container mx-5 sm:mx-8 md:mx-12 lg:mx-14 px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+
           <div className="space-y-4">
             <Link href="/" className="text-xl font-bold">
               Bargain<span className="text-purple-500">Hunt</span>
@@ -14,6 +15,7 @@ export function Footer() {
               Compare prices across Amazon and Flipkart to find the best deals on your favorite products.
             </p>
           </div>
+
           <div>
             <h4 className="font-medium mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm text-gray-400">
@@ -39,6 +41,7 @@ export function Footer() {
               </li>
             </ul>
           </div>
+
           <div>
             <h4 className="font-medium mb-4">Resources</h4>
             <ul className="space-y-2 text-sm text-gray-400">
@@ -59,7 +62,8 @@ export function Footer() {
               </li>
             </ul>
           </div>
-          <div className="text-gray-400 space-y-4">
+
+          <div className="text-gray-400 space-y-4 flex flex-col flex-wrap">
             <h4 className="font-medium text-white">Contact Developer</h4>
             <p>
               <Link href="mailto:anshpethe110@gmail.com" className="hover:text-purple-600 flex items-center space-x-2">
@@ -82,6 +86,7 @@ export function Footer() {
               </Link>
             </div>
           </div>
+
         </div>
       </div>
       <div className="mt-6 pt-6 border-t border-gray-800 text-center text-sm text-gray-500">

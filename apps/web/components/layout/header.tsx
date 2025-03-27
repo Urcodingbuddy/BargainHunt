@@ -38,7 +38,7 @@ export function Header() {
 
   return (
     <header className="border-b border-gray-800 h-16 flex items-center">
-      <div className="@container w-full px-4 mx-15">
+      <div className="@container w-full px-4 mx-5 sm:mx-8 md:mx-12 lg:mx-14">
         <div className="flex items-center justify-between h-full">
           <Link href="/" className="text-xl font-bold">
             Bargain<span className="text-purple-500">Hunt</span>

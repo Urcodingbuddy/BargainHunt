@@ -61,7 +61,7 @@ export default function Home() {
               </Button>
             </div>
           </div>
-          <div className="relative h-[400px] rounded-xl overflow-hidden border border-gray-800">
+          <div className="relative w-full h-56 sm:h-64 md:h-72 lg:h-80 rounded-xl overflow-hidden border border-gray-800">
             <ProductCarousel />
           </div>
         </div>
