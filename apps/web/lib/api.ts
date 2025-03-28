@@ -1,5 +1,6 @@
+import { v4 as uuidv4 } from 'uuid';
 import { normalizeTitle, calculateSimilarity } from "./utils"
-
+let counter = 1;
 // Types for Amazon and Flipkart products
 export type AmazonProduct = {
   name: string
@@ -75,7 +76,7 @@ export function normalizeProductData(
     const numericPrice = priceStr ? Number.parseFloat(priceStr) : 0
 
     normalizedProducts.push({
-      id: `amazon-${normalizedTitle.replace(/\s+/g, "-")}`,
+      id: `amazon-${normalizedTitle.replace(/\s+/g, "-")}-${counter++}`,
       title: amazonProduct.name,
       normalizedTitle,
       image: amazonProduct.image,
@@ -138,7 +139,7 @@ export function normalizeProductData(
     } else {
       // Create a new product entry for Flipkart
       normalizedProducts.push({
-        id: `flipkart-${normalizedFlipkartTitle.replace(/\s+/g, "-")}`,
+        id: `flipkart-${normalizedFlipkartTitle.replace(/\s+/g, "-")}-${counter++}`,
         title: flipkartProduct.name,
         normalizedTitle: normalizedFlipkartTitle,
         image: flipkartProduct.image,
@@ -156,61 +157,6 @@ export function normalizeProductData(
 
   return normalizedProducts
 }
-
-// Sample data for initial render
-export const sampleProducts: NormalizedProduct[] = [
-  {
-    id: "laptop-gaming-asus",
-    title:
-      "ASUS TUF Gaming A15 Ryzen 7 Octa Core 4800H - (16 GB/512 GB SSD/Windows 10/4 GB Graphics/NVIDIA GeForce GTX 1650)",
-    normalizedTitle:
-      "asus tuf gaming a15 ryzen 7 octa core 4800h 16 gb 512 gb ssd windows 10 4 gb graphics nvidia geforce gtx 1650",
-    image:
-      "https://rukminim2.flixcart.com/image/312/312/kp2y2kw0/computer/y/0/c/na-thin-and-light-laptop-asus-original-imag3ebnzawky4kn.jpeg",
-    rating: 4.2,
-    reviews: 1245,
-    prices: {
-      amazon: {
-        price: "₹58,990",
-        originalPrice: "₹70,990",
-        numericValue: 58990,
-        discount: "17%",
-        link: "#",
-      },
-      flipkart: {
-        price: "₹57,990",
-        originalPrice: "₹69,990",
-        numericValue: 57990,
-        link: "#",
-      },
-    },
-  },
-  {
-    id: "smartphone-samsung-galaxy",
-    title: "Samsung Galaxy S24 Ultra 5G AI Smartphone (Titanium Gray, 12GB, 256GB Storage)",
-    normalizedTitle: "samsung galaxy s24 ultra 5g ai smartphone titanium gray 12gb 256gb storage",
-    image: "https://m.media-amazon.com/images/I/81vxWpPpgNL._AC_UY218_.jpg",
-    rating: 4.3,
-    reviews: 451,
-    prices: {
-      amazon: {
-        price: "₹99,899",
-        originalPrice: "₹1,19,999",
-        numericValue: 99899,
-        discount: "17%",
-        link: "#",
-      },
-      flipkart: {
-        price: "₹1,19,999",
-        originalPrice: "₹1,34,999",
-        numericValue: 119999,
-        link: "#",
-      },
-    },
-  },
-]
-
-
 
 // Function to scrape and store product data
 export async function scrapeAndStoreProduct(productName: string) {
