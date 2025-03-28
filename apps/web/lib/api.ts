@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { normalizeTitle, calculateSimilarity } from "./utils"
 let counter = 1;
 // Types for Amazon and Flipkart products
