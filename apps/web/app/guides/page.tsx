@@ -4,7 +4,7 @@ import Link from "next/link"
 export default function GuidesPage() {
   const guides = [
     {
-      title: "How to Find the Best Deals on Electronics",
+      title: "How to Find the Best Deals on Electronics items ?",
       description:
         "Learn expert strategies for comparing prices, timing your purchases, and using price tracking tools to save big on smartphones, laptops, and other gadgets.",
       category: "Shopping Tips",
@@ -22,7 +22,7 @@ export default function GuidesPage() {
       image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=600&h=400&auto=format&fit=crop",
     },
     {
-      title: "Seasonal Sales Guide: When to Buy What",
+      title: "Ultimate Seasonal Sales Guide: When to Buy What ?",
       description:
         "Discover the best times of year to purchase different product categories for maximum discounts, from electronics and appliances to clothing and furniture.",
       category: "Shopping Calendar",

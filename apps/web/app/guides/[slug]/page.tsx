@@ -7,7 +7,7 @@ import GuidePostClient from "./client"
 // This is a static mapping of guide posts
 const guidePosts = {
   "find-best-electronics-deals": {
-    title: "How to Find the Best Deals on Electronics",
+    title: "How to Find the Best Deals on Electronics items ?",
     date: "May 15, 2023",
     author: "Sarah Johnson",
     category: "Shopping Tips",
@@ -69,7 +69,7 @@ const guidePosts = {
         slug: "amazon-vs-flipkart-price-comparison",
       },
       {
-        title: "Seasonal Sales Guide: When to Buy What",
+        title: "Ultimate Seasonal Sales Guide: When to Buy What ?",
         category: "Shopping Calendar",
         image: "https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=600&h=400&auto=format&fit=crop",
         slug: "seasonal-sales-guide",
@@ -158,7 +158,7 @@ const guidePosts = {
     `,
     relatedPosts: [
       {
-        title: "How to Find the Best Deals on Electronics",
+        title: "How to Find the Best Deals on Electronics items ?",
         category: "Shopping Tips",
         image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=600&h=400&auto=format&fit=crop",
         slug: "find-best-electronics-deals",
@@ -172,7 +172,7 @@ const guidePosts = {
     ],
   },
   "seasonal-sales-guide": {
-    title: "Seasonal Sales Guide: When to Buy What",
+    title: "Ultimate Seasonal Sales Guide: When to Buy What ?",
     date: "June 28, 2023",
     author: "Priya Patel",
     category: "Shopping Calendar",
@@ -265,7 +265,7 @@ const guidePosts = {
     `,
     relatedPosts: [
       {
-        title: "How to Find the Best Deals on Electronics",
+        title: "How to Find the Best Deals on Electronics items ?",
         category: "Shopping Tips",
         image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=600&h=400&auto=format&fit=crop",
         slug: "find-best-electronics-deals",

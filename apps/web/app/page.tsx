@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { BrainCircuit, Clock, Cpu, Eye } from "lucide-react"
 import ProductCarousel from "@/components/product-carousel"
+import { BorderBeam } from "@/components/ui/border-beam"
 
 export default function Home() {
   const [email, setEmail] = useState("")
@@ -61,8 +62,9 @@ export default function Home() {
               </Button>
             </div>
           </div>
-          <div className="relative w-full h-56 sm:h-64 md:h-72 lg:h-96 rounded-xl overflow-hidden border border-gray-800">
+          <div className="relative w-full h-56 sm:h-64 md:h-72 lg:h-96 rounded-xl overflow-hidden border-2">
             <ProductCarousel />
+            <BorderBeam/>
           </div>
         </div>
       </section>
@@ -77,7 +79,7 @@ export default function Home() {
 
         <div className="grid md:grid-cols-3 gap-6">
           <FeaturedCard
-            title="How to Find the Best Deals on Electronics"
+            title="How to Find the Best Deals on Electronics items ?"
             description="Learn expert strategies for comparing prices, timing your purchases, and using price tracking tools to save big on smartphones, laptops, and other gadgets."
             image="https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=600&h=400&auto=format&fit=crop"
             date="May 15, 2023"
@@ -95,7 +97,7 @@ export default function Home() {
             slug="amazon-vs-flipkart-price-comparison"
           />
           <FeaturedCard
-            title="Seasonal Sales Guide: When to Buy What"
+            title="Ultimate Seasonal Sales Guide: When to Buy What ?"
             description="Discover the best times of year to purchase different product categories for maximum discounts, from electronics and appliances to clothing and furniture."
             image="https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=600&h=400&auto=format&fit=crop"
             date="June 28, 2023"
@@ -170,9 +172,9 @@ export default function Home() {
 
 function FeaturedCard({ title, description, image, date, category, icon, slug = "" }: any) {
   return (
-    <Card className="bg-gray-900 border-gray-800 overflow-hidden hover:border-purple-500/50 transition-colors rounded-lg">
-      <div className="relative h-48">
-        <Image src={image || "/placeholder.svg"} alt={title} fill className="object-cover" />
+    <Card className="backdrop-blur-3xl bg-gradient-to-tl from-purple-900/35 via-black/30 to-transparent border-gray-800 overflow-hidden hover:border-purple-500/50 transition-colors rounded-lg">
+      <div className="relative h-48 overflow-hidden group">
+        <Image src={image || "/placeholder.svg"} alt={title} fill className="transition-transform duration-500 ease-in-out group-hover:scale-110 object-cover" />
       </div>
       <CardHeader>
         <div className="flex items-center gap-2 text-sm text-purple-500 mb-2">
@@ -189,7 +191,7 @@ function FeaturedCard({ title, description, image, date, category, icon, slug = 
           <Clock className="h-4 w-4" />
           <span>{date}</span>
         </div>
-        <Link href={`/guides/${slug}`} className="text-purple-500 hover:text-purple-400">
+        <Link href={`/guides/${slug}`} className="text-purple-500 hover:text-white">
           Read more →
         </Link>
       </CardFooter>
@@ -201,7 +203,7 @@ function ArticleCard({ title, description, category, date, slug = "", image }: a
   return (
     <Link href={`/blog/${slug}`} className="group">
       <div className="space-y-3">
-        <div className="relative h-48 rounded-lg overflow-hidden border border-gray-800 group-hover:border-purple-500/50 transition-colors">
+        <div className="relative h-48 rounded-lg overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-colors">
           <Image src={image || "/placeholder.svg"} alt={`${title} thumbnail`} fill className="object-cover" />
         </div>
         <div>
