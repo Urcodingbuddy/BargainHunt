@@ -40,8 +40,8 @@ export default function Home() {
 
   return (
     <div className="@container mx-auto px-4 py-12">
+      <Meteors number={20} />
       <section className="relative mb-20 z-100">
-      <Meteors number={40} />
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h1 className="text-4xl md:text-6xl font-bold leading-tight">
