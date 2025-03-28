@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { BrainCircuit, Clock, Cpu, Eye } from "lucide-react"
 import ProductCarousel from "@/components/product-carousel"
 import { BorderBeam } from "@/components/ui/border-beam"
+import { Meteors } from "@/components/ui/meteors"
 
 export default function Home() {
   const [email, setEmail] = useState("")
@@ -39,7 +40,8 @@ export default function Home() {
 
   return (
     <div className="@container mx-auto px-4 py-12">
-      <section className="mb-20 z-100">
+      <section className="relative mb-20 z-100">
+      <Meteors number={40} />
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h1 className="text-4xl md:text-6xl font-bold leading-tight">

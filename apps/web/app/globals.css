@@ -121,3 +121,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes meteor {
+  0% {
+    transform: rotate(var(--angle)) translateX(0);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--angle)) translateX(-500px);
+    opacity: 0;
+  }
+}
+
+/* Create the 'animate-meteor' utility class */
+.animate-meteor {
+  animation: meteor 5s linear infinite;
+  /* animation-direction: reverse; Set the angle to a negative value to reverse direction */
+}
