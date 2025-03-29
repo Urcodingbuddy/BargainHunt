@@ -1,9 +1,8 @@
 import puppeteer from 'puppeteer';
-export async function scrapeProduct(searchParams:string) {
 
+export async function scrapeProduct(searchParams: string) {
     if (!searchParams) return;
     console.log("Scraping Amazon and Flipkart for:", searchParams);
-    // Run both scrapers simultaneously
     const [amazonData, flipkartData] = await Promise.all([
         scrapeAmazon(searchParams),
         scrapeFlipkart(searchParams)
@@ -11,8 +10,7 @@ export async function scrapeProduct(searchParams:string) {
     return { amazon: amazonData, flipkart: flipkartData };
 }
 
-async function scrapeAmazon(searchParams:string) {
-
+async function scrapeAmazon(searchParams: string) {
 
     let browser: any;
     try {
@@ -21,7 +19,6 @@ async function scrapeAmazon(searchParams:string) {
                 headless: true,
                 args: ["--no-sandbox", "--disable-setuid-sandbox"]
             });
-
         const page = await browser.newPage();
         const BASE_URL = "https://www.amazon.in/s?k=";
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
@@ -42,7 +39,6 @@ async function scrapeAmazon(searchParams:string) {
             const availabilitySelector = ".a-size-medium.a-color-success";
             const imageSelector = ".s-image";
 
-
             return Array.from(document.querySelectorAll(productSelector)).map(el => {
                 return {
                     name: el.querySelector(nameSelector)?.textContent?.trim() || "N/A",
@@ -62,12 +58,15 @@ async function scrapeAmazon(searchParams:string) {
     } catch (error) {
         console.error('An error occurred:', error);
     } finally {
-        await browser.close();
+        if (browser) {
+            await browser.close();
+        }
     }
 
 }
 
-async function scrapeFlipkart(searchParams:string) {
+async function scrapeFlipkart(searchParams: string) {
+
     let browser: any;
     try {
         browser = await puppeteer.launch({
@@ -106,6 +105,8 @@ async function scrapeFlipkart(searchParams:string) {
     } catch (error) {
         console.error('An error occurred:', error);
     } finally {
-        await browser.close();
+        if (browser) {
+            await browser.close();
+        }
     }
 }
