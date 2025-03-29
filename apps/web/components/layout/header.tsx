@@ -14,7 +14,7 @@ export function Header() {
   const navRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
-  
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -112,16 +112,15 @@ export function Header() {
 
         {/* Mobile Navigation */}
         <AnimatePresence>
-  {isMenuOpen && (
-    <motion.nav
-      initial={{ height: 0, opacity: 0 }}
-      animate={{ height: "220px", opacity: 1 }}
-      exit={{ height: 0, opacity: 0 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="absolute z-200 flex justify-end border-x border-b right-0 py-3 mx-2 sm:mx-8 md:mx-12 lg:mx-14 top-16 w-40 bg-transparent backdrop-blur-3xl rounded-b-lg shadow-lg overflow-hidden will-change-[height, opacity] z-20"
-    >
-
-              <nav className="flex flex-col justify-evenly px-6 items-end w-full h-full space-y-4">
+          {isMenuOpen && (
+            <motion.nav
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "220px", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="absolute flex justify-end border-x border-b right-0 py-3 mx-2 sm:mx-8 md:mx-12 lg:mx-14 top-16 w-40 bg-transparent backdrop-blur-3xl rounded-b-lg shadow-lg overflow-hidden will-change-[height, opacity]"
+            >
+              <nav className="flex z-20 flex-col justify-evenly px-6 items-end w-full h-full space-y-4">
                 <Link
                   href="/"
                   className={`text-sm font-semibold ${isActive("/") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}

@@ -43,11 +43,11 @@ export default function SearchPage() {
     <div className="container mx-auto px-4 py-12">
       
       {/* Overlay when search is open */}
-      {isSearchOpen && <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40" onClick={closeSearch}></div>}
+      {isSearchOpen && <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-10" onClick={closeSearch}></div>}
 
       {/* Search popup */}
       {isSearchOpen && (
-        <div className="fixed top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl z-50 px-4">
+        <div className="fixed top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl z-10 px-4">
           <Card className="bg-gray-900 border-gray-800 rounded-lg">
             <CardContent className="p-6">
               <div className="flex justify-between items-center mb-4">

@@ -44,11 +44,8 @@ export default function RootLayout({
       <Head>
         <meta property="og:title" content="BargainHunt" />
         <meta property="og:type" content="E-commerce Compare" />
-
         <meta property="og:url" content="https://bargainhunt.vercel.app" />
-
         <meta property="og:image" content="./thumbnail-preview.png" />
-
         <meta property="og:description" content="Find the best deals across Amazon and Flipkart" />
       </Head>
       <body className={`${inter.className}
@@ -62,11 +59,9 @@ export default function RootLayout({
       }>
         <div className="min-h-screen flex flex-col">
           <Header />
-          {/* <ShineBorder
-            className="relative"
-          > */}
-            <main className="flex-1 mx-2 sm:mx-8 md:mx-12 lg:mx-14 z-200"><Suspense>{children}</Suspense></main>
-          {/* </ShineBorder> */}
+          <main className="flex-1 mx-2 sm:mx-8 md:mx-12 lg:mx-14">
+            <Suspense>{children}</Suspense>
+          </main>
           <Footer />
           <Toaster />
         </div>
