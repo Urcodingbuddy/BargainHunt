@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
 
-export async function scrapeProduct(searchParams:string) {
+export async function scrapeProduct(searchParams: string) {
     if (!searchParams) return;
     console.log("Scraping Amazon and Flipkart for:", searchParams);
     try {
@@ -27,9 +27,9 @@ export async function scrapeProduct(searchParams:string) {
 
 async function launchBrowser() {
     return await puppeteer.launch({
-        args: [...chromium.args, 
-            "--no-sandbox", 
-            "--disable-setuid-sandbox", 
+        args: [...chromium.args,
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
             "--disable-dev-shm-usage",
             "--disable-accelerated-2d-canvas",
             "--no-first-run",
@@ -42,7 +42,7 @@ async function launchBrowser() {
 }
 
 
-async function scrapeAmazon(searchParams:string) {
+async function scrapeAmazon(searchParams: string) {
     let browser;
     try {
         browser = await launchBrowser();
@@ -50,10 +50,9 @@ async function scrapeAmazon(searchParams:string) {
         const BASE_URL = "https://www.amazon.in/s?k=";
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
         const amazonUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, '+'))}`;
-        await page.screenshot({"path":"screenshot.jpeg"})
         console.log("Navigating to Amazon...");
         await page.goto(amazonUrl, { waitUntil: "domcontentloaded" });
-        
+
         try {
             await page.waitForSelector(".s-card-container", { timeout: 30000 });
         } catch (error) {
@@ -101,7 +100,7 @@ async function scrapeAmazon(searchParams:string) {
     }
 }
 
-async function scrapeFlipkart(searchParams:string) {
+async function scrapeFlipkart(searchParams: string) {
     let browser;
     try {
         browser = await launchBrowser();
@@ -110,10 +109,8 @@ async function scrapeFlipkart(searchParams:string) {
         const BASE_URL = "https://www.flipkart.com/search?q=";
         await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
         const flipkartUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, '+'))}`;
-        
         console.log("Navigating to Flipkart...");
         await page.goto(flipkartUrl, { waitUntil: "domcontentloaded" });
-        
         try {
             await page.waitForSelector("._75nlfW", { timeout: 30000 });
         } catch (error) {
@@ -128,7 +125,7 @@ async function scrapeFlipkart(searchParams:string) {
             const orignalPriceSelector = ".yRaY8j.ZYYwLA";
             const detailsSelector = ".J+igdf";
             const imageSelector = ".DByuf4";
-            
+
             return Array.from(document.querySelectorAll(productSelector))
                 .map(el => {
                     const nameText = el.querySelector(nameSelector)?.textContent?.trim().concat("|") || "";
@@ -149,7 +146,7 @@ async function scrapeFlipkart(searchParams:string) {
     } catch (error) {
         console.error('An error occurred with Flipkart scraping:', error);
         return [];
-    }finally {
+    } finally {
         if (browser) await browser.close();
     }
 }
