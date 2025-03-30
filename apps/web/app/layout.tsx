@@ -7,7 +7,6 @@ import { Footer } from "@/components/layout/footer"
 import { Toaster } from "@/components/ui/toaster"
 import { Suspense } from 'react'
 import Head from "next/head"
-// import { ShineBorder } from "@/components/ui/shine-border"
 
 const inter = Funnel_Display({ subsets: ["latin"] })
 
