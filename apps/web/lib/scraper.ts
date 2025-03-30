@@ -1,31 +1,65 @@
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
+import chromium from '@sparticuz/chromium';
 
-export async function scrapeProduct(searchParams: string) {
+export async function scrapeProduct(searchParams:string) {
     if (!searchParams) return;
     console.log("Scraping Amazon and Flipkart for:", searchParams);
-    const [amazonData, flipkartData] = await Promise.all([
-        scrapeAmazon(searchParams),
-        scrapeFlipkart(searchParams)
-    ]);
-    return { amazon: amazonData, flipkart: flipkartData };
+    try {
+        const [amazonData, flipkartData] = await Promise.all([
+            scrapeAmazon(searchParams),
+            scrapeFlipkart(searchParams)
+        ]);
+        console.log("Scraping End");
+        return {
+            amazon: amazonData || [],
+            flipkart: flipkartData || [],
+            timestamp: new Date().toISOString()
+        };
+    } catch (error) {
+        console.error("Error in scrapeProduct:", error);
+        return {
+            amazon: [],
+            flipkart: [],
+            timestamp: new Date().toISOString()
+        };
+    }
 }
 
-async function scrapeAmazon(searchParams: string) {
+async function launchBrowser() {
+    return await puppeteer.launch({
+        args: [...chromium.args, 
+            "--no-sandbox", 
+            "--disable-setuid-sandbox", 
+            "--disable-dev-shm-usage",
+            "--disable-accelerated-2d-canvas",
+            "--no-first-run",
+            "--no-zygote",
+            "--disable-gpu"],
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
+        defaultViewport: chromium.defaultViewport
+    });
+}
 
-    let browser: any;
+
+async function scrapeAmazon(searchParams:string) {
+    let browser;
     try {
-        browser = await puppeteer.launch(
-            {
-                headless: true,
-                args: ["--no-sandbox", "--disable-setuid-sandbox"]
-            });
+        browser = await launchBrowser();
         const page = await browser.newPage();
         const BASE_URL = "https://www.amazon.in/s?k=";
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
         const amazonUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, '+'))}`;
+        await page.screenshot({"path":"screenshot.jpeg"})
         console.log("Navigating to Amazon...");
         await page.goto(amazonUrl, { waitUntil: "domcontentloaded" });
-        await page.waitForSelector(".s-card-container", { timeout: 30000 });
+        
+        try {
+            await page.waitForSelector(".s-card-container", { timeout: 30000 });
+        } catch (error) {
+            console.log("Timeout or selector not found on Amazon, returning empty results");
+            return [];
+        }
 
         const amazonData = await page.evaluate(() => {
             const productSelector = ".s-card-container";
@@ -39,48 +73,53 @@ async function scrapeAmazon(searchParams: string) {
             const availabilitySelector = ".a-size-medium.a-color-success";
             const imageSelector = ".s-image";
 
-            return Array.from(document.querySelectorAll(productSelector)).map(el => {
-                return {
-                    name: el.querySelector(nameSelector)?.textContent?.trim() || "N/A",
-                    rating: el.querySelector(ratingSelector)?.textContent?.trim() || "N/A",
-                    reviews: el.querySelector(reviewsSelector)?.textContent?.trim() || "N/A",
-                    boughtInPastMonth: el.querySelector(boughtInPastMonthSelector)?.textContent?.trim() || "N/A",
-                    price: el.querySelector(priceSelector)?.textContent?.trim() || "Out of Stock",
-                    originalPrice: el.querySelector(originalPriceSelector)?.textContent?.trim() || "N/A",
-                    discount: el.querySelector(discountSelector)?.textContent?.trim() || "",
-                    availability: el.querySelector(availabilitySelector)?.textContent?.trim() || "In Stock",
-                    image: el.querySelector(imageSelector)?.getAttribute("src") || "",
-                    link: el.querySelector("a")?.getAttribute("href") ? `https://www.amazon.in${el.querySelector("a")?.getAttribute("href")}` : ""
-                };
-            }).slice(1);
+            return Array.from(document.querySelectorAll(productSelector))
+                .map(el => {
+                    return {
+                        name: el.querySelector(nameSelector)?.textContent?.trim() || "N/A",
+                        rating: el.querySelector(ratingSelector)?.textContent?.trim() || "N/A",
+                        reviews: el.querySelector(reviewsSelector)?.textContent?.trim() || "N/A",
+                        boughtInPastMonth: el.querySelector(boughtInPastMonthSelector)?.textContent?.trim() || "N/A",
+                        price: el.querySelector(priceSelector)?.textContent?.trim() || "Out of Stock",
+                        originalPrice: el.querySelector(originalPriceSelector)?.textContent?.trim() || "N/A",
+                        discount: el.querySelector(discountSelector)?.textContent?.trim() || "",
+                        availability: el.querySelector(availabilitySelector)?.textContent?.trim() || "In Stock",
+                        image: el.querySelector(imageSelector)?.getAttribute("src") || "",
+                        link: el.querySelector("a")?.getAttribute("href") ? `https://www.amazon.in${el.querySelector("a")?.getAttribute("href")}` : ""
+                    };
+                })
+                .filter(item => item.name !== "N/A" && item.name.length > 0)
+                .slice(0, 10); // Limit to 10 results for faster response
         });
+        await page.close();
         return amazonData;
     } catch (error) {
-        console.error('An error occurred:', error);
+        console.error('An error occurred with Amazon scraping:', error);
+        return [];
     } finally {
-        if (browser) {
-            await browser.close();
-        }
+        if (browser) await browser.close();
     }
-
 }
 
-async function scrapeFlipkart(searchParams: string) {
-
-    let browser: any;
+async function scrapeFlipkart(searchParams:string) {
+    let browser;
     try {
-        browser = await puppeteer.launch({
-            headless: true,
-            args: ["--no-sandbox", "--disable-setuid-sandbox"],
-        });
+        browser = await launchBrowser();
         const page = await browser.newPage();
-        page.setDefaultNavigationTimeout(2 * 60 * 1000);
+        page.setDefaultNavigationTimeout(6000); // 6 seconds timeout
         const BASE_URL = "https://www.flipkart.com/search?q=";
         await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
         const flipkartUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, '+'))}`;
+        
         console.log("Navigating to Flipkart...");
         await page.goto(flipkartUrl, { waitUntil: "domcontentloaded" });
-        await page.waitForSelector("._75nlfW", { timeout: 30000 });
+        
+        try {
+            await page.waitForSelector("._75nlfW", { timeout: 30000 });
+        } catch (error) {
+            console.log("Timeout or selector not found on Flipkart, returning empty results");
+            return [];
+        }
 
         const flipkartData = await page.evaluate(() => {
             const productSelector = "._75nlfW";
@@ -89,24 +128,30 @@ async function scrapeFlipkart(searchParams: string) {
             const orignalPriceSelector = ".yRaY8j.ZYYwLA";
             const detailsSelector = ".J+igdf";
             const imageSelector = ".DByuf4";
-            return Array.from(document.querySelectorAll(productSelector)).map(el => {
-                const nameText = el.querySelector(nameSelector)?.textContent?.trim().concat("|") || "";
-                const detailsText = el.querySelector(detailsSelector)?.textContent?.trim() || "";
-                return {
-                    name: nameText + detailsText || "N/A",
-                    price: el.querySelector(priceSelector)?.textContent?.trim() || "N/A",
-                    orignalPrice: el.querySelector(orignalPriceSelector)?.textContent?.trim() || "N/A",
-                    image: el.querySelector(imageSelector)?.getAttribute("src") || "",
-                    link: el.querySelector("a")?.getAttribute("href") ? `https://www.flipkart.com${el.querySelector("a")?.getAttribute("href")}` : ""
-                };
-            }).slice(1)
-        })
+            
+            return Array.from(document.querySelectorAll(productSelector))
+                .map(el => {
+                    const nameText = el.querySelector(nameSelector)?.textContent?.trim().concat("|") || "";
+                    const detailsText = el.querySelector(detailsSelector)?.textContent?.trim() || "";
+                    return {
+                        name: nameText + detailsText || "N/A",
+                        price: el.querySelector(priceSelector)?.textContent?.trim() || "N/A",
+                        originalPrice: el.querySelector(orignalPriceSelector)?.textContent?.trim() || "N/A",
+                        image: el.querySelector(imageSelector)?.getAttribute("src") || "",
+                        link: el.querySelector("a")?.getAttribute("href") ? `https://www.flipkart.com${el.querySelector("a")?.getAttribute("href")}` : ""
+                    };
+                })
+                .filter(item => item.name !== "N/A" && item.name.length > 0)
+                .slice(0, 10); // Limit to 10 results for faster response
+        });
+        await page.close();
         return flipkartData;
     } catch (error) {
-        console.error('An error occurred:', error);
-    } finally {
-        if (browser) {
-            await browser.close();
-        }
+        console.error('An error occurred with Flipkart scraping:', error);
+        return [];
+    }finally {
+        if (browser) await browser.close();
     }
 }
+// Remove this line as we're now exporting the function instead of directly calling it
+// scrapeProduct("Realme Gt 6T")
