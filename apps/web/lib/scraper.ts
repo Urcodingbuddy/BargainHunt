@@ -63,6 +63,7 @@ async function scrapeAmazon(searchParams: string) {
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
         const amazonUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, '+'))}`;
         console.log("Navigating to Amazon...");
+        // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
         await page.goto(amazonUrl, { waitUntil: "domcontentloaded" });
         // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
         try {
@@ -119,7 +120,7 @@ async function scrapeFlipkart(searchParams: string) {
         const page = await browser.newPage();
         await page.setRequestInterception(true);
         page.on("request", (req) => {
-            if (["image", "stylesheet", "font", "media", "other"].includes(req.resourceType())) {
+            if (["stylesheet", "font", "other"].includes(req.resourceType())) {
                 req.abort();
             } else {
                 req.continue();
