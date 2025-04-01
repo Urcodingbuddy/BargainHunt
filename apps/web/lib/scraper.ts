@@ -53,7 +53,7 @@ async function scrapeAmazon(searchParams: string) {
         page.setDefaultNavigationTimeout(6000);
         await page.setRequestInterception(true);
         page.on("request", (req) => {
-            if (["image", "stylesheet", "font", "media", "other"].includes(req.resourceType())) {
+            if (["image", "font", "media", "other"].includes(req.resourceType())) {
                 req.abort();
             } else {
                 req.continue();
@@ -61,13 +61,14 @@ async function scrapeAmazon(searchParams: string) {
         });
         const BASE_URL = "https://www.amazon.in/s?k=";
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
-        const amazonUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, '+'))}`;
+        const amazonUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, ' '))}`;
         console.log("Navigating to Amazon...");
-        // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
+        page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
         await page.goto(amazonUrl, { waitUntil: "domcontentloaded" });
-        // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
+        page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
         try {
             await page.waitForSelector(".s-card-container", { timeout: 30000 });
+            // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
         } catch (error) {
             console.log("Timeout or selector not found on Amazon, returning empty results");
             return [];
@@ -101,7 +102,7 @@ async function scrapeAmazon(searchParams: string) {
                     };
                 })
                 .filter(item => item.name !== "N/A" && item.name.length > 0)
-                .slice(0, 10); // Limit to 10 results for faster response
+                .slice(0, 10);
         });
         await page.close();
         return amazonData;
@@ -120,7 +121,7 @@ async function scrapeFlipkart(searchParams: string) {
         const page = await browser.newPage();
         await page.setRequestInterception(true);
         page.on("request", (req) => {
-            if (["stylesheet", "font", "other"].includes(req.resourceType())) {
+            if (["font", "other"].includes(req.resourceType())) {
                 req.abort();
             } else {
                 req.continue();
@@ -128,10 +129,10 @@ async function scrapeFlipkart(searchParams: string) {
         });
         const BASE_URL = "https://www.flipkart.com/search?q=";
         await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
-        const flipkartUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, '+'))}`;
+        const flipkartUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, ' '))}`;
         console.log("Navigating to Flipkart...");
         await page.goto(flipkartUrl, { waitUntil: "domcontentloaded" });
-        // page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
+        page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
 
         const isRushPage = await page.evaluate(() => {
             return !!document.querySelector("#retry_btn"); // Retry button exists on "rush page"
@@ -140,10 +141,10 @@ async function scrapeFlipkart(searchParams: string) {
         if (isRushPage) {
             console.log("Rush page detected! Waiting for 3 seconds...");
             await new Promise(resolve => setTimeout(resolve, 3000)); // Wait manually
-            // page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
+            page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
             console.log("Clicking 'Try Now' button...");
             await page.locator('button').click();
-            // page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
+            page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
 
             // page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
 
@@ -151,9 +152,9 @@ async function scrapeFlipkart(searchParams: string) {
             console.log("Navigated to the actual product page.");
         }
 
-        // page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
         try {
             await page.waitForSelector("._75nlfW", { timeout: 5000 });
+            // page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
         } catch (error) {
             console.log("Timeout or selector not found on Flipkart, returning empty results");
             return [];
@@ -162,17 +163,23 @@ async function scrapeFlipkart(searchParams: string) {
         const flipkartData = await page.evaluate(() => {
             const productSelector = "._75nlfW";
             const nameSelector = ".KzDlHZ";
+            const productDetailsSelector = "div._6NESgJ ul.G4BRas";
             const priceSelector = ".Nx9bqj._4b5DiR";
             const orignalPriceSelector = ".yRaY8j.ZYYwLA";
-            const detailsSelector = ".J+igdf";
             const imageSelector = ".DByuf4";
 
             return Array.from(document.querySelectorAll(productSelector))
                 .map(el => {
-                    const nameText = el.querySelector(nameSelector)?.textContent?.trim().concat("|") || "";
-                    const detailsText = el.querySelector(detailsSelector)?.textContent?.trim() || "";
+                    console.log(el.innerHTML);
+                    const name = el.querySelector(nameSelector)?.textContent?.trim() || "N/A"
+                    const detailsList = el.querySelector(productDetailsSelector);
+                    const details = detailsList
+                        ? Array.from(detailsList.querySelectorAll("li.J+igdf"))
+                              .map(li => li.textContent?.trim() || "")
+                              .join(" ")
+                        : "";
                     return {
-                        name: nameText + detailsText || "N/A",
+                        name: `${name} ${details}`,
                         price: el.querySelector(priceSelector)?.textContent?.trim() || "N/A",
                         originalPrice: el.querySelector(orignalPriceSelector)?.textContent?.trim() || "N/A",
                         image: el.querySelector(imageSelector)?.getAttribute("src") || "",

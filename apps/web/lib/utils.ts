@@ -25,39 +25,64 @@ export function truncateText(text: string, maxLength: number): string {
   return text.slice(0, maxLength) + "..."
 }
 
+
 export function normalizeTitle(title: string): string {
-  // Convert to lowercase
-  let normalized = title.toLowerCase()
+  let normalized = title.toLowerCase(); // Convert to lowercase
 
   // Remove common marketing phrases
   const marketingPhrases = [
-    "best selling",
-    "top rated",
-    "limited time",
-    "special offer",
-    "new arrival",
-    "exclusive",
-    "premium",
-    "official",
-    "authentic",
-    "with",
-    "featuring",
-    "includes",
-    "for",
-  ]
-
+    "best selling", "top rated", "limited time", "special offer",
+    "new arrival", "exclusive", "premium", "official", "authentic",
+    "with", "featuring", "includes", "for",
+  ];
+  
   marketingPhrases.forEach((phrase) => {
-    normalized = normalized.replace(new RegExp(`\\b${phrase}\\b`, "gi"), "")
-  })
+    normalized = normalized.replace(new RegExp(`\\b${phrase}\\b`, "gi"), "");
+  });
 
-  // Remove extra spaces, special characters, and trim
-  normalized = normalized
-    .replace(/[^\w\s]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
+  // Remove unnecessary punctuation but keep important ones
+  normalized = normalized.replace(/[^\w\s\+\-\/]/g, " "); // Keep `+`, `-`, `/`
 
-  return normalized
+  // Replace multiple spaces with a single space
+  normalized = normalized.replace(/\s+/g, " ").trim();
+
+  return normalized;
 }
+
+
+// export function normalizeTitle(title: string): string {
+//   // Convert to lowercase
+//   let normalized = title.toLowerCase()
+
+//   // Remove common marketing phrases
+//   const marketingPhrases = [
+//     "best selling",
+//     "top rated",
+//     "limited time",
+//     "special offer",
+//     "new arrival",
+//     "exclusive",
+//     "premium",
+//     "official",
+//     "authentic",
+//     "with",
+//     "featuring",
+//     "includes",
+//     "for",
+//   ]
+
+//   marketingPhrases.forEach((phrase) => {
+//     normalized = normalized.replace(new RegExp(`\\b${phrase}\\b`, "gi"), "")
+//   })
+
+//   // Remove extra spaces, special characters, and trim
+//   normalized = normalized
+//     .replace(/[^\w\s]/g, " ")
+//     .replace(/\s+/g, " ")
+//     .trim()
+
+//   return normalized
+// }
 
 export function calculateSimilarity(str1: string, str2: string): number {
   // Simple word overlap score
