@@ -63,9 +63,9 @@ async function scrapeAmazon(searchParams: string) {
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
         const amazonUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, ' '))}`;
         console.log("Navigating to Amazon...");
-        page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
+        // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
         await page.goto(amazonUrl, { waitUntil: "domcontentloaded" });
-        page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
+        // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
         try {
             await page.waitForSelector(".s-card-container", { timeout: 30000 });
             // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
@@ -163,32 +163,37 @@ async function scrapeFlipkart(searchParams: string) {
         const flipkartData = await page.evaluate(() => {
             const productSelector = "._75nlfW";
             const nameSelector = ".KzDlHZ";
-            const productDetailsSelector = "div._6NESgJ ul.G4BRas";
+            const detailsListSelector = "div._6NESgJ ul.G4BRas";
             const priceSelector = ".Nx9bqj._4b5DiR";
-            const orignalPriceSelector = ".yRaY8j.ZYYwLA";
+            const originalPriceSelector = ".yRaY8j.ZYYwLA";
             const imageSelector = ".DByuf4";
-
-            return Array.from(document.querySelectorAll(productSelector))
-                .map(el => {
-                    console.log(el.innerHTML);
-                    const name = el.querySelector(nameSelector)?.textContent?.trim() || "N/A"
-                    const detailsList = el.querySelector(productDetailsSelector);
-                    const details = detailsList
-                        ? Array.from(detailsList.querySelectorAll("li.J+igdf"))
-                              .map(li => li.textContent?.trim() || "")
-                              .join(" ")
-                        : "";
-                    return {
-                        name: `${name} ${details}`,
-                        price: el.querySelector(priceSelector)?.textContent?.trim() || "N/A",
-                        originalPrice: el.querySelector(orignalPriceSelector)?.textContent?.trim() || "N/A",
-                        image: el.querySelector(imageSelector)?.getAttribute("src") || "",
-                        link: el.querySelector("a")?.getAttribute("href") ? `https://www.flipkart.com${el.querySelector("a")?.getAttribute("href")}` : ""
-                    };
-                })
-                .filter(item => item.name !== "N/A" && item.name.length > 0)
-                .slice(0, 10); // Limit to 10 results for faster response
+        
+            return Array.from(document.querySelectorAll(productSelector)).map(el => {
+                const name = el.querySelector(nameSelector)?.textContent?.trim() || "N/A";
+                const detailsList = el.querySelector(detailsListSelector);
+                const details = detailsList
+                    ? Array.from(detailsList.querySelectorAll("li.J+igdf"))
+                          .map(li => li.textContent?.trim() || "")
+                          .join(" | ")
+                    : "";
+                const price = el.querySelector(priceSelector)?.textContent?.trim() || "N/A";
+                const originalPrice = el.querySelector(originalPriceSelector)?.textContent?.trim() || "N/A";
+                const image = el.querySelector(imageSelector)?.getAttribute("src") || "";
+                const link = el.querySelector("a")?.getAttribute("href")
+                    ? `https://www.flipkart.com${el.querySelector("a")?.getAttribute("href")}`
+                    : "";
+        
+                return {
+                    name: `${name} ${details}`,
+                    price,
+                    originalPrice,
+                    image,
+                    link
+                };
+            }).filter(item => item.name !== "N/A" && item.name.length > 0).slice(0, 10);
         });
+        
+
         await page.close();
         return flipkartData;
     } catch (error) {
