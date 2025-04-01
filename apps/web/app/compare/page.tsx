@@ -185,41 +185,39 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
 
               {/* Flipkart Price */}
               {product.prices.flipkart ? (
-                <div className="relative h-full">
-                  <div className="bg-[#1F2937] p-4 rounded-lg">
+                <div className="relative">
+                  <div className="bg-[#1F2937] p-4 rounded-lg h-full flex flex-col justify-evenly">
                     <h4 className="text-sm md:text-lg font-bold mb-2">Flipkart</h4>
                     {product.prices.flipkart.originalPrice && (
-                      <div className="text-xs md:text-sm text-gray-400 line-through">
-                        {product.prices.flipkart.originalPrice}
-                      </div>
+                      <div className="text-xs md:text-sm text-gray-400 line-through">{product.prices.flipkart.originalPrice}</div>
                     )}
-                    <div
-                      className={`text-md md:text-2xl font-bold ${bestPrice === "flipkart" ? "text-green-500" : "text-white"}`}
-                    >
+                    <div className={`text-md md:text-2xl font-bold ${bestPrice === "flipkart" ? "text-green-500" : "text-white"}`}>
                       {product.prices.flipkart.price}
                     </div>
+
+                    <Button className="w-full text-xs mt-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-md">
+                      <Link
+                        href={product.prices.flipkart.link || "#"}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center w-full"
+                      >
+                        <span className="hidden sm:block mr-1">Buy on</span> Flipkart <ExternalLink className="ml-1 h-3 w-3" />
+                      </Link>
+                    </Button>
                   </div>
                   {bestPrice === "flipkart" && product.prices.amazon && (
                     <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
                       Best Price
                     </div>
                   )}
-                  <Button className="w-full mt-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-md">
-                    <Link
-                      href={product.prices.flipkart.link || "#"}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center w-full"
-                    >
-                      <span className="hidden sm:block mr-1">Buy on</span> Flipkart <ExternalLink className="ml-1 h-3 w-3" />
-                    </Link>
-                  </Button>
                 </div>
               ) : (
                 <div className="bg-[#1F2937] p-4 rounded-lg flex items-center justify-center">
                   <p className="text-gray-400 text-center">Not available on Flipkart</p>
                 </div>
               )}
+
 
             </div>
           </div>
