@@ -66,6 +66,18 @@ async function scrapeAmazon(searchParams: string) {
         // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
         await page.goto(amazonUrl, { waitUntil: "domcontentloaded" });
         // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
+
+const captchaDetected = await page.evaluate(() => {
+            return document.body.textContent.includes("captcha") || 
+                   document.body.textContent.includes("robot") ||
+                   document.title.includes("Robot");
+        });
+        
+        if (captchaDetected) {
+            console.log("Amazon bot detection triggered - attempting bypass");
+            await page.reload({ waitUntil: "networkidle2" });
+        }
+
         try {
             await page.waitForSelector(".s-card-container", { timeout: 30000 });
             // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
