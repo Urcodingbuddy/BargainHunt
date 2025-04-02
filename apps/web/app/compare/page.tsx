@@ -168,7 +168,7 @@ export default function ComparePage() {
                     ref={searchInputRef}
                     type="text"
                     placeholder="Search for products..."
-                    className="bg-black/20 border-white/10 text-white placeholder:text-white/50 focus-visible:ring-purple-400 pr-10"
+                    className="bg-black/20 border-white/10 text-white placeholder:text-white/50 pr-10"
                     value={searchQuery}
                     onChange={(e) => handleSearchInputChange(e.target.value)}
                   />
