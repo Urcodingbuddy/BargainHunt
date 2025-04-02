@@ -38,7 +38,7 @@ export function Header() {
   }, [pathname]);
 
   return (
-    <header className="border-b z-10 border-gray-800 bg-gradient-to-b from-black via-black/100 to-transparent h-16 flex items-center justify-center overflow-x-hidden">
+    <header className="border-b z-30 border-gray-800 bg-gradient-to-b from-black via-black/100 to-transparent h-16 flex items-center justify-center overflow-x-hidden">
       <div className="@container w-full px-4 mx-2 sm:mx-8 md:mx-12 lg:mx-14 overflow-hidden">
         <div className="flex items-center justify-between h-full">
           <Link href="/" className="text-xl font-bold">
