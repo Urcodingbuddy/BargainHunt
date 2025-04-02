@@ -9,7 +9,7 @@ export const PRODUCT_CATEGORIES = {
   smartphones: ["phone", "smartphone", "mobile", "iphone", "galaxy", "redmi", "oneplus", "apple", "samsung", "realme", "oppo", "vivo", "iqoo", "nokia", "jio", "honor", "huawei"],
   laptops: ["laptop", "notebook", "macbook", "thinkpad", "chromebook"],
   tablets: ["tablet", "ipad", "galaxy tab", "surface"],
-  tvs: ["tv", "television", "smart tv", "led tv", "oled"],
+  televisions: ["tv", "television", "smart tv", "led tv", "oled"],
   headphones: ["headphone", "earphone", "earbud", "airpod", "tws"],
   smartwatches: ["watch", "smartwatch", "fitness tracker", "band"],
   cameras: ["camera", "dslr", "mirrorless", "gopro"],

@@ -113,6 +113,44 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@utility mini-scrollbar {
+  &::-webkit-scrollbar {
+    width: 0.3rem; /* Equivalent to w-2 */
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #awawaw; /* Ensure this is the correct color code */
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #828282; /* Equivalent to bg-primary/50 */
+    border-radius: 9999px; /* Equivalent to rounded-full */
+    border-width: 2px; /* Equivalent to border-2 */
+    border-color: #1a1a1a; /* Equivalent to border-[#1a1a1a] */
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-primary); /* Equivalent to hover:bg-primary */
+  }
+}
+
+@utility ultra-scrollbar {
+  &::-webkit-scrollbar {
+    width: 0.3rem; /* Equivalent to w-2 */
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #323232;
+    border-radius: 9999px /* Ensure this is the correct color code */
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #828282; /* Equivalent to bg-primary/50 */
+    border-radius: 9999px; /* Equivalent to rounded-full */
+    border-width: 2px; /* Equivalent to border-2 */
+    border-color: #a1a1a1; /* Equivalent to border-[#1a1a1a] */
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-primary); /* Equivalent to hover:bg-primary */
+  }
+}
+
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

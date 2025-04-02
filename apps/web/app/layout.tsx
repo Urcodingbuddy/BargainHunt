@@ -47,14 +47,7 @@ export default function RootLayout({
         <meta property="og:image" content="./thumbnail-preview.png" />
         <meta property="og:description" content="Find the best deals across Amazon and Flipkart" />
       </Head>
-      <body className={`${inter.className}
-        [&::-webkit-scrollbar]:w-2
-        [&::-webkit-scrollbar-track]:bg-[#1a11a]
-        [&::-webkit-scrollbar-thumb]:bg-primary/50
-        [&::-webkit-scrollbar-thumb]:rounded-full
-        [&::-webkit-scrollbar-thumb]:border-2
-        [&::-webkit-scrollbar-thumb]:border-[#1a1a1a]
-        [&::-webkit-scrollbar-thumb]:hover:bg-primary`
+      <body className={`${inter.className} mini-scrollbar`
       }>
         <div className="min-h-screen flex flex-col">
           <Header />
