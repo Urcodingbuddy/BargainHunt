@@ -9,7 +9,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { BrainCircuit, Clock, Cpu, Eye } from "lucide-react"
 import ProductCarousel from "@/components/product-carousel"
 import { BorderBeam } from "@/components/ui/border-beam"
-import { Meteors } from "@/components/ui/meteors"
+import { cn } from "@/lib/utils";
+import { InteractiveGridPattern } from "@/components/ui/intrective-grid-pattern"
+
 
 export default function Home() {
   const [email, setEmail] = useState("")
@@ -40,133 +42,138 @@ export default function Home() {
 
   return (
     <div className="@container mx-auto px-4 py-12">
-      <Meteors number={30} />
+      <InteractiveGridPattern
+      className={cn(
+        "[mask-image:radial-gradient(50vw_circle_at_center,white,transparent)]",
+        "inset-x-0 inset-y-[-10%] h-[200%] skew-y-12",
+      )}
+      />
       <section className="relative mb-20 z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-              Find the Best <span className="text-purple-500">Deals</span> Across Amazon and Flipkart
-            </h1>
-            <p className="text-gray-400 text-lg md:text-xl">
-              Compare prices, discover discounts, and make smarter shopping decisions with our real-time price
-              comparison tool.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="bg-purple-600 cursor-pointer hover:bg-purple-700 rounded-md text-white">
-                <Link href="/compare">Compare Prices</Link>
-              </Button>
-              <Button
-                variant="outline"
-                className="border-gray-700 cursor-pointer hover:bg-gray-900 rounded-md"
-                onClick={scrollToNewsletter}
-              >
-                Join Newsletter
-              </Button>
-            </div>
-          </div>
-          <div className="relative w-full h-56 sm:h-64 md:h-72 lg:h-96 rounded-xl overflow-hidden border-2">
-            <ProductCarousel />
-            <BorderBeam/>
-          </div>
+      <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="space-y-6">
+        <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+          Find the Best <span className="text-purple-500">Deals</span> Across Amazon and Flipkart
+        </h1>
+        <p className="text-gray-400 text-lg md:text-xl">
+          Compare prices, discover discounts, and make smarter shopping decisions with our real-time price
+          comparison tool.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Button className="bg-purple-600 cursor-pointer hover:bg-purple-700 rounded-md text-white">
+          <Link href="/compare">Compare Prices</Link>
+          </Button>
+          <Button
+          variant="outline"
+          className="border-gray-700 cursor-pointer hover:bg-gray-900 rounded-md"
+          onClick={scrollToNewsletter}
+          >
+          Join Newsletter
+          </Button>
         </div>
+        </div>
+        <div className="relative w-full h-[14rem] sm:h-[16rem] md:h-[18rem] lg:h-[24rem] rounded-xl overflow-hidden border-2">
+        <ProductCarousel />
+        <BorderBeam/>
+        </div>
+      </div>
       </section>
 
       <section className="mb-20 z-10">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold">Featured Guides</h2>
-          <Link href="/guides" className="text-purple-500 hover:text-purple-400 text-sm flex items-center gap-2">
-            View all <Eye className="h-4 w-4" />
-          </Link>
-        </div>
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-2xl font-bold">Featured Guides</h2>
+        <Link href="/guides" className="text-purple-500 hover:text-purple-400 text-sm flex items-center gap-2">
+        View all <Eye className="h-4 w-4" />
+        </Link>
+      </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          <FeaturedCard
-            title="How to Find the Best Deals on Electronics items ?"
-            description="Learn expert strategies for comparing prices, timing your purchases, and using price tracking tools to save big on smartphones, laptops, and other gadgets."
-            image="https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=600&h=400&auto=format&fit=crop"
-            date="May 15, 2023"
-            category="Shopping Tips"
-            icon={<BrainCircuit className="h-5 w-5" />}
-            slug="find-best-electronics-deals"
-          />
-          <FeaturedCard
-            title="Amazon vs Flipkart: Which Offers Better Prices?"
-            description="A comprehensive analysis of pricing strategies, discount patterns, and exclusive deals on both platforms to help you decide where to shop for maximum savings."
-            image="https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=600&h=400&auto=format&fit=crop"
-            date="June 2, 2023"
-            category="Price Comparison"
-            icon={<Cpu className="h-5 w-5" />}
-            slug="amazon-vs-flipkart-price-comparison"
-          />
-          <FeaturedCard
-            title="Ultimate Seasonal Sales Guide: When to Buy What ?"
-            description="Discover the best times of year to purchase different product categories for maximum discounts, from electronics and appliances to clothing and furniture."
-            image="https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=600&h=400&auto=format&fit=crop"
-            date="June 28, 2023"
-            category="Shopping Calendar"
-            icon={<Eye className="h-5 w-5" />}
-            slug="seasonal-sales-guide"
-          />
-        </div>
+      <div className="grid md:grid-cols-3 gap-6">
+        <FeaturedCard
+        title="How to Find the Best Deals on Electronics items ?"
+        description="Learn expert strategies for comparing prices, timing your purchases, and using price tracking tools to save big on smartphones, laptops, and other gadgets."
+        image="https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=600&h=400&auto=format&fit=crop"
+        date="May 15, 2023"
+        category="Shopping Tips"
+        icon={<BrainCircuit className="h-5 w-5" />}
+        slug="find-best-electronics-deals"
+        />
+        <FeaturedCard
+        title="Amazon vs Flipkart: Which Offers Better Prices?"
+        description="A comprehensive analysis of pricing strategies, discount patterns, and exclusive deals on both platforms to help you decide where to shop for maximum savings."
+        image="https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=600&h=400&auto=format&fit=crop"
+        date="June 2, 2023"
+        category="Price Comparison"
+        icon={<Cpu className="h-5 w-5" />}
+        slug="amazon-vs-flipkart-price-comparison"
+        />
+        <FeaturedCard
+        title="Ultimate Seasonal Sales Guide: When to Buy What ?"
+        description="Discover the best times of year to purchase different product categories for maximum discounts, from electronics and appliances to clothing and furniture."
+        image="https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=600&h=400&auto=format&fit=crop"
+        date="June 28, 2023"
+        category="Shopping Calendar"
+        icon={<Eye className="h-5 w-5" />}
+        slug="seasonal-sales-guide"
+        />
+      </div>
       </section>
 
       <section className="mb-20 z-10">
-        <h2 className="text-2xl font-bold mb-8">Recent Articles</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <ArticleCard
-            title="10 Browser Extensions That Help You Save Money While Shopping Online"
-            description="Discover the best browser add-ons that automatically find coupon codes, compare prices, and alert you to price drops on your favorite products."
-            category="Shopping Tools"
-            date="July 5, 2023"
-            slug="browser-extensions-save-money"
-            image="https://images.unsplash.com/photo-1610986603166-f78428624e76?q=80&w=600&h=400&auto=format&fit=crop"
-          />
-          <ArticleCard
-            title="How to Read Price History Charts to Make Smarter Purchases"
-            description="Learn to interpret price fluctuation patterns to determine if a 'sale' is really a good deal or just clever marketing."
-            category="Smart Shopping"
-            date="July 18, 2023"
-            slug="read-price-history-charts"
-            image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&h=400&auto=format&fit=crop"
-          />
-          <ArticleCard
-            title="The Psychology of Discounts: Don't Fall for These Pricing Tricks"
-            description="Understand the psychological tactics retailers use to make deals seem better than they are, and how to spot genuine bargains."
-            category="Consumer Psychology"
-            date="August 3, 2023"
-            slug="psychology-of-discounts"
-            image="https://images.unsplash.com/photo-1607082350899-7e105aa886ae?q=80&w=600&h=400&auto=format&fit=crop"
-          />
-        </div>
+      <h2 className="text-2xl font-bold mb-8">Recent Articles</h2>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <ArticleCard
+        title="10 Browser Extensions That Help You Save Money While Shopping Online"
+        description="Discover the best browser add-ons that automatically find coupon codes, compare prices, and alert you to price drops on your favorite products."
+        category="Shopping Tools"
+        date="July 5, 2023"
+        slug="browser-extensions-save-money"
+        image="https://images.unsplash.com/photo-1610986603166-f78428624e76?q=80&w=600&h=400&auto=format&fit=crop"
+        />
+        <ArticleCard
+        title="How to Read Price History Charts to Make Smarter Purchases"
+        description="Learn to interpret price fluctuation patterns to determine if a 'sale' is really a good deal or just clever marketing."
+        category="Smart Shopping"
+        date="July 18, 2023"
+        slug="read-price-history-charts"
+        image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&h=400&auto=format&fit=crop"
+        />
+        <ArticleCard
+        title="The Psychology of Discounts: Don't Fall for These Pricing Tricks"
+        description="Understand the psychological tactics retailers use to make deals seem better than they are, and how to spot genuine bargains."
+        category="Consumer Psychology"
+        date="August 3, 2023"
+        slug="psychology-of-discounts"
+        image="https://images.unsplash.com/photo-1607082350899-7e105aa886ae?q=80&w=600&h=400&auto=format&fit=crop"
+        />
+      </div>
       </section>
 
       <section ref={newsletterRef} id="newsletter" className="bg-gray-900 rounded-lg p-8 mb-20 z-10">
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold">Never Miss a <span className="text-purple-500" >Deal</span></h2>
-            <p className="text-gray-400">
-              Subscribe to receive price drop alerts, exclusive discount codes, and shopping tips to save more on your
-              favorite products.
-            </p>
-          </div>
-          <form onSubmit={handleSubscribe} className="flex gap-2">
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              className="bg-black border-gray-800 focus-visible:ring-purple-500 rounded-md"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <Button
-              type="submit"
-              className="text-white cursor-pointer bg-purple-600 hover:bg-purple-700 whitespace-nowrap rounded-md"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Subscribing..." : "Subscribe"}
-            </Button>
-          </form>
+      <div className="grid md:grid-cols-2 gap-8 items-center">
+        <div className="space-y-4">
+        <h2 className="text-2xl font-bold">Never Miss a <span className="text-purple-500" >Deal</span></h2>
+        <p className="text-gray-400">
+          Subscribe to receive price drop alerts, exclusive discount codes, and shopping tips to save more on your
+          favorite products.
+        </p>
         </div>
+        <form onSubmit={handleSubscribe} className="flex gap-2">
+        <Input
+          type="email"
+          placeholder="Enter your email"
+          className="bg-black border-gray-800 focus-visible:ring-purple-500 rounded-md"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <Button
+          type="submit"
+          className="text-white cursor-pointer bg-purple-600 hover:bg-purple-700 whitespace-nowrap rounded-md"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Subscribing..." : "Subscribe"}
+        </Button>
+        </form>
+      </div>
       </section>
     </div>
   )
