@@ -9,8 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { BrainCircuit, Clock, Cpu, Eye } from "lucide-react"
 import ProductCarousel from "@/components/product-carousel"
 import { BorderBeam } from "@/components/ui/border-beam"
-import { cn } from "@/lib/utils";
-import { InteractiveGridPattern } from "@/components/ui/intrective-grid-pattern"
+
 
 
 export default function Home() {
@@ -42,13 +41,7 @@ export default function Home() {
 
   return (
     <div className="@container mx-auto px-4 py-12">
-      <InteractiveGridPattern
-      className={cn(
-        "[mask-image:radial-gradient(50vw_circle_at_center,white,transparent)]",
-        "inset-x-0 inset-y-[-10%] h-[200%] skew-y-12",
-      )}
-      />
-      <section className="relative mb-20 z-10">
+      <section className="relative mb-20 ">
       <div className="grid lg:grid-cols-2 gap-12 items-center">
         <div className="space-y-6">
         <h1 className="text-4xl md:text-6xl font-bold leading-tight">
@@ -78,7 +71,7 @@ export default function Home() {
       </div>
       </section>
 
-      <section className="mb-20 z-10">
+      <section className="mb-20 ">
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-2xl font-bold">Featured Guides</h2>
         <Link href="/guides" className="text-purple-500 hover:text-purple-400 text-sm flex items-center gap-2">
@@ -117,7 +110,7 @@ export default function Home() {
       </div>
       </section>
 
-      <section className="mb-20 z-10">
+      <section className="mb-20 ">
       <h2 className="text-2xl font-bold mb-8">Recent Articles</h2>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <ArticleCard
@@ -147,7 +140,7 @@ export default function Home() {
       </div>
       </section>
 
-      <section ref={newsletterRef} id="newsletter" className="bg-gray-900 rounded-lg p-8 mb-20 z-10">
+      <section ref={newsletterRef} id="newsletter" className="bg-gray-900 rounded-lg p-8 mb-20 ">
       <div className="grid md:grid-cols-2 gap-8 items-center">
         <div className="space-y-4">
         <h2 className="text-2xl font-bold">Never Miss a <span className="text-purple-500" >Deal</span></h2>
