@@ -92,7 +92,7 @@ export function Header() {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Link href="/search">
+            <Link href="/compare">
               <Button
                 variant="ghost"
                 size="sm"
@@ -149,7 +149,7 @@ export function Header() {
                 >
                   Blog
                 </Link>
-                <Link href="/search">
+                <Link href="/compare">
                   <Button
                     variant="ghost"
                     size="sm"
