@@ -118,47 +118,47 @@ export function Header() {
               animate={{ height: "220px", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="absolute flex justify-end border-x border-b right-0 py-3 mx-2 sm:mx-8 md:mx-12 lg:mx-14 top-16 w-40 bg-transparent backdrop-blur-3xl rounded-b-lg shadow-lg overflow-hidden will-change-[height, opacity]"
+              className="absolute z-50 flex justify-end border-x border-b right-0 py-3 mx-2 sm:mx-8 md:mx-12 lg:mx-14 top-16 w-40 bg-transparent backdrop-blur-3xl rounded-b-lg shadow-lg overflow-hidden will-change-[height, opacity] pointer-events-auto"
             >
               <nav className="flex z-20 flex-col justify-evenly px-6 items-end w-full h-full space-y-4">
-                <Link
-                  href="/"
-                  className={`text-sm font-semibold ${isActive("/") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
-                  onClick={closeMenu}
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/compare"
-                  className={`text-sm font-semibold ${isActive("/compare") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
-                  onClick={closeMenu}
-                >
-                  Compare
-                </Link>
-                <Link
-                  href="/guides"
-                  className={`text-sm font-semibold ${isActive("/guides") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
-                  onClick={closeMenu}
-                >
-                  Guides
-                </Link>
-                <Link
-                  href="/blog"
-                  className={` text-sm font-semibold ${isActive("/blog") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
-                  onClick={closeMenu}
-                >
-                  Blog
-                </Link>
-                <Link href="/compare">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="cursor-pointer bg-purple-600 text-white hover:border-white hover:text-gray-200 border border-transparent flex items-center gap-2"
-                  >
-                    <Search className="h-5 w-5" />
-                    <span>Search</span>
-                  </Button>
-                </Link>
+          <Link
+            href="/"
+            className={`text-sm font-semibold ${isActive("/") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
+            onClick={closeMenu}
+          >
+            Home
+          </Link>
+          <Link
+            href="/compare"
+            className={`text-sm font-semibold ${isActive("/compare") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
+            onClick={closeMenu}
+          >
+            Compare
+          </Link>
+          <Link
+            href="/guides"
+            className={`text-sm font-semibold ${isActive("/guides") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
+            onClick={closeMenu}
+          >
+            Guides
+          </Link>
+          <Link
+            href="/blog"
+            className={` text-sm font-semibold ${isActive("/blog") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
+            onClick={closeMenu}
+          >
+            Blog
+          </Link>
+          <Link href="/compare">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="cursor-pointer bg-purple-600 text-white hover:border-white hover:text-gray-200 border border-transparent flex items-center gap-2"
+            >
+              <Search className="h-5 w-5" />
+              <span>Search</span>
+            </Button>
+          </Link>
               </nav>
             </motion.nav>
           )}
