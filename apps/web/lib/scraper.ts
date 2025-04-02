@@ -132,7 +132,7 @@ async function scrapeFlipkart(searchParams: string) {
         const flipkartUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, ' '))}`;
         console.log("Navigating to Flipkart...");
         await page.goto(flipkartUrl, { waitUntil: "domcontentloaded" });
-        page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
+        // page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
 
         const isRushPage = await page.evaluate(() => {
             return !!document.querySelector("#retry_btn"); // Retry button exists on "rush page"
@@ -141,7 +141,7 @@ async function scrapeFlipkart(searchParams: string) {
         if (isRushPage) {
             console.log("Rush page detected! Waiting for 3 seconds...");
             await new Promise(resolve => setTimeout(resolve, 3000)); // Wait manually
-            page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
+            // page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
             console.log("Clicking 'Try Now' button...");
             await page.locator('button').click();
             page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
