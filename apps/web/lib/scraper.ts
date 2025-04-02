@@ -11,7 +11,7 @@ export async function scrapeProduct(searchParams: string) {
             scrapeAmazon(searchParams),
             scrapeFlipkart(searchParams)
         ]);
-        // console.log(amazonData, flipkartData)
+        console.log(amazonData, flipkartData)
         console.log("Scraping End");
         return {
             amazon: amazonData || [],
@@ -163,19 +163,32 @@ async function scrapeFlipkart(searchParams: string) {
         const flipkartData = await page.evaluate(() => {
             const productSelector = "._75nlfW";
             const nameSelector = ".KzDlHZ";
-            const detailsListSelector = "div._6NESgJ ul.G4BRas";
+            const detailsContainerSelector = "div._6NESgJ";
+            const detailsListSelector = "ul.G4BRas";
+            const detailItemSelector = "li.J\\+igdf"; // Escaping the + character properly
             const priceSelector = ".Nx9bqj._4b5DiR";
             const originalPriceSelector = ".yRaY8j.ZYYwLA";
             const imageSelector = ".DByuf4";
         
             return Array.from(document.querySelectorAll(productSelector)).map(el => {
                 const name = el.querySelector(nameSelector)?.textContent?.trim() || "N/A";
-                const detailsList = el.querySelector(detailsListSelector);
-                const details = detailsList
-                    ? Array.from(detailsList.querySelectorAll("li.J+igdf"))
-                          .map(li => li.textContent?.trim() || "")
-                          .join(" | ")
-                    : "";
+                
+                // Extract details from the list items
+                const detailsContainer = el.querySelector(detailsContainerSelector);
+                let details = "";
+                
+                if (detailsContainer) {
+                    const detailsList = detailsContainer.querySelector(detailsListSelector);
+                    if (detailsList) {
+                        // Only get the first list item
+                        const firstItem = detailsList.querySelector(detailItemSelector);
+                        if (firstItem) {
+                            const text = firstItem.textContent?.trim() || "";
+                            details = text.replace(/\|/g, ',');
+                        }
+                    }
+                }
+                
                 const price = el.querySelector(priceSelector)?.textContent?.trim() || "N/A";
                 const originalPrice = el.querySelector(originalPriceSelector)?.textContent?.trim() || "N/A";
                 const image = el.querySelector(imageSelector)?.getAttribute("src") || "";
@@ -184,7 +197,7 @@ async function scrapeFlipkart(searchParams: string) {
                     : "";
         
                 return {
-                    name: `${name} ${details}`,
+                    name:`${name} ${details}`,
                     price,
                     originalPrice,
                     image,
@@ -192,6 +205,7 @@ async function scrapeFlipkart(searchParams: string) {
                 };
             }).filter(item => item.name !== "N/A" && item.name.length > 0).slice(0, 10);
         });
+        
         
 
         await page.close();

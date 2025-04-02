@@ -1,6 +1,7 @@
-import { normalizeTitle, calculateSimilarity } from "./utils"
-let counter = 1;
-// Types for Amazon and Flipkart products
+import { normalizeTitle, calculateSimilarity, detectCategory, type ProductCategory } from "./utils"
+
+let counter = 1
+
 export type AmazonProduct = {
   name: string
   rating: string
@@ -17,16 +18,16 @@ export type AmazonProduct = {
 export type FlipkartProduct = {
   name: string
   price: string
-  orignalPrice: string
+  originalPrice: string
   image: string
   link: string
 }
 
-// Normalized product type that works with both Amazon and Flipkart data
 export type NormalizedProduct = {
   id: string
   title: string
   normalizedTitle: string
+  category: ProductCategory | null
   image: string
   rating?: number
   reviews?: number
@@ -50,34 +51,30 @@ export type NormalizedProduct = {
   similarityScore?: number
 }
 
-// Function to normalize product data from both sources
 export function normalizeProductData(
   amazonProducts: AmazonProduct[] = [],
-  flipkartProducts: FlipkartProduct[] = [],
+  flipkartProducts: FlipkartProduct[] = []
 ): NormalizedProduct[] {
   const normalizedProducts: NormalizedProduct[] = []
 
-  // Process Amazon products
   amazonProducts.forEach((amazonProduct) => {
-    // Create a normalized title for better matching with Flipkart
     const normalizedTitle = normalizeTitle(amazonProduct.name)
+    const category = detectCategory(amazonProduct.name)
 
-    // Extract numeric rating
-    const ratingMatch = amazonProduct.rating?.match(/(\d+(\.\d+)?)/)
-    const rating = ratingMatch && ratingMatch[1] ? Number.parseFloat(ratingMatch[1]) : undefined
+    const ratingMatch = amazonProduct.rating?.match(/(\d+(\.\d+)?)/);
+    const rating = ratingMatch?.[1] ? Number.parseFloat(ratingMatch[1]) : undefined;
 
-    // Extract numeric reviews
-    const reviewsMatch = amazonProduct.reviews?.match(/\d+/)
-    const reviews = reviewsMatch ? Number.parseInt(reviewsMatch[0], 10) : undefined
+    const reviewsMatch = amazonProduct.reviews?.match(/\d+/);
+    const reviews = reviewsMatch ? Number.parseInt(reviewsMatch[0], 10) : undefined;
 
-    // Extract price as number
-    const priceStr = amazonProduct.price?.replace(/[₹,]/g, "")
-    const numericPrice = priceStr ? Number.parseFloat(priceStr) : 0
+    const priceStr = amazonProduct.price?.replace(/[₹,]/g, "");
+    const numericPrice = priceStr ? Number.parseFloat(priceStr) : 0;
 
     normalizedProducts.push({
       id: `amazon-${normalizedTitle.replace(/\s+/g, "-")}-${counter++}`,
       title: amazonProduct.name,
       normalizedTitle,
+      category,
       image: amazonProduct.image,
       rating,
       reviews,
@@ -95,57 +92,48 @@ export function normalizeProductData(
     })
   })
 
-  // Process Flipkart products and try to match with Amazon products
   flipkartProducts.forEach((flipkartProduct) => {
     const normalizedFlipkartTitle = normalizeTitle(flipkartProduct.name)
+    const category = detectCategory(flipkartProduct.name)
 
-    // Extract price as number
     const priceStr = flipkartProduct.price?.replace(/[₹,]/g, "")
     const numericPrice = priceStr ? Number.parseFloat(priceStr) : 0
 
-    // Try to find a matching Amazon product by calculating similarity scores
-    let bestMatch = -1
-    let highestSimilarity = 0.5 // Threshold for considering a match
+    let bestMatchIndex: number | null = null
+    let highestSimilarity = 0.6
 
     normalizedProducts.forEach((product, index) => {
       if (product.prices.amazon) {
-        // Calculate similarity between titles
         const similarity = calculateSimilarity(normalizedFlipkartTitle, product.normalizedTitle)
-
         if (similarity > highestSimilarity) {
           highestSimilarity = similarity
-          bestMatch = index
+          bestMatchIndex = index
         }
       }
     })
 
-    let bestMatchIndex: number | null = null
-    if (bestMatchIndex !== null) {
-      // Add Flipkart data to the existing product
-      if (bestMatchIndex !== null && normalizedProducts[bestMatchIndex]?.prices) {
-        normalizedProducts[bestMatchIndex].prices.flipkart = {
+    if (bestMatchIndex !== null && bestMatchIndex >= 0 && bestMatchIndex < normalizedProducts.length) {
+      const matchedProduct = normalizedProducts[bestMatchIndex]
+      if (matchedProduct) {
+        matchedProduct.prices.flipkart = {
           price: flipkartProduct.price,
-          originalPrice: flipkartProduct.orignalPrice,
+          originalPrice: flipkartProduct.originalPrice,
           numericValue: numericPrice,
           link: flipkartProduct.link,
         }
-      }
-      if (bestMatch !== -1 && normalizedProducts[bestMatch]) {
-        if (normalizedProducts[bestMatchIndex]) {
-          normalizedProducts[bestMatchIndex].similarityScore = highestSimilarity;
-        }
+        matchedProduct.similarityScore = highestSimilarity
       }
     } else {
-      // Create a new product entry for Flipkart
       normalizedProducts.push({
         id: `flipkart-${normalizedFlipkartTitle.replace(/\s+/g, "-")}-${counter++}`,
         title: flipkartProduct.name,
         normalizedTitle: normalizedFlipkartTitle,
+        category,
         image: flipkartProduct.image,
         prices: {
           flipkart: {
             price: flipkartProduct.price,
-            originalPrice: flipkartProduct.orignalPrice,
+            originalPrice: flipkartProduct.originalPrice,
             numericValue: numericPrice,
             link: flipkartProduct.link,
           },
@@ -157,30 +145,36 @@ export function normalizeProductData(
   return normalizedProducts
 }
 
-// Function to scrape and store product data
-export async function scrapeAndStoreProduct(productName: string) {
+export async function scrapeAndStoreProduct(
+  productName: string,
+  category?: ProductCategory
+): Promise<NormalizedProduct[]> {
   try {
-    const response = await fetch(`/api/scrape?query=${encodeURIComponent(productName)}`, {
+    const queryParams = new URLSearchParams({ query: productName })
+    if (category) {
+      queryParams.append('category', category)
+    }
+
+    const response = await fetch(`/api/scrape?${queryParams}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-    });
+    })
 
     if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
+      throw new Error(`API request failed with status ${response.status}`)
     }
 
-    const data = await response.json();
+    const data = await response.json()
 
-    // Normalize the data
     if (data && (data.amazon || data.flipkart)) {
-      return normalizeProductData(data.amazon || [], data.flipkart || []);
+      return normalizeProductData(data.amazon || [], data.flipkart || [])
     }
 
-    return [];
+    return []
   } catch (error) {
-    console.error("Error scraping product data:", error);
-    return [];
+    console.error("Error scraping product data:", error)
+    return []
   }
 }
