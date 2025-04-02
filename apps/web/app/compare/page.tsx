@@ -128,9 +128,9 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
   return (
     <Card className="bg-[#111827] border-gray-800 overflow-hidden rounded-lg">
       <div className="p-6">
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col md:flex-row gap-6 w-full">
 
-          <div className="flex flex-col lg:flex-row gap-6">
+          <div className="flex flex-col lg:flex-row gap-6 w-full">
 
             <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-5/8">
 
