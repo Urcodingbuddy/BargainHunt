@@ -68,8 +68,8 @@ async function scrapeAmazon(searchParams: string) {
         // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
 
 const captchaDetected = await page.evaluate(() => {
-            return document.body.textContent.includes("captcha") || 
-                   document.body.textContent.includes("robot") ||
+            return document.body.textContent?.includes("captcha") || 
+                   document.body.textContent?.includes("robot") ||
                    document.title.includes("Robot");
         });
         
