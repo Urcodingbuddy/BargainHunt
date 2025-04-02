@@ -9,7 +9,7 @@ export const PRODUCT_CATEGORIES = {
   smartphones: ["phone", "smartphone", "mobile", "iphone", "galaxy", "redmi", "oneplus", "apple", "samsung", "realme", "oppo", "vivo", "iqoo", "nokia", "jio", "honor", "huawei"],
   laptops: ["laptop", "notebook", "macbook", "thinkpad", "chromebook"],
   tablets: ["tablet", "ipad", "galaxy tab", "surface"],
-  Television: ["tv", "television", "smart tv", "led tv", "oled"],
+  tvs: ["tv", "television", "smart tv", "led tv", "oled"],
   headphones: ["headphone", "earphone", "earbud", "airpod", "tws"],
   smartwatches: ["watch", "smartwatch", "fitness tracker", "band"],
   cameras: ["camera", "dslr", "mirrorless", "gopro"],
@@ -32,18 +32,10 @@ export function detectCategory(title: string): ProductCategory | null {
   return null
 }
 
-export function formatPrice(price: number | string): string {
-  const numPrice = typeof price === "string" ? Number.parseFloat(price) : price
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(numPrice)
-}
-
 export function normalizeTitle(title: string): string {
   let normalized = title.toLowerCase()
 
+  // Remove common marketing phrases
   const marketingPhrases = [
     "best selling", "top rated", "limited time", "special offer",
     "new arrival", "exclusive", "premium", "official", "authentic",
@@ -54,16 +46,40 @@ export function normalizeTitle(title: string): string {
     normalized = normalized.replace(new RegExp(`\\b${phrase}\\b`, "gi"), "")
   })
 
+  // Keep only alphanumeric characters and specific symbols
   normalized = normalized.replace(/[^a-zA-Z0-9\s\+\-\/]/g, " ")
+  
+  // Replace multiple spaces with a single space and trim
   return normalized.replace(/\s+/g, " ").trim()
 }
 
 export function calculateSimilarity(str1: string, str2: string): number {
   if (!str1 || !str2) return 0
   
-  const words1 = new Set(str1.split(/\s+/))
-  const words2 = new Set(str2.split(/\s+/))
+  // Normalize both strings
+  const norm1 = normalizeTitle(str1)
+  const norm2 = normalizeTitle(str2)
   
-  const intersection = [...words1].filter(word => words2.has(word)).length
-  return intersection / Math.max(words1.size, words2.size)
+  // Split into words and create sets
+  const words1 = new Set(norm1.split(/\s+/))
+  const words2 = new Set(norm2.split(/\s+/))
+  
+  // Calculate intersection
+  const intersection = [...words1].filter(word => words2.has(word))
+  
+  // Calculate Jaccard similarity
+  const union = new Set([...words1, ...words2])
+  
+  // Require at least 80% similarity for a match
+  const similarity = intersection.length / union.size
+  return similarity >= 0.8 ? similarity : 0
+}
+
+export function formatPrice(price: number | string): string {
+  const numPrice = typeof price === "string" ? Number.parseFloat(price) : price
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(numPrice)
 }

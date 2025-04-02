@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
@@ -11,17 +11,19 @@ import { normalizeProductData, scrapeAndStoreProduct } from "@/lib/api"
 import type { NormalizedProduct } from "@/lib/api"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { CategoryFilter } from "@/components/Categoryfilter"
-import type { ProductCategory } from "@/lib/utils"
+import { Search, X } from "lucide-react"
+import { PRODUCT_CATEGORIES, type ProductCategory } from "@/lib/utils"
+
 
 export default function ComparePage() {
   const [searchQuery, setSearchQuery] = useState("")
-  const [products, setProducts] = useState(normalizeProductData())
+  const [products, setProducts] = useState<NormalizedProduct[]>(normalizeProductData())
   const [isLoading, setIsLoading] = useState(false)
-  const searchParams = useSearchParams()
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | null>(null)
-
-
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [hasChanges, setHasChanges] = useState(false)
+  const searchInputRef = useRef<HTMLInputElement>(null)
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     const query = searchParams.get("q")
@@ -35,7 +37,6 @@ export default function ComparePage() {
       fetchProducts(query, category)
     } else if (category) {
       setSelectedCategory(category)
-      // You might want to fetch some default products for the category here
     }
   }, [searchParams])
 
@@ -44,6 +45,7 @@ export default function ComparePage() {
     try {
       const scrapedProducts = await scrapeAndStoreProduct(query, category || undefined)
       setProducts(scrapedProducts.length > 0 ? scrapedProducts : [])
+      setIsSearchOpen(false) // Close the popup after successful search
     } catch (error) {
       console.error("Error fetching products:", error)
       setProducts([])
@@ -54,52 +56,146 @@ export default function ComparePage() {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!searchQuery.trim()) return
+    if (!searchQuery.trim() || !hasChanges) return
     fetchProducts(searchQuery, selectedCategory)
+    setHasChanges(false)
+  }
+
+  const handleSearchInputChange = (value: string) => {
+    setSearchQuery(value)
+    setHasChanges(true)
   }
 
   const handleCategoryChange = (category: ProductCategory | null) => {
     setSelectedCategory(category)
-    if (searchQuery) {
-      fetchProducts(searchQuery, category)
-    }
+    setHasChanges(true)
   }
 
-  const filteredProducts = selectedCategory
-    ? products.filter((product) => product.category === selectedCategory)
-    : products
+  const openSearch = () => {
+    setIsSearchOpen(true)
+    setTimeout(() => {
+      searchInputRef.current?.focus()
+    }, 100)
+  }
+
+  const closeSearch = () => {
+    setIsSearchOpen(false)
+  }
 
   return (
     <div className="container mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold mb-8">Compare Prices</h1>
 
-      <form onSubmit={handleSearch} className="mb-8 max-w-xl">
-        <div className="flex gap-2">
-          <Input
-            type="text"
-            placeholder="Search for products to compare..."
-            className="bg-[#111827] border-gray-700 focus-visible:ring-purple-500 rounded-md"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+      {/* Search Input that opens popup */}
+      <div className="mb-8 max-w-xl">
+        <Input
+          type="text"
+          placeholder="Search for products to compare..."
+          className="bg-[#111827] border-gray-700 focus-visible:ring-purple-500 rounded-md cursor-pointer"
+          value={searchQuery}
+          onClick={openSearch}
+          readOnly
+        />
+      </div>
+
+      {/* Search Popup */}
+      {isSearchOpen && (
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            onClick={closeSearch}
           />
-          <Button type="submit" className="bg-purple-600 hover:bg-purple-700 text-white rounded-md cursor-pointer " disabled={isLoading}>
-            {isLoading ? "Searching..." : "Search"}
-          </Button>
-        </div>
-      </form>
 
-      <CategoryFilter selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} />
+          {/* Popup Content */}
+          <div className="fixed top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl z-50 px-4">
+            <div className="bg-gray-900 border border-gray-800 rounded-lg shadow-xl">
+              <div className="p-6">
+                {/* Header */}
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-bold text-white">Search Products</h2>
+                  <button
+                    onClick={closeSearch}
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
 
+                {/* Search Form */}
+                <form onSubmit={handleSearch} className="space-y-6">
+                  <div className="relative">
+                    <Input
+                      ref={searchInputRef}
+                      type="text"
+                      placeholder="Search for products..."
+                      className="bg-black border-gray-700 focus-visible:ring-purple-500 pr-10 text-lg py-6 rounded-md"
+                      value={searchQuery}
+                      onChange={(e) => handleSearchInputChange(e.target.value)}
+                    />
+                    <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  </div>
+
+                  {/* Categories */}
+                  <div className="space-y-4">
+                    <h3 className="text-sm font-medium text-gray-400">Categories</h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button
+                        type="button"
+                        variant={selectedCategory === null ? "default" : "outline"}
+                        onClick={() => handleCategoryChange(null)}
+                        className={`text-sm ${
+                          selectedCategory === null
+                            ? "bg-purple-600 hover:bg-purple-700 text-white"
+                            : "hover:bg-purple-600 hover:text-white"
+                        }`}
+                      >
+                        All Categories
+                      </Button>
+                      {Object.keys(PRODUCT_CATEGORIES).map((category) => (
+                        <Button
+                          key={category}
+                          type="button"
+                          variant={selectedCategory === category ? "default" : "outline"}
+                          onClick={() => handleCategoryChange(category as ProductCategory)}
+                          className={`text-sm ${
+                            selectedCategory === category
+                              ? "bg-purple-600 hover:bg-purple-700 text-white"
+                              : "hover:bg-purple-600 hover:text-white"
+                          }`}
+                        >
+                          {category.charAt(0).toUpperCase() + category.slice(1)}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Search Button */}
+                  <Button
+                    type="submit"
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 rounded-md transition-colors"
+                    disabled={!hasChanges || isLoading}
+                  >
+                    {isLoading ? "Searching..." : "Search Products"}
+                  </Button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Results */}
       {isLoading ? (
         <div className="flex justify-center items-center py-20">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6">
-          {filteredProducts.map((product) => (
+          {products.map((product) => (
             <ProductComparisonCard key={product.id} product={product} />
           ))}
-          {filteredProducts.length === 0 && !isLoading && (
+           {products.length === 0 && !isLoading && (
             <div className="text-center text-gray-400 py-12">
               No products found. Try a different search or category.
             </div>

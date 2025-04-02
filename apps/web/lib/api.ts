@@ -57,6 +57,7 @@ export function normalizeProductData(
 ): NormalizedProduct[] {
   const normalizedProducts: NormalizedProduct[] = []
 
+  // Process Amazon products first
   amazonProducts.forEach((amazonProduct) => {
     const normalizedTitle = normalizeTitle(amazonProduct.name)
     const category = detectCategory(amazonProduct.name)
@@ -92,6 +93,7 @@ export function normalizeProductData(
     })
   })
 
+  // Process Flipkart products with stricter matching
   flipkartProducts.forEach((flipkartProduct) => {
     const normalizedFlipkartTitle = normalizeTitle(flipkartProduct.name)
     const category = detectCategory(flipkartProduct.name)
@@ -99,8 +101,9 @@ export function normalizeProductData(
     const priceStr = flipkartProduct.price?.replace(/[₹,]/g, "")
     const numericPrice = priceStr ? Number.parseFloat(priceStr) : 0
 
+    // Try to find a matching Amazon product with high similarity
     let bestMatchIndex: number | null = null
-    let highestSimilarity = 0.6
+    let highestSimilarity = 0
 
     normalizedProducts.forEach((product, index) => {
       if (product.prices.amazon) {
@@ -112,6 +115,7 @@ export function normalizeProductData(
       }
     })
 
+    // Only match if similarity is high enough (threshold is now handled in calculateSimilarity)
     if (bestMatchIndex !== null && bestMatchIndex >= 0 && bestMatchIndex < normalizedProducts.length) {
       const matchedProduct = normalizedProducts[bestMatchIndex]
       if (matchedProduct) {
@@ -124,6 +128,7 @@ export function normalizeProductData(
         matchedProduct.similarityScore = highestSimilarity
       }
     } else {
+      // Create a new product entry if no match found
       normalizedProducts.push({
         id: `flipkart-${normalizedFlipkartTitle.replace(/\s+/g, "-")}-${counter++}`,
         title: flipkartProduct.name,
