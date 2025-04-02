@@ -1,5 +1,4 @@
 import puppeteer from "puppeteer-core";
-
 import chromium from "@sparticuz/chromium";
 chromium.setGraphicsMode = false;
 
@@ -41,7 +40,7 @@ async function launchBrowser() {
       "--disable-gpu",
     ],
     executablePath:
-      process.env.CHROME_EXECUTABLE_PATH || (await chromium.executablePath()),
+      process.env.CHROME_EXECUTABLE_PATH || await chromium.executablePath(),
     headless: chromium.headless,
     defaultViewport: chromium.defaultViewport,
   });
@@ -55,7 +54,7 @@ async function scrapeAmazon(searchParams: string) {
     page.setDefaultNavigationTimeout(6000);
     await page.setRequestInterception(true);
     page.on("request", (req) => {
-      if (["image", "font", "media", "other"].includes(req.resourceType())) {
+      if (["font", "other"].includes(req.resourceType())) {
         req.abort();
       } else {
         req.continue();
