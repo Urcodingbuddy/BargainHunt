@@ -1,29 +1,29 @@
-"use client"
+"use client";
 
-import { useToast } from "@/components/ui/use-toast"
-import { useEffect } from "react"
-import { Share2, Twitter, Facebook, Linkedin } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/use-toast";
+import { useEffect } from "react";
+import { Share2, Twitter, Facebook, Linkedin } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 // Define the post type
 type Post = {
-  title: string
-  category: string
-  date: string
-  author: string
-  readTime: string
-  image: string
-  content: string
+  title: string;
+  category: string;
+  date: string;
+  author: string;
+  readTime: string;
+  image: string;
+  content: string;
   relatedPosts: Array<{
-    title: string
-    category: string
-    image: string
-    slug: string
-  }>
-}
+    title: string;
+    category: string;
+    image: string;
+    slug: string;
+  }>;
+};
 
 export default function BlogPostClient({ post }: { post: Post }) {
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!post) {
@@ -31,40 +31,40 @@ export default function BlogPostClient({ post }: { post: Post }) {
         title: "Post not found",
         description: "The requested blog post could not be found.",
         variant: "destructive",
-      })
+      });
     }
-  }, [post, toast])
+  }, [post, toast]);
 
   const handleShare = (platform: string) => {
-    const url = window.location.href
-    const text = `Check out this article: ${post.title}`
+    const url = window.location.href;
+    const text = `Check out this article: ${post.title}`;
 
-    let shareUrl = ""
+    let shareUrl = "";
 
     switch (platform) {
       case "twitter":
-        shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`
-        break
+        shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+        break;
       case "facebook":
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`
-        break
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+        break;
       case "linkedin":
-        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`
-        break
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+        break;
       default:
         // Copy to clipboard
-        navigator.clipboard.writeText(url)
+        navigator.clipboard.writeText(url);
         toast({
           title: "Link copied",
           description: "The article link has been copied to your clipboard.",
-        })
-        return
+        });
+        return;
     }
 
     if (shareUrl) {
-      window.open(shareUrl, "_blank")
+      window.open(shareUrl, "_blank");
     }
-  }
+  };
 
   return (
     <div className="flex justify-between items-center mb-8">
@@ -107,6 +107,5 @@ export default function BlogPostClient({ post }: { post: Post }) {
         Share
       </Button>
     </div>
-  )
+  );
 }
-

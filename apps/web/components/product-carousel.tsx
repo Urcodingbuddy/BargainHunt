@@ -1,15 +1,16 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Image from "next/image"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const images = [
   {
     src: "./macbook-air.jpg",
     alt: "MacBook Air",
     title: "MacBook Air M2",
-    description: "The new MacBook Air with M2 chip - Lightweight, powerful, and efficient.",
+    description:
+      "The new MacBook Air with M2 chip - Lightweight, powerful, and efficient.",
   },
   {
     src: "./Razor-kitty.jpeg",
@@ -27,34 +28,38 @@ const images = [
     src: "./boat-earbuds.png",
     alt: "boAt Earbuds",
     title: "boAt Airdopes",
-    description: "Wireless earbuds with Dolby Audio for immersive sound experience.",
+    description:
+      "Wireless earbuds with Dolby Audio for immersive sound experience.",
   },
   {
     src: "./hp-victus-laptop.png",
     alt: "HP Victus Gaming Laptop",
     title: "HP Victus Gaming Laptop",
-    description: "Powerful gaming laptop with high-performance graphics and cooling.",
+    description:
+      "Powerful gaming laptop with high-performance graphics and cooling.",
   },
-]
+];
 
 export default function ProductCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
-  }
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+  };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length)
-  }
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + images.length) % images.length
+    );
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      nextSlide()
-    }, 5000)
+      nextSlide();
+    }, 5000);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="relative w-full h-full ">
@@ -64,7 +69,9 @@ export default function ProductCarousel() {
           <div
             key={index}
             className={`absolute inset-0 transition-opacity duration-500 ${
-              index === currentIndex ? "opacity-100" : "opacity-0 pointer-events-none"
+              index === currentIndex
+                ? "opacity-100"
+                : "opacity-0 pointer-events-none"
             }`}
           >
             <img
@@ -108,6 +115,5 @@ export default function ProductCarousel() {
         ))}
       </div>
     </div>
-  )
+  );
 }
-

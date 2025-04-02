@@ -13,16 +13,14 @@
         "name": "next"
       }
     ]
-    
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     "next-env.d.ts",
     "next.config.js",
-    ".next/types/**/*.ts"
-, "lib/scraper.ts"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    ".next/types/**/*.ts",
+    "lib/scraper.ts"
+  ],
+  "exclude": ["node_modules"]
 }

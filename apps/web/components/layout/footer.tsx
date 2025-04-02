@@ -1,18 +1,18 @@
-import Link from "next/link"
-import { Github, Linkedin, Twitter, MailIcon } from "lucide-react"
+import Link from "next/link";
+import { Github, Linkedin, Twitter, MailIcon } from "lucide-react";
 
 export function Footer() {
   return (
     <footer className="border-t border-gray-800 py-8">
       <div className="@container mx-2 sm:mx-8 md:mx-12 lg:mx-14 px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-
           <div className="space-y-4">
             <Link href="/" className="text-xl font-bold">
               Bargain<span className="text-purple-500">Hunt</span>
             </Link>
             <p className="text-sm text-gray-400">
-              Compare prices across Amazon and Flipkart to find the best deals on your favorite products.
+              Compare prices across Amazon and Flipkart to find the best deals
+              on your favorite products.
             </p>
           </div>
 
@@ -66,33 +66,43 @@ export function Footer() {
           <div className="text-gray-400 space-y-4 flex flex-col flex-wrap">
             <h4 className="font-medium text-white">Contact Developer</h4>
             <p>
-              <Link href="mailto:anshpethe110@gmail.com" className="hover:text-purple-600 flex items-center space-x-2">
+              <Link
+                href="mailto:anshpethe110@gmail.com"
+                className="hover:text-purple-600 flex items-center space-x-2"
+              >
                 <MailIcon className="h-5 w-5" />
                 <span>anshpethe110@gmail.com</span>
               </Link>
             </p>
             <div className="flex space-x-6 text-gray-400">
-              <Link href="https://github.com/Urcodingbuddy" className="hover:text-purple-600">
+              <Link
+                href="https://github.com/Urcodingbuddy"
+                className="hover:text-purple-600"
+              >
                 <Github className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>
               </Link>
-              <Link href="https://x.com/PetheAnsh" className="hover:text-purple-600">
+              <Link
+                href="https://x.com/PetheAnsh"
+                className="hover:text-purple-600"
+              >
                 <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
               </Link>
-              <Link href="https://www.linkedin.com/in/petheansh/" className="hover:text-purple-600">
+              <Link
+                href="https://www.linkedin.com/in/petheansh/"
+                className="hover:text-purple-600"
+              >
                 <Linkedin className="h-5 w-5" />
                 <span className="sr-only">LinkedIn</span>
               </Link>
             </div>
           </div>
-
         </div>
       </div>
       <div className="mt-6 pt-6 border-t border-gray-800 text-center text-sm text-gray-500">
         <p>© {new Date().getFullYear()} BargainHunt. All rights reserved.</p>
       </div>
     </footer>
-  )
+  );
 }
-

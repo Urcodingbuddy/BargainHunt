@@ -137,7 +137,7 @@
   }
   &::-webkit-scrollbar-track {
     background-color: #323232;
-    border-radius: 9999px /* Ensure this is the correct color code */
+    border-radius: 9999px; /* Ensure this is the correct color code */
   }
   &::-webkit-scrollbar-thumb {
     background-color: #828282; /* Equivalent to bg-primary/50 */
@@ -149,7 +149,6 @@
     background-color: var(--color-primary); /* Equivalent to hover:bg-primary */
   }
 }
-
 
 @layer base {
   * {

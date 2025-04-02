@@ -1,116 +1,125 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useEffect, useState, useRef } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card } from "@/components/ui/card"
-import { Star, ExternalLink, ArrowLeft } from "lucide-react"
-import { normalizeProductData, scrapeAndStoreProduct } from "@/lib/api"
-import type { NormalizedProduct } from "@/lib/api"
-import { useSearchParams } from "next/navigation"
-import Link from "next/link"
-import { Search, X } from "lucide-react"
-import { PRODUCT_CATEGORIES, type ProductCategory } from "@/lib/utils"
-import { motion } from "framer-motion"
+import { useEffect, useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
+import { Star, ExternalLink, ArrowLeft } from "lucide-react";
+import { normalizeProductData, scrapeAndStoreProduct } from "@/lib/api";
+import type { NormalizedProduct } from "@/lib/api";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { Search, X } from "lucide-react";
+import { PRODUCT_CATEGORIES, type ProductCategory } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 export default function ComparePage() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [products, setProducts] = useState<NormalizedProduct[]>(normalizeProductData())
-  const [isLoading, setIsLoading] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState<ProductCategory | null>(null)
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [hasChanges, setHasChanges] = useState(false)
-  const searchInputRef = useRef<HTMLInputElement>(null)
-  const searchParams = useSearchParams()
+  const [searchQuery, setSearchQuery] = useState("");
+  const [products, setProducts] = useState<NormalizedProduct[]>(
+    normalizeProductData()
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedCategory, setSelectedCategory] =
+    useState<ProductCategory | null>(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    const query = searchParams.get("q")
-    const category = searchParams.get("category") as ProductCategory | null
+    const query = searchParams.get("q");
+    const category = searchParams.get("category") as ProductCategory | null;
 
     if (query) {
-      setSearchQuery(query)
+      setSearchQuery(query);
       if (category) {
-        setSelectedCategory(category)
+        setSelectedCategory(category);
       }
-      fetchProducts(query, category)
+      fetchProducts(query, category);
     } else if (category) {
-      setSelectedCategory(category)
+      setSelectedCategory(category);
     }
-  }, [searchParams])
+  }, [searchParams]);
 
-  const fetchProducts = async (query: string, category?: ProductCategory | null) => {
-    setIsLoading(true)
+  const fetchProducts = async (
+    query: string,
+    category?: ProductCategory | null
+  ) => {
+    setIsLoading(true);
     try {
-      const scrapedProducts = await scrapeAndStoreProduct(query, category || undefined)
-      setProducts(scrapedProducts.length > 0 ? scrapedProducts : [])
-      setIsSearchOpen(false) // Close the popup after successful search
+      const scrapedProducts = await scrapeAndStoreProduct(
+        query,
+        category || undefined
+      );
+      setProducts(scrapedProducts.length > 0 ? scrapedProducts : []);
+      setIsSearchOpen(false); // Close the popup after successful search
     } catch (error) {
-      console.error("Error fetching products:", error)
-      setProducts([])
+      console.error("Error fetching products:", error);
+      setProducts([]);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!searchQuery.trim() || !hasChanges) return
-    fetchProducts(searchQuery, selectedCategory)
-    setHasChanges(false)
-  }
+    e.preventDefault();
+    if (!searchQuery.trim() || !hasChanges) return;
+    fetchProducts(searchQuery, selectedCategory);
+    setHasChanges(false);
+  };
 
   const handleSearchInputChange = (value: string) => {
-    setSearchQuery(value)
-    setHasChanges(true)
-  }
+    setSearchQuery(value);
+    setHasChanges(true);
+  };
 
   const handleCategoryChange = (category: ProductCategory | null) => {
-    setSelectedCategory(category)
-    setHasChanges(true)
-  }
+    setSelectedCategory(category);
+    setHasChanges(true);
+  };
 
   useEffect(() => {
-    let isThrottled = false
+    let isThrottled = false;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key === "k") {
-        e.preventDefault()
-        if (isThrottled) return
+        e.preventDefault();
+        if (isThrottled) return;
 
         setIsSearchOpen((prev) => {
           if (!prev) {
             setTimeout(() => {
-              searchInputRef.current?.focus()
-            }, 100)
+              searchInputRef.current?.focus();
+            }, 100);
           }
-          return !prev
-        })
-        isThrottled = true
+          return !prev;
+        });
+        isThrottled = true;
 
         setTimeout(() => {
-          isThrottled = false
-        }, 500)
+          isThrottled = false;
+        }, 500);
       }
-    }
+    };
 
-    window.addEventListener("keydown", handleKeyDown)
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [])
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   const openSearch = () => {
-    setIsSearchOpen(true)
+    setIsSearchOpen(true);
     setTimeout(() => {
-      searchInputRef.current?.focus()
-    }, 100)
-  }
+      searchInputRef.current?.focus();
+    }, 100);
+  };
 
   const closeSearch = () => {
-    setIsSearchOpen(false)
-  }
+    setIsSearchOpen(false);
+  };
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -136,7 +145,10 @@ export default function ComparePage() {
       {isSearchOpen && (
         <>
           {/* Backdrop */}
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" onClick={closeSearch} />
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            onClick={closeSearch}
+          />
 
           {/* Popup Content */}
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -149,7 +161,9 @@ export default function ComparePage() {
             >
               {/* Header */}
               <div className="flex items-center justify-between border-b border-white/10 p-4">
-                <h2 className="text-lg font-medium text-white">Search Products</h2>
+                <h2 className="text-lg font-medium text-white">
+                  Search Products
+                </h2>
                 <button
                   onClick={closeSearch}
                   className="rounded-full p-1 text-white/70 hover:bg-white/10 hover:text-white transition-colors"
@@ -175,22 +189,25 @@ export default function ComparePage() {
                   <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50 h-4 w-4" />
                 </div>
 
-
-
                 <div className="flex flex-col md:flex-row justify-between gap-2 h-80">
                   {/* Categories */}
                   <div className="space-y-2 pr-5 md:w-1/3 overflow-y-scroll scroll-smooth ultra-scrollbar select-none">
-                    <h3 className="text-xs font-medium text-white/70">Categories</h3>
+                    <h3 className="text-xs font-medium text-white/70">
+                      Categories
+                    </h3>
                     <div className="flex flex-col gap-2">
                       <Button
                         type="button"
                         size="sm"
-                        variant={selectedCategory === null ? "default" : "outline"}
+                        variant={
+                          selectedCategory === null ? "default" : "outline"
+                        }
                         onClick={() => handleCategoryChange(null)}
-                        className={`text-xs ${selectedCategory === null
-                          ? "bg-purple-600 hover:bg-purple-700 text-white"
-                          : "bg-black/20 border-white/10 text-white hover:bg-white/10"
-                          }`}
+                        className={`text-xs ${
+                          selectedCategory === null
+                            ? "bg-purple-600 hover:bg-purple-700 text-white"
+                            : "bg-black/20 border-white/10 text-white hover:bg-white/10"
+                        }`}
                       >
                         All Categories
                       </Button>
@@ -199,12 +216,19 @@ export default function ComparePage() {
                           key={category}
                           type="button"
                           size="sm"
-                          variant={selectedCategory === category ? "default" : "outline"}
-                          onClick={() => handleCategoryChange(category as ProductCategory)}
-                          className={`text-xs ${selectedCategory === category
-                            ? "bg-purple-600 hover:bg-purple-700 text-white"
-                            : "bg-black/20 border-white/10 text-white hover:bg-white/10"
-                            }`}
+                          variant={
+                            selectedCategory === category
+                              ? "default"
+                              : "outline"
+                          }
+                          onClick={() =>
+                            handleCategoryChange(category as ProductCategory)
+                          }
+                          className={`text-xs ${
+                            selectedCategory === category
+                              ? "bg-purple-600 hover:bg-purple-700 text-white"
+                              : "bg-black/20 border-white/10 text-white hover:bg-white/10"
+                          }`}
                         >
                           {category.charAt(0).toUpperCase() + category.slice(1)}
                         </Button>
@@ -214,7 +238,9 @@ export default function ComparePage() {
 
                   {/* Popular Products */}
                   <Card className="bg-black/20 px-4 py-7.5 rounded-lg">
-                    <h3 className="text-xl font-bold mb-4">Trending Searches</h3>
+                    <h3 className="text-xl font-bold mb-4">
+                      Trending Searches
+                    </h3>
                     <ul className="space-y-2">
                       <li>
                         <Link
@@ -279,7 +305,6 @@ export default function ComparePage() {
                           Sony WH-1000XM5
                         </Link>
                       </li>
-
                     </ul>
                   </Card>
                 </div>
@@ -313,22 +338,22 @@ export default function ComparePage() {
         </div>
       )}
     </div>
-  )
+  );
 }
 
 function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
   // Determine which store has the better price (if both are available)
-  const amazonPrice = product.prices.amazon?.numericValue
-  const flipkartPrice = product.prices.flipkart?.numericValue
+  const amazonPrice = product.prices.amazon?.numericValue;
+  const flipkartPrice = product.prices.flipkart?.numericValue;
 
-  let bestPrice = "none"
+  let bestPrice = "none";
 
   if (amazonPrice && flipkartPrice) {
-    bestPrice = amazonPrice <= flipkartPrice ? "amazon" : "flipkart"
+    bestPrice = amazonPrice <= flipkartPrice ? "amazon" : "flipkart";
   } else if (amazonPrice) {
-    bestPrice = "amazon"
+    bestPrice = "amazon";
   } else if (flipkartPrice) {
-    bestPrice = "flipkart"
+    bestPrice = "flipkart";
   }
 
   return (
@@ -348,29 +373,40 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
               {/* Product Details */}
 
               <div className="flex flex-col">
-                <h3 className="text-sm md:text-lg font-bold text-white mb-2">{product.title}</h3>
+                <h3 className="text-sm md:text-lg font-bold text-white mb-2">
+                  {product.title}
+                </h3>
 
                 {/* Ratings */}
                 {product.rating && (
                   <div className="flex flex-wrap items-center gap-2 mb-0 sm:mb-4">
                     <div className="flex items-center text-yellow-400 text-sm md:text-lg">
                       <Star className="h-4 w-4 fill-current" />
-                      <span className="ml-1">{product.rating} out of 5 stars</span>
+                      <span className="ml-1">
+                        {product.rating} out of 5 stars
+                      </span>
                     </div>
-                    {product.reviews && <span className="text-gray-500">({product.reviews} reviews)</span>}
+                    {product.reviews && (
+                      <span className="text-gray-500">
+                        ({product.reviews} reviews)
+                      </span>
+                    )}
                   </div>
                 )}
 
                 {/* Additional details if available */}
                 {product.availability && (
                   <div className="text-xs sm:text-sm text-gray-400 ">
-                    Availability: <span className="text-white">{product.availability}</span>
+                    Availability:{" "}
+                    <span className="text-white">{product.availability}</span>
                   </div>
                 )}
 
                 {product.boughtInPastMonth && (
                   <div className="text-sm text-gray-400 mb-2">
-                    <span className="text-white">{product.boughtInPastMonth}</span>
+                    <span className="text-white">
+                      {product.boughtInPastMonth}
+                    </span>
                   </div>
                 )}
               </div>
@@ -381,7 +417,9 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
               {product.prices.amazon ? (
                 <div className="relative">
                   <div className="bg-[#130e054d] backdrop-blur-3xl border-2 p-4 rounded-lg h-full flex flex-col justify-evenly">
-                    <h4 className="text-sm md:text-lg font-bold mb-2">Amazon</h4>
+                    <h4 className="text-sm md:text-lg font-bold mb-2">
+                      Amazon
+                    </h4>
                     {product.prices.amazon.originalPrice && (
                       <div className="text-xs md:text-sm text-gray-400 line-through">
                         {product.prices.amazon.originalPrice}
@@ -400,8 +438,8 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
                         rel="noopener noreferrer"
                         className="flex items-center justify-center w-full"
                       >
-                        <span className="hidden sm:block mr-1">Buy on</span>Amazon{" "}
-                        <ExternalLink className="ml-1 h-3 w-3" />
+                        <span className="hidden sm:block mr-1">Buy on</span>
+                        Amazon <ExternalLink className="ml-1 h-3 w-3" />
                       </Link>
                     </Button>
                   </div>
@@ -413,7 +451,9 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
                 </div>
               ) : (
                 <div className="bg-blend-darken border-2 p-4 rounded-lg flex items-center justify-center">
-                  <p className="text-gray-400 text-center">Not available on Amazon</p>
+                  <p className="text-gray-400 text-center">
+                    Not available on Amazon
+                  </p>
                 </div>
               )}
 
@@ -421,7 +461,9 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
               {product.prices.flipkart ? (
                 <div className="relative">
                   <div className="bg-[#0b0912c2] backdrop-blur-3xl border-2 p-4 rounded-lg h-full flex flex-col justify-evenly">
-                    <h4 className="text-sm md:text-lg font-bold mb-2">Flipkart</h4>
+                    <h4 className="text-sm md:text-lg font-bold mb-2">
+                      Flipkart
+                    </h4>
                     {product.prices.flipkart.originalPrice && (
                       <div className="text-xs md:text-sm text-gray-400 line-through">
                         {product.prices.flipkart.originalPrice}
@@ -440,8 +482,8 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
                         rel="noopener noreferrer"
                         className="flex items-center justify-center w-full"
                       >
-                        <span className="hidden sm:block mr-1">Buy on</span> Flipkart{" "}
-                        <ExternalLink className="ml-1 h-3 w-3" />
+                        <span className="hidden sm:block mr-1">Buy on</span>{" "}
+                        Flipkart <ExternalLink className="ml-1 h-3 w-3" />
                       </Link>
                     </Button>
                   </div>
@@ -453,7 +495,9 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
                 </div>
               ) : (
                 <div className="bg-blend-darken border-2 p-4 rounded-lg flex items-center justify-center">
-                  <p className="text-gray-400 text-center">Not available on Flipkart</p>
+                  <p className="text-gray-400 text-center">
+                    Not available on Flipkart
+                  </p>
                 </div>
               )}
             </div>
@@ -461,6 +505,5 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
         </div>
       </div>
     </Card>
-  )
+  );
 }
-

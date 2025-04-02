@@ -1,12 +1,15 @@
-import { Button } from "@/components/ui/button"
-import { PRODUCT_CATEGORIES, type ProductCategory } from "@/lib/utils"
+import { Button } from "@/components/ui/button";
+import { PRODUCT_CATEGORIES, type ProductCategory } from "@/lib/utils";
 
 interface CategoryFilterProps {
-  selectedCategory: ProductCategory | null
-  onCategoryChange: (category: ProductCategory | null) => void
+  selectedCategory: ProductCategory | null;
+  onCategoryChange: (category: ProductCategory | null) => void;
 }
 
-export function CategoryFilter({ selectedCategory, onCategoryChange }: CategoryFilterProps) {
+export function CategoryFilter({
+  selectedCategory,
+  onCategoryChange,
+}: CategoryFilterProps) {
   return (
     <div className="flex flex-wrap gap-2 mb-4">
       <Button
@@ -27,5 +30,5 @@ export function CategoryFilter({ selectedCategory, onCategoryChange }: CategoryF
         </Button>
       ))}
     </div>
-  )
+  );
 }
