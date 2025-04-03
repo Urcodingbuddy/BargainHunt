@@ -23,6 +23,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "@tailwindcss/oxide": "^4.1.2",
     "@tailwindcss/postcss": "^4.0.16",
     "postcss": "^8.5.3",
     "puppeteer": "^24.4.0",
