@@ -52,7 +52,7 @@ export default function Home() {
     <div className="@container mx-auto px-4 py-12">
       <InteractiveGridPattern
         className={cn(
-          "[mask-image:radial-gradient(400px_circle_at_center,white,transparent)]",
+          "[mask-image:radial-gradient(40vw_circle_at_center,white,transparent)]",
           "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12",
         )}
       />
