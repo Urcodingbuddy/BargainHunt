@@ -491,11 +491,11 @@ async function scrapeFlipkart(searchParams: string) {
           const finalName = details ? `${name} ${details}` : name;
           
           return {
-            name: finalName,
-            price: findText(el, priceSelectors),
-            originalPrice: findText(el, originalPriceSelectors),
-            image: image,
-            link: fullLink
+            name: finalName || "N/A",
+            price: findText(el, priceSelectors) || "N/A",
+            originalPrice: findText(el, originalPriceSelectors) || "N/A",
+            image: image || "N/A",
+            link: fullLink || "N/A"
           };
         })
         .filter(item => item && item.name !== "N/A" && item.name.length > 0)
