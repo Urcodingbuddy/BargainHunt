@@ -185,9 +185,11 @@ async function scrapeAmazon(searchParams: string) {
     }
 
     if (!selectedSelector) {
+      const pageContent = await page.content();
       console.log(
         "No suitable Amazon selectors found, returning empty results"
       );
+      console.log("Falulty Page: "+ pageContent)
       return [];
     }
 
