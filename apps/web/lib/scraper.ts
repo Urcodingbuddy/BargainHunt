@@ -130,7 +130,7 @@ async function scrapeAmazon(searchParams: string) {
 
     if (pageState === "captcha") {
       console.log("Amazon bot detection triggered - attempting bypass");
-      await page.reload({ waitUntil: "networkidle2", timeout: 5000 });
+      await page.reload({ waitUntil: "networkidle2", timeout: 10000 });
     }
 
     const selectors = [
