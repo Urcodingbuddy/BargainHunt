@@ -56,7 +56,7 @@ export default function Home() {
           "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12",
         )}
       />
-      <section className="relative mb-20 ">
+      <section className="relative mb-20 pointer-events-none">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h1 className="text-4xl md:text-6xl font-bold leading-tight">
