@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
+import { AwardIcon } from "lucide-react";
 chromium.setGraphicsMode = false;
 
 export async function scrapeProduct(searchParams: string) {
@@ -40,7 +41,7 @@ async function launchBrowser() {
       "--disable-gpu",
     ],
     executablePath:
-      process.env.CHROME_EXECUTABLE_PATH || await chromium.executablePath(),
+      process.env.CHROME_EXECUTABLE_PATH || (await chromium.executablePath()),
     headless: chromium.headless,
     defaultViewport: chromium.defaultViewport,
   });
@@ -51,94 +52,206 @@ async function scrapeAmazon(searchParams: string) {
   try {
     browser = await launchBrowser();
     const page = await browser.newPage();
-    page.setDefaultNavigationTimeout(6000);
+
+    page.setDefaultNavigationTimeout(8000);
+    page.setDefaultTimeout(8000);
+
     await page.setRequestInterception(true);
     page.on("request", (req) => {
-      if (["font", "other"].includes(req.resourceType())) {
+      if (
+        ["image", "stylesheet", "font", "media", "other"].includes(
+          req.resourceType()
+        )
+      ) {
         req.abort();
       } else {
         req.continue();
       }
     });
-    const BASE_URL = "https://www.amazon.in/s?k=";
+
     await page.setUserAgent(
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     );
+
+    await page.setExtraHTTPHeaders({
+      "Accept-Language": "en-US,en;q=0.9",
+      Accept:
+        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+    });
+
+    const BASE_URL = "https://www.amazon.in/s?k=";
     const amazonUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, " "))}`;
     console.log("Navigating to Amazon...");
-    // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
-    await page.goto(amazonUrl, { waitUntil: "domcontentloaded" });
-    // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
 
-    const captchaDetected = await page.evaluate(() => {
-      return (
+    await page
+      .goto(amazonUrl, {
+        waitUntil: "networkidle2",
+        timeout: 20000,
+      })
+      .catch(async (err) => {
+        console.log(
+          "Amazon navigation timeout, proceeding anyway:",
+          err.message
+        );
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      });
+
+    console.log("Checking Amazon page status...");
+
+    const pageState = await page.evaluate(() => {
+      if (
         document.body.textContent?.includes("captcha") ||
         document.body.textContent?.includes("robot") ||
         document.title.includes("Robot")
-      );
+      ) {
+        return "captcha";
+      }
+
+      if (document.querySelector(".s-card-container")) {
+        return "products-found";
+      }
+
+      if (document.querySelector(".s-impression-counter4")) {
+        return "alternative-selector";
+      }
+
+      if (document.querySelector(".sg-col-20-of-24")) {
+        return "alternative-selector";
+      }
+
+      if (document.querySelector(".s-main-slot")) {
+        return "main-slot";
+      }
+
+      return "unknown";
     });
 
-    if (captchaDetected) {
+    console.log("Amazon page state:", pageState);
+
+    if (pageState === "captcha") {
       console.log("Amazon bot detection triggered - attempting bypass");
-      await page.reload({ waitUntil: "networkidle2" });
+      await page.reload({ waitUntil: "networkidle2", timeout: 5000 });
     }
 
-    try {
-      await page.waitForSelector(".s-card-container", { timeout: 30000 });
-      // page.screenshot({ "path": "./lib/screenshots/amazon.jpeg" });
-    } catch (error) {
+    const selectors = [
+      ".s-card-container",
+      ".s-result-item",
+      ".sg-col-inner .a-section",
+      ".s-main-slot > div",
+    ];
+
+    let selectedSelector = "";
+
+    for (const selector of selectors) {
+      console.log(`Trying Amazon selector: ${selector}`);
+      try {
+        const exists = await page.evaluate((sel) => {
+          return document.querySelectorAll(sel).length > 0;
+        }, selector);
+
+        if (exists) {
+          selectedSelector = selector;
+          console.log(`Found working Amazon selector: ${selector}`);
+          break;
+        }
+      } catch (error) {
+        console.log(`Selector ${selector} failed: ${error}`);
+      }
+    }
+
+    if (!selectedSelector) {
       console.log(
-        "Timeout or selector not found on Amazon, returning empty results"
+        "No suitable Amazon selectors found, returning empty results"
       );
       return [];
     }
 
-    const amazonData = await page.evaluate(() => {
-      const productSelector = ".s-card-container";
-      const nameSelector =
-        ".a-size-medium.a-spacing-none.a-color-base.a-text-normal";
-      const ratingSelector = ".a-icon-star-small";
-      const reviewsSelector = ".a-size-base.s-underline-text";
-      const boughtInPastMonthSelector =
-        ".a-row.a-size-base .a-size-base.a-color-secondary";
-      const priceSelector = ".a-price-whole";
-      const originalPriceSelector = ".a-offscreen";
-      const discountSelector = ".a-size-base.a-color-price";
-      const availabilitySelector = ".a-size-medium.a-color-success";
-      const imageSelector = ".s-image";
+    const amazonData = await page.evaluate((productSelector) => {
+      const findText = (element: any, selectors: any) => {
+        for (const selector of selectors) {
+          const el = element.querySelector(selector);
+          if (el && el.textContent) {
+            return el.textContent.trim();
+          }
+        }
+        return "N/A";
+      };
+
+      const nameSelectors = [
+        ".a-size-medium.a-color-base.a-text-normal",
+        ".a-size-base-plus.a-color-base.a-text-normal",
+        ".a-size-medium.a-spacing-none.a-color-base.a-text-normal",
+        "h2 .a-link-normal",
+        "h2",
+      ];
+
+      const priceSelectors = [
+        ".a-price .a-offscreen",
+        ".a-price-whole",
+        ".a-price",
+        ".a-color-price",
+      ];
+
+      const originalPriceSelector = [".a-price span", ".a-text-price"];
+
+      const ratingSelectors = [
+        ".a-icon-star-small",
+        ".a-icon-star .a-icon-alt",
+        ".a-icon-star",
+      ];
+
+      const reviewsSelectors = [
+        ".a-size-base.s-underline-text",
+        ".a-size-base",
+        ".a-link-normal .a-size-base",
+      ];
+
+      const boughtInPastMonthSelector = [
+        ".a-row.a-size-base .a-size-base.a-color-secondary",
+      ];
+
+      const discountSelector = [".a-size-base.a-color-price"];
+
+      const availabilitySelector = [".a-size-medium.a-color-success"];
+
+      const imageSelectors = [".s-image", "img"];
 
       return Array.from(document.querySelectorAll(productSelector))
         .map((el) => {
+          const linkElement = el.querySelector("a");
+          const link = linkElement?.getAttribute("href");
+
+          if (!link) return null;
+
+          const fullLink = link.startsWith("http")
+            ? link
+            : `https://www.amazon.in${link}`;
+
+          let image = "";
+          for (const imgSelector of imageSelectors) {
+            const imgEl = el.querySelector(imgSelector);
+            if (imgEl) {
+              image = imgEl.getAttribute("src") || "";
+              if (image) break;
+            }
+          }
+
           return {
-            name: el.querySelector(nameSelector)?.textContent?.trim() || "N/A",
-            rating:
-              el.querySelector(ratingSelector)?.textContent?.trim() || "N/A",
-            reviews:
-              el.querySelector(reviewsSelector)?.textContent?.trim() || "N/A",
-            boughtInPastMonth:
-              el
-                .querySelector(boughtInPastMonthSelector)
-                ?.textContent?.trim() || "N/A",
-            price:
-              el.querySelector(priceSelector)?.textContent?.trim() ||
-              "Out of Stock",
-            originalPrice:
-              el.querySelector(originalPriceSelector)?.textContent?.trim() ||
-              "N/A",
-            discount:
-              el.querySelector(discountSelector)?.textContent?.trim() || "",
-            availability:
-              el.querySelector(availabilitySelector)?.textContent?.trim() ||
-              "In Stock",
-            image: el.querySelector(imageSelector)?.getAttribute("src") || "",
-            link: el.querySelector("a")?.getAttribute("href")
-              ? `https://www.amazon.in${el.querySelector("a")?.getAttribute("href")}`
-              : "",
+            name: findText(el, nameSelectors) || "N/A",
+            rating: findText(el, ratingSelectors) || "N/A",
+            reviews: findText(el, reviewsSelectors) || "N/A",
+            boughtInPastMonth: findText(el, boughtInPastMonthSelector) || "N/A",
+            originalPrice: findText(el, originalPriceSelector) || "N/A",
+            price: findText(el, priceSelectors) || "N/A",
+            discount: findText(el, discountSelector) || "N/A",
+            availability: findText(el, availabilitySelector) || "N/A",
+            image: image,
+            link: fullLink,
           };
         })
-        .filter((item) => item.name !== "N/A" && item.name.length > 0)
+        .filter((item) => item && item.name !== "N/A" && item.name.length > 0)
         .slice(0, 10);
-    });
+    }, selectedSelector);
     await page.close();
     return amazonData;
   } catch (error) {
@@ -154,108 +267,215 @@ async function scrapeFlipkart(searchParams: string) {
   try {
     browser = await launchBrowser();
     const page = await browser.newPage();
+
+    page.setDefaultNavigationTimeout(8000);
+    page.setDefaultTimeout(8000);
+
     await page.setRequestInterception(true);
     page.on("request", (req) => {
-      if (["font", "other"].includes(req.resourceType())) {
+      if (
+        ["stylesheet", "font", "media", "other"].includes(
+          req.resourceType()
+        )
+      ) {
         req.abort();
       } else {
         req.continue();
       }
     });
-    const BASE_URL = "https://www.flipkart.com/search?q=";
+
     await page.setUserAgent(
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     );
-    const flipkartUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, " "))}`;
-    console.log("Navigating to Flipkart...");
-    await page.goto(flipkartUrl, { waitUntil: "domcontentloaded" });
-    // page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
 
-    const isRushPage = await page.evaluate(() => {
-      return !!document.querySelector("#retry_btn"); // Retry button exists on "rush page"
+    await page.setExtraHTTPHeaders({
+      "Accept-Language": "en-US,en;q=0.9",
+      Accept:
+        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
     });
 
-    if (isRushPage) {
-      console.log("Rush page detected! Waiting for 3 seconds...");
-      await new Promise((resolve) => setTimeout(resolve, 3000)); // Wait manually
-      // page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
-      console.log("Clicking 'Try Now' button...");
-      await page.locator("button").click();
-    //   page.screenshot({ path: "./lib/screenshots/flipkart.jpeg" });
+    const BASE_URL = "https://www.flipkart.com/search?q=";
+    const flipkartUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, " "))}`;
+    console.log("Navigating to Flipkart...");
 
-      // page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
-
-      await page.waitForNavigation({
-        waitUntil: "networkidle0",
-        timeout: 30000,
+    await page
+      .goto(flipkartUrl, {
+        waitUntil: "networkidle2",
+        timeout: 20000,
+      })
+      .catch(async (err) => {
+        console.log(
+          "Flipkart navigation timeout, proceeding anyway:",
+          err.message
+        );
+        await new Promise((resolve) => setTimeout(resolve, 3000));
       });
-      console.log("Navigated to the actual product page.");
+
+    const blockedPage = await page.evaluate(() => {
+      return {
+        retry: !!document.querySelector("#retry_btn"),
+        login: !!document.querySelector("._3wFoIb"),
+        popup: !!document.querySelector("._2KpZ6l"),
+      };
+    });
+
+    if (blockedPage.retry || blockedPage.login || blockedPage.popup) {
+      console.log("Flipkart blocking page detected!");
+
+      // Handle retry button
+      if (blockedPage.retry) {
+        console.log("Rush page detected! Waiting for 3 seconds...");
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+
+        try {
+          console.log("Clicking 'Try Now' button...");
+          await page.locator("button").click();
+          await page
+            .waitForNavigation({
+              waitUntil: "networkidle2",
+              timeout: 20000,
+            })
+            .catch(() =>
+              console.log("Navigation after retry button timed out")
+            );
+        } catch (error) {
+          console.log(`Error clicking retry button: ${error}`);
+        }
+      }
+
+      if (blockedPage.popup) {
+        try {
+          console.log("Closing popup...");
+          await page.click("button._2KpZ6l");
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        } catch (error) {
+          console.log(`Error closing popup: ${error}`);
+        }
+      }
     }
 
-    try {
-      await page.waitForSelector("._75nlfW", { timeout: 5000 });
-      // page.screenshot({ "path": "./lib/screenshots/flipkart.jpeg" })
-    } catch (error) {
-      console.log(
-        "Timeout or selector not found on Flipkart, returning empty results"
-      );
+    const selectors = [
+      ".cPHDOP.col-12-12",
+      "._75nlfW"
+    ];
+
+
+    let selectedSelector = "";
+    for (const selector of selectors) {
+      console.log(`Trying Flipkart selector: ${selector}`);
+      try {
+        // Check if selector exists and has items
+        const exists = await page.evaluate((sel) => {
+          return document.querySelectorAll(sel).length > 0;
+        }, selector);
+        
+        if (exists) {
+          selectedSelector = selector;
+          console.log(`Found working Flipkart selector: ${selector}`);
+          break;
+        }
+      } catch (error) {
+        console.log(`Selector ${selector} failed: ${error}`);
+      }
+    }
+    
+    if (!selectedSelector) {
+      console.log("No suitable Flipkart selectors found, returning empty results");
       return [];
     }
 
-    const flipkartData = await page.evaluate(() => {
-      const productSelector = "._75nlfW";
-      const nameSelector = ".KzDlHZ";
-      const detailsContainerSelector = "div._6NESgJ";
-      const detailsListSelector = "ul.G4BRas";
-      const detailItemSelector = "li.J\\+igdf"; // Escaping the + character properly
-      const priceSelector = ".Nx9bqj._4b5DiR";
-      const originalPriceSelector = ".yRaY8j.ZYYwLA";
-      const imageSelector = ".DByuf4";
+    const flipkartData = await page.evaluate((productSelector) => {
+      const findText = (element:any, selectors:any) => {
+        for (const selector of selectors) {
+          const el = element.querySelector(selector);
+          if (el && el.textContent) {
+            return el.textContent.trim();
+          }
+        }
+        return "N/A";
+      };
+      
+      const nameSelectors = [
+        ".KzDlHZ", 
+        "._4rR01T", 
+        "._Spp8"]
 
+      const detailsSelectors = [
+        ".G4BRas li.J\\+igdf", 
+        "._1xgFaf", 
+        "._3Djpdu"
+      ];
+      
+      const priceSelectors = [
+        ".Nx9bqj._4b5DiR", 
+        "._30jeq3", 
+        "._1_WHN1"
+      ];
+      
+      const originalPriceSelectors = [
+        ".yRaY8j.ZYYwLA", 
+        "._3I9_wc", 
+        "._27UcVY"
+      ];
+      
+      const imageSelectors = [
+        ".DByuf4", 
+        "._396cs4", 
+        "._2r_T1I"
+      ];
+      
+      // Process products
       return Array.from(document.querySelectorAll(productSelector))
         .map((el) => {
-          const name =
-            el.querySelector(nameSelector)?.textContent?.trim() || "N/A";
-
-          // Extract details from the list items
-          const detailsContainer = el.querySelector(detailsContainerSelector);
+          // Extract link first as it's crucial
+          const linkElement = el.querySelector("a");
+          const link = linkElement?.getAttribute("href");
+          
+          // Skip if no link found (likely not a product)
+          if (!link) return null;
+          
+          const fullLink = link.startsWith("http") ? link : `https://www.flipkart.com${link}`;
+          
+          // Get name
+          const name = findText(el, nameSelectors);
+          
+          // Get details
           let details = "";
-
-          if (detailsContainer) {
-            const detailsList =
-              detailsContainer.querySelector(detailsListSelector);
-            if (detailsList) {
-              // Only get the first list item
-              const firstItem = detailsList.querySelector(detailItemSelector);
-              if (firstItem) {
-                const text = firstItem.textContent?.trim() || "";
-                details = text.replace(/\|/g, ",");
+          for (const selector of detailsSelectors) {
+            try {
+              const detailsElement = el.querySelector(selector);
+              if (detailsElement) {
+                details = detailsElement.textContent?.trim() || "";
+                break;
               }
+            } catch (error) {
+              console.log(`Selector ${selector} failed: ${error}`);
             }
           }
-
-          const price =
-            el.querySelector(priceSelector)?.textContent?.trim() || "N/A";
-          const originalPrice =
-            el.querySelector(originalPriceSelector)?.textContent?.trim() ||
-            "N/A";
-          const image =
-            el.querySelector(imageSelector)?.getAttribute("src") || "";
-          const link = el.querySelector("a")?.getAttribute("href")
-            ? `https://www.flipkart.com${el.querySelector("a")?.getAttribute("href")}`
-            : "";
-
+          
+          
+          let image = "";
+          for (const imgSelector of imageSelectors) {
+            const imgEl = el.querySelector(imgSelector);
+            if (imgEl) {
+              image = imgEl.getAttribute("src") || "";
+              if (image) break;
+            }
+          }
+          
+          const finalName = details ? `${name} ${details}` : name;
+          
           return {
-            name: `${name} ${details}`,
-            price,
-            originalPrice,
-            image,
-            link,
+            name: finalName,
+            price: findText(el, priceSelectors),
+            originalPrice: findText(el, originalPriceSelectors),
+            image: image,
+            link: fullLink
           };
         })
-        .filter((item) => item.name !== "N/A" && item.name.length > 0)
+        .filter(item => item && item.name !== "N/A" && item.name.length > 0)
         .slice(0, 10);
-    });
+    }, selectedSelector)
 
     await page.close();
     return flipkartData;
@@ -266,5 +486,6 @@ async function scrapeFlipkart(searchParams: string) {
     if (browser) await browser.close();
   }
 }
-// Remove this line as we're now exporting the function instead of directly calling it
+// Use this fucntion invocation for testing purpose without running local Env
+
 // scrapeProduct("Realme Gt 6T")
