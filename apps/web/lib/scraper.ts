@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
-import { AwardIcon } from "lucide-react";
+
 chromium.setGraphicsMode = false;
 
 export async function scrapeProduct(searchParams: string) {
@@ -29,22 +29,44 @@ export async function scrapeProduct(searchParams: string) {
 }
 
 async function launchBrowser() {
-  return await puppeteer.launch({
-    args: [
-      ...chromium.args,
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-accelerated-2d-canvas",
-      "--no-first-run",
-      "--no-zygote",
-      "--disable-gpu",
-    ],
-    executablePath:
-      process.env.CHROME_EXECUTABLE_PATH || (await chromium.executablePath()),
-    headless: chromium.headless,
-    defaultViewport: chromium.defaultViewport,
-  });
+  const randomDelay = Math.floor(Math.random() * 500);
+  await new Promise(resolve => setTimeout(resolve, randomDelay));
+  try {
+    return await puppeteer.launch({
+      args: [
+        ...chromium.args,
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--disable-gpu",
+        "--disable-web-security", // Helps with some CORS issues
+        "--disable-features=IsolateOrigins,site-per-process" // Helps with iframe navigation
+      ],
+      executablePath:
+        process.env.CHROME_EXECUTABLE_PATH || await chromium.executablePath(),
+      headless: chromium.headless,
+      defaultViewport: {
+        width: 1280,
+        height: 800
+      },
+    });
+  } catch (error:any) {
+    console.error("Browser launch error:", error);
+    if (error.code === "ETXTBSY") {
+      console.log("ETXTBSY error detected, waiting and retrying browser launch...");
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return await puppeteer.launch({
+        args: chromium.args,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
+        defaultViewport: chromium.defaultViewport,
+      });
+    }
+    throw error;
+  }
 }
 
 async function scrapeAmazon(searchParams: string) {
@@ -55,6 +77,20 @@ async function scrapeAmazon(searchParams: string) {
 
     page.setDefaultNavigationTimeout(8000);
     page.setDefaultTimeout(8000);
+
+    await page.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    );
+
+    await page.setExtraHTTPHeaders({
+      'Accept-Language': 'en-US,en;q=0.9',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Connection': 'keep-alive',
+      'Cache-Control': 'max-age=0',
+      'Sec-Ch-Ua': '"Google Chrome";v="98", " Not;A Brand";v="99"',
+      'Sec-Ch-Ua-Mobile': '?0',
+    });
 
     await page.setRequestInterception(true);
     page.on("request", (req) => {
@@ -67,16 +103,6 @@ async function scrapeAmazon(searchParams: string) {
       } else {
         req.continue();
       }
-    });
-
-    await page.setUserAgent(
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    );
-
-    await page.setExtraHTTPHeaders({
-      "Accept-Language": "en-US,en;q=0.9",
-      Accept:
-        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
     });
 
     const BASE_URL = "https://www.amazon.in/s?k=";
@@ -98,39 +124,38 @@ async function scrapeAmazon(searchParams: string) {
 
     console.log("Checking Amazon page status...");
 
-    const pageState = await page.evaluate(() => {
-      if (
+    const captchaDetected = await page.evaluate(() => {
+      return (
         document.body.textContent?.includes("captcha") ||
         document.body.textContent?.includes("robot") ||
-        document.title.includes("Robot")
-      ) {
-        return "captcha";
-      }
-
-      if (document.querySelector(".s-card-container")) {
-        return "products-found";
-      }
-
-      if (document.querySelector(".s-impression-counter4")) {
-        return "alternative-selector";
-      }
-
-      if (document.querySelector(".sg-col-20-of-24")) {
-        return "alternative-selector";
-      }
-
-      if (document.querySelector(".s-main-slot")) {
-        return "main-slot";
-      }
-
-      return "unknown";
+        document.title.includes("Robot") ||
+        document.body.textContent?.includes("verify your identity")
+      );
     });
 
-    console.log("Amazon page state:", pageState);
-
-    if (pageState === "captcha") {
+    if (captchaDetected) {
       console.log("Amazon bot detection triggered - attempting bypass");
-      await page.reload({ waitUntil: "networkidle2", timeout: 10000 });
+      // Wait a bit to simulate human behavior
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      
+      // Try clicking any "I'm not a robot" button if present
+      try {
+        await page.click('input[type="submit"]');
+        await page.waitForNavigation({ waitUntil: "networkidle2", timeout: 5000 });
+      } catch (e) {
+        console.log("No clickable captcha button found");
+      }
+      
+      // If still on captcha, try reload
+      const stillCaptcha = await page.evaluate(() => {
+        return document.body.textContent?.includes("captcha");
+      });
+      
+      if (stillCaptcha) {
+        console.log("Amazon bot detection triggered - attempting bypass");
+        await page.reload({ waitUntil: "networkidle2" });
+      }
     }
 
     const selectors = [
