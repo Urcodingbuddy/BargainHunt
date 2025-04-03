@@ -83,7 +83,7 @@ export function normalizeProductData(
       availability: amazonProduct.availability,
       prices: {
         amazon: {
-          price: `₹${amazonProduct.price}`,
+          price: amazonProduct.price,
           originalPrice: amazonProduct.originalPrice,
           numericValue: numericPrice,
           discount: amazonProduct.discount,
