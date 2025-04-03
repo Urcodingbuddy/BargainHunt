@@ -229,6 +229,8 @@ async function scrapeAmazon(searchParams: string) {
         });
       } catch (e) {
         console.log("Failed to navigate from rush hour page:", e);
+        const pageContent = await page.content();
+        console.log("Falulty Page: " + pageContent);
         throw new Error("Rush hour page bypass failed");
       }
     }
@@ -260,11 +262,9 @@ async function scrapeAmazon(searchParams: string) {
     }
 
     if (!selectedSelector) {
-      const pageContent = await page.content();
       console.log(
         "No suitable Amazon selectors found, returning empty results"
       );
-      console.log("Falulty Page: " + pageContent);
       return [];
     }
 
@@ -351,7 +351,13 @@ async function scrapeAmazon(searchParams: string) {
             link: fullLink,
           };
         })
-        .filter((item) => item && item.name !== "N/A" && item.name.length > 0 && item.price !== "N/A")
+        .filter(
+          (item) =>
+            item &&
+            item.name !== "N/A" &&
+            item.name.length > 0 &&
+            item.price !== "N/A"
+        )
         .slice(0, 10);
     }, selectedSelector);
     await page.close();
@@ -561,7 +567,13 @@ async function scrapeFlipkart(searchParams: string) {
             link: fullLink,
           };
         })
-        .filter((item) => item && item.name !== "N/A" && item.name.length > 0 && item.price !== "N/A")
+        .filter(
+          (item) =>
+            item &&
+            item.name !== "N/A" &&
+            item.name.length > 0 &&
+            item.price !== "N/A"
+        )
         .slice(0, 10);
     }, selectedSelector);
 
