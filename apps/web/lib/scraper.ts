@@ -1,5 +1,7 @@
-import puppeteer from "puppeteer-core";
+import puppeteer from "puppeteer-extra";
 import chromium from "@sparticuz/chromium";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
+puppeteer.use(StealthPlugin());
 
 chromium.setGraphicsMode = false;
 
@@ -151,7 +153,8 @@ async function scrapeAmazon(searchParams: string) {
         );
         await new Promise((resolve) => setTimeout(resolve, 3000));
       });
-
+    await page.mouse.move(100, 100);
+    await page.evaluate(() => window.scrollBy(0, 100));
     console.log("Checking Amazon page status...");
 
     const captchaDetected = await page.evaluate(() => {
