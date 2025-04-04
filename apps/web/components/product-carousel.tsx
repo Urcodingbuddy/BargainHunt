@@ -62,7 +62,7 @@ export default function ProductCarousel() {
   }, []);
 
   return (
-    <div className="relative w-full h-full ">
+    <div className="relative w-full h-full pointer-events-auto">
       {/* Carousel Images */}
       <div className="relative w-full h-full ">
         {images.map((image, index) => (
