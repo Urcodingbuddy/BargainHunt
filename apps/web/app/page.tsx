@@ -68,12 +68,12 @@ export default function Home() {
               decisions with our real-time price comparison tool.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="bg-purple-600 cursor-pointer hover:bg-purple-700 rounded-md text-white">
+              <Button className="bg-purple-600 cursor-pointer pointer-events-auto hover:bg-purple-700 rounded-md text-white">
                 <Link href="/compare">Compare Prices</Link>
               </Button>
               <Button
                 variant="outline"
-                className="border-gray-700 cursor-pointer hover:bg-gray-900 rounded-md"
+                className="border-gray-700 cursor-pointer pointer-events-auto hover:bg-gray-900 rounded-md"
                 onClick={scrollToNewsletter}
               >
                 Join Newsletter
