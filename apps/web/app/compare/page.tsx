@@ -1,14 +1,17 @@
 "use client";
 
 import type React from "react";
-
+import Spline from "@splinetool/react-spline";
 import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Star, ExternalLink, ArrowLeft } from "lucide-react";
-import { normalizeProductData, scrapeAndStoreProduct } from "@/lib/api";
-import type { NormalizedProduct } from "@/lib/api";
+import {
+  normalizeProductData,
+  scrapeAndStoreProduct,
+} from "@/lib/ProductMatching";
+import type { NormalizedProduct } from "@/lib/ProductMatching";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Search, X } from "lucide-react";
@@ -20,7 +23,7 @@ export default function ComparePage() {
   const [products, setProducts] = useState<NormalizedProduct[]>(
     normalizeProductData()
   );
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -322,8 +325,12 @@ export default function ComparePage() {
         </>
       )}
       {isLoading ? (
-        <div className="flex justify-center items-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+        <div
+          className="relative border-gray-700 rounded-lg h-96 overflow-auto"
+          onWheel={(e) => e.stopPropagation()}
+        >
+          <div className=" bg-[#0a0a0a] h-9 w-35 absolute right-5 bottom-5"></div>
+          <Spline scene="https://prod.spline.design/I0fZjdwinGcOCQNa/scene.splinecode" />
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6">
