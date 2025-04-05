@@ -39,7 +39,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      
       <Head>
+      
         <meta property="og:title" content="BargainHunt" />
         <meta property="og:type" content="E-commerce Compare" />
         <meta property="og:url" content="https://bargainhunt.vercel.app" />
@@ -54,6 +56,12 @@ export default function RootLayout({
           <Header />
           <main className="flex-1 mx-2 sm:mx-8 md:mx-12 lg:mx-14">
             <Suspense>{children}</Suspense>
+            <iframe
+    src="https://www.chatbase.co/chatbot-iframe/aK9uDLKFneU55nyobNwP1"
+    width="100%"
+    // style="height: 100%; min-height: 700px"
+    // frameborder="0"
+></iframe>
           </main>
           <Footer />
           <Toaster />
