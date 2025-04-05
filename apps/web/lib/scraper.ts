@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
+import { unique } from "next/dist/build/utils";
 
 
 chromium.setGraphicsMode = false;
@@ -340,7 +341,17 @@ async function scrapeAmazon(searchParams: string) {
             }
           }
 
+          let uniqueID = "";
+          const name = findText(el, nameSelectors);
+          const price= findText(el, priceSelectors);
+          if(name && price){
+            uniqueID = name + " | " + price;
+          }else{
+            uniqueID = "N/A";
+          }
+
           return {
+            uniqueID: uniqueID,
             name: findText(el, nameSelectors) || "N/A",
             rating: findText(el, ratingSelectors),
             reviews: findText(el, reviewsSelectors),
@@ -533,9 +544,7 @@ async function scrapeFlipkart(searchParams: string) {
             ? link
             : `https://www.flipkart.com${link}`;
 
-          // Get name
-          const name = findText(el, nameSelectors);
-
+                    
           // Get details
           let details = "";
           for (const selector of detailsSelectors) {
@@ -559,9 +568,20 @@ async function scrapeFlipkart(searchParams: string) {
             }
           }
 
-          const finalName = details ? `${name} ${details}` : name;
+          
+          let uniqueID = "";
+          const name = findText(el, nameSelectors);
+          const price= findText(el, priceSelectors);
+          const finalName = details ? `${name} ${details}` : name; 
+
+          if(name && price){
+            uniqueID = name + " | " + price;
+          }else{
+            uniqueID = "N/A";
+          }
 
           return {
+            uniqueID: uniqueID,
             name: finalName,
             price: findText(el, priceSelectors) || "N/A",
             originalPrice: findText(el, originalPriceSelectors),
