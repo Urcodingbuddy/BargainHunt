@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Star, ExternalLink } from "lucide-react";
 import Link from "next/link";
-import type { NormalizedProduct } from "@/lib/api";
+import type { NormalizedProduct } from "@/lib/ProductMatching";
 
 interface ProductCardProps {
   product: NormalizedProduct;
