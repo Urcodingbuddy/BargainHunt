@@ -13,7 +13,7 @@ export async function scrapeProduct(searchParams: string) {
       scrapeAmazon(searchParams),
       scrapeFlipkart(searchParams),
     ]);
-    console.log(amazonData, flipkartData);
+    // console.log(amazonData, flipkartData);
     console.log("Scraping End");
     return {
       amazon: amazonData || [],
