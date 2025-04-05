@@ -17,6 +17,7 @@ import Link from "next/link";
 import { Search, X } from "lucide-react";
 import { PRODUCT_CATEGORIES, type ProductCategory } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { ToastAction } from "@/components/ui/toast";
 
 export default function ComparePage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -326,7 +327,7 @@ export default function ComparePage() {
       )}
       {isLoading ? (
         <div
-          className="relative border-gray-700 rounded-lg h-96 overflow-auto"
+          className="relative border border-gray-700 rounded-lg h-5vh overflow-auto"
           onWheel={(e) => e.stopPropagation()}
         >
           <div className=" bg-[#0a0a0a] h-9 w-35 absolute right-5 bottom-5"></div>
@@ -338,9 +339,11 @@ export default function ComparePage() {
             <ProductComparisonCard key={product.id} product={product} />
           ))}
           {products.length === 0 && !isLoading && (
-            <div className="text-center text-gray-400 py-12">
-              No products found. Try a different search or category.
-            </div>
+            <ToastAction altText={"No products found"}>
+            alttext="No products found"
+            message="No products found. Please try a different search."
+            action="Try Again"      
+          </ToastAction>
           )}
         </div>
       )}
