@@ -16,6 +16,8 @@
     "@radix-ui/react-toast": "^1.2.6",
     "@repo/ui": "*",
     "@sparticuz/chromium": "^133.0.0",
+    "@splinetool/react-spline": "^4.0.0",
+    "@splinetool/runtime": "^1.9.82",
     "axios": "^1.8.4",
     "class-variance-authority": "^0.7.1",
     "clean": "^4.0.2",
