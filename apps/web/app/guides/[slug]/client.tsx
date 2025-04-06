@@ -67,8 +67,8 @@ export default function GuidePostClient({ post }: { post: Post }) {
   }
 
   return (
-    <div className="flex justify-between items-center mb-8">
-      <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2 justify-between items-center mb-8">
+      <div className="flex gap-2 ">
         <Button
           variant="outline"
           size="sm"
