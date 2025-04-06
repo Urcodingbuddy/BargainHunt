@@ -72,7 +72,7 @@ export default function GuidePostClient({ post }: { post: Post }) {
         <Button
           variant="outline"
           size="sm"
-          className="h-8 px-3 border-gray-800 hover:bg-gray-900 rounded-md"
+          className="h-8 cursor-pointer px-3 border-gray-800 hover:bg-gray-900 rounded-md"
           onClick={() => handleShare("twitter")}
         >
           <Twitter className="h-4 w-4 mr-1" />
@@ -81,7 +81,7 @@ export default function GuidePostClient({ post }: { post: Post }) {
         <Button
           variant="outline"
           size="sm"
-          className="h-8 px-3 border-gray-800 hover:bg-gray-900 rounded-md"
+          className="h-8 cursor-pointer  px-3 border-gray-800 hover:bg-gray-900 rounded-md"
           onClick={() => handleShare("facebook")}
         >
           <Facebook className="h-4 w-4 mr-1" />
@@ -90,7 +90,7 @@ export default function GuidePostClient({ post }: { post: Post }) {
         <Button
           variant="outline"
           size="sm"
-          className="h-8 px-3 border-gray-800 hover:bg-gray-900 rounded-md"
+          className="h-8 cursor-pointer  px-3 border-gray-800 hover:bg-gray-900 rounded-md"
           onClick={() => handleShare("linkedin")}
         >
           <Linkedin className="h-4 w-4 mr-1" />
@@ -100,7 +100,7 @@ export default function GuidePostClient({ post }: { post: Post }) {
       <Button
         variant="outline"
         size="sm"
-        className="h-8 px-3 border-gray-800 hover:bg-gray-900 rounded-md"
+        className="h-8 cursor-pointer px-3 border-gray-800 hover:bg-gray-900 rounded-md"
         onClick={() => handleShare("clipboard")}
       >
         <Share2 className="h-4 w-4 mr-1" />
