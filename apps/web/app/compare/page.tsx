@@ -327,7 +327,7 @@ export default function ComparePage() {
       )}
       {isLoading ? (
         <div
-          className="relative border border-gray-700 rounded-lg h-5vh overflow-auto"
+          className="relative h-5vh overflow-auto"
           onWheel={(e) => e.stopPropagation()}
         >
           <div className=" bg-[#0a0a0a] h-9 w-35 absolute right-5 bottom-5"></div>
