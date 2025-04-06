@@ -10,9 +10,9 @@ export default function Chatbot() {
     <div className="relative overflow-hidden rounded-lg z-20">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="h-12 md:h-14 w-12 md:w-14 rounded-full md:bg-purple-800 bg-purple-600 text-white fixed bottom-6 md:bottom-13 right-6 md:right-13 flex items-center justify-center shadow-lg hover:bg-purple-600 transition duration-300 cursor-pointer group ease-in-out"
+        className="h-12 md:h-13 w-12 md:w-13 rounded-full md:bg-purple-800 bg-purple-600 text-white fixed bottom-6 md:bottom-13 right-6 md:right-13 flex items-center justify-center shadow-lg hover:bg-purple-600 transition duration-300 cursor-pointer group ease-in-out"
       >
-        <BotMessageSquare className="h-7 md:h-9 w-7 md:w-9 transition-transform duration-300 group-hover:scale-110" />
+        <BotMessageSquare className="h-7 md:h-8 w-7 md:w-8 transition-transform duration-300 group-hover:scale-110" />
       
       </button>
       <motion.div
