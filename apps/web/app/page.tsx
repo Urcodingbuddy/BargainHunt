@@ -92,7 +92,7 @@ export default function Home() {
           <h2 className="text-2xl font-bold">Featured Guides</h2>
           <Link
             href="/guides"
-            className="text-purple-500 hover:text-purple-400 text-sm flex items-center gap-2"
+            className="text-purple-500 hover:text-purple-400 text-sm flex items-center gap-2 pointer-events-auto z-20"
           >
             View all <Eye className="h-4 w-4" />
           </Link>
