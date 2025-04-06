@@ -327,7 +327,7 @@ export default function ComparePage() {
       )}
       {isLoading ? (
         <div
-          className="relative h-5vh overflow-auto"
+          className="relative h-5vh overflow-auto pointer-events-none"
           onWheel={(e) => e.stopPropagation()}
         >
           <div className=" bg-[#0a0a0a] h-9 w-35 absolute right-5 bottom-5"></div>
