@@ -19,6 +19,7 @@ import { BorderBeam } from "@/components/ui/border-beam";
 import { InteractiveGridPattern } from "@/components/ui/intrective-grid-pattern";
 import { cn } from "@/lib/utils";
 
+
 export default function Home() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
