@@ -103,7 +103,6 @@ export const PRODUCT_CATEGORIES = {
 } as const;
 
 export type ProductCategory = keyof typeof PRODUCT_CATEGORIES;
-console.log(PRODUCT_CATEGORIES);
 export function detectCategory(title: string): ProductCategory | null {
   const normalizedTitle = title.toLowerCase();
   for (const [category, keywords] of Object.entries(PRODUCT_CATEGORIES)) {
@@ -116,10 +115,9 @@ export function detectCategory(title: string): ProductCategory | null {
 export function extractSpecsByCategory(title: string, category: ProductCategory): ExtractedSpecs {
   const lower = title.toLowerCase()
   const specs: ExtractedSpecs = {}
-
+  console.log("EXTRACTING SPECS FOR", category, lower)
   switch (category) {
     case "smartphones": {
-      console.log("SMARTPHONES")
       specs.ram = lower.match(/(\d{2}|\d{1}) ?gb ram/)?.[0]
       specs.storage = lower.match(/(\d{3,4}|\d{2,3}) ?gb(?! ram)/)?.[0]
       specs.screenSize = lower.match(/(\d{1,2}\.?\d{0,2}) ?("|inch|inches)/)?.[1]
@@ -128,7 +126,6 @@ export function extractSpecsByCategory(title: string, category: ProductCategory)
     }
 
     case "laptops": {
-      console.log("LAPTOPS")
       specs.processor = lower.match(/i[3579]-\d{4,5}[a-z]*/)?.[0] || lower.match(/ryzen \d \d{4}[a-z]*/)?.[0]
       specs.processorGen = lower.match(/(\d{1,2})(st|nd|rd|th) gen/)?.[1]
       specs.ram = lower.match(/(\d{1,2}) ?gb ram/)?.[1]
