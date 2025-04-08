@@ -15,7 +15,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
       <div className="relative bg-black/20 border-dotted border-2 border-zinc-600 backdrop-blur-2xl rounded-lg p-8 w-full max-w-md shadow-lg">
         <button
           onClick={onClose}
-          className="absolute rounded-lg hover:bg-white/20 flex justify-center items-center w-7 h-7 top-4 right-4 text-gray-300 hover:text-white"
+          className="absolute cursor-pointer rounded-lg hover:bg-white/20 flex justify-center items-center w-7 h-7 top-4 right-4 text-gray-300 hover:text-white"
           aria-label="Close"
         >
           <X className="h-6 w-6" />
