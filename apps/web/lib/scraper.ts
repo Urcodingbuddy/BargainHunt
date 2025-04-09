@@ -206,6 +206,7 @@ async function scrapeAmazon(searchParams: string) {
         300 + Math.random() * 100,
         400 + Math.random() * 100
       );
+
       await new Promise((resolve) =>
         setTimeout(resolve, 2000 + Math.random() * 300)
       );
@@ -235,8 +236,6 @@ async function scrapeAmazon(searchParams: string) {
           waitUntil: "networkidle2",
           timeout: 10000,
         });
-        const pageContent = await page.content();
-        console.log("Falulty Page: " + pageContent);
       }
     }
 
@@ -395,23 +394,14 @@ async function scrapeAmazon(searchParams: string) {
 
 async function scrapeFlipkart(searchParams: string) {
   let browser;
+  let retryCount = 0;
+  const maxRetries = 2;
   try {
     browser = await launchBrowser();
     const page = await browser.newPage();
 
     page.setDefaultNavigationTimeout(8000);
     page.setDefaultTimeout(8000);
-
-    await page.setRequestInterception(true);
-    page.on("request", (req) => {
-      if (
-        ["stylesheet", "font", "media", "other"].includes(req.resourceType())
-      ) {
-        req.abort();
-      } else {
-        req.continue();
-      }
-    });
 
     await page.setUserAgent(
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
@@ -421,11 +411,46 @@ async function scrapeFlipkart(searchParams: string) {
       "Accept-Language": "en-US,en;q=0.9",
       Accept:
         "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+      "Accept-Encoding": "gzip, deflate, br",
+      Connection: "keep-alive",
+      "Cache-Control": "max-age=0",
+      "Sec-Ch-Ua": '"Google Chrome";v="98", " Not;A Brand";v="99"',
+      "Sec-Ch-Ua-Mobile": "?0",
+    });
+
+    await page.setRequestInterception(true);
+    page.on("request", (req) => {
+      const resourceType = req.resourceType();
+      if (
+        resourceType === "image" ||
+        resourceType === "stylesheet" ||
+        resourceType === "font" ||
+        resourceType === "media"
+      ) {
+        req.abort();
+      } else {
+        req.continue();
+      }
+    });
+
+    browser.setCookie({
+      name: "session-id",
+      value: `${Date.now()}`,
+      domain: ".amazon.in",
+      path: "/",
+      expires: Date.now() + 1000 * 60 * 60 * 24,
+      httpOnly: false,
+      secure: true,
+      sameSite: "None",
     });
 
     const BASE_URL = "https://www.flipkart.com/search?q=";
     const flipkartUrl = `${BASE_URL}${encodeURIComponent(searchParams.trim().replace(/\s+/g, " "))}`;
-    console.log("Navigating to Flipkart...");
+    console.log(`Navigating to Flipkart (attempt ${retryCount + 1})...`);
+
+    await new Promise((resolve) =>
+      setTimeout(resolve, 1000 + Math.random() * 2000)
+    );
 
     await page
       .goto(flipkartUrl, {
@@ -505,10 +530,8 @@ async function scrapeFlipkart(searchParams: string) {
     }
 
     if (!selectedSelector) {
-      console.log(
-        "No suitable Flipkart selectors found, returning empty results"
-      );
-      return [];
+      await page.reload({ waitUntil: "networkidle2" });
+      console.log("No suitable Flipkart selectors found, Trying again...");
     }
 
     const flipkartData = await page.evaluate((productSelector) => {
@@ -602,10 +625,18 @@ async function scrapeFlipkart(searchParams: string) {
     await page.close();
     return flipkartData;
   } catch (error) {
-    console.error("An error occurred with Flipkart scraping:", error);
-    return [];
-  } finally {
+    console.error(`Flipkart scraping attempt ${retryCount + 1} failed:`, error);
     if (browser) await browser.close();
+    retryCount++;
+    if (retryCount < maxRetries) {
+      console.log(
+        `Retrying Flipkart scrape (attempt ${retryCount + 1} of ${maxRetries})...`
+      );
+      await new Promise((resolve) => setTimeout(resolve, 10000 * retryCount)); // Increasing backoff
+    } else {
+      console.log("All Flipkart scraping attempts failed");
+      return [];
+    }
   }
 }
 // Use this fucntion invocation for testing purpose without running local Env
