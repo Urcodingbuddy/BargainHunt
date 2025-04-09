@@ -2,7 +2,6 @@ import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
 import { unique } from "next/dist/build/utils";
 
-
 chromium.setGraphicsMode = false;
 
 export async function scrapeProduct(searchParams: string) {
@@ -220,19 +219,24 @@ async function scrapeAmazon(searchParams: string) {
         });
 
         console.log("Searching for products...");
-        await page.waitForSelector('#twotabsearchtextbox', { visible: true });
-        await page.type('#twotabsearchtextbox', searchParams, { delay: 50 });
-        await page.keyboard.press('Enter');
+        await page.waitForSelector("#twotabsearchtextbox", { visible: true });
+        await page.type("#twotabsearchtextbox", searchParams, { delay: 50 });
+        await page.keyboard.press("Enter");
         await page.waitForNavigation({
           waitUntil: "networkidle2",
           timeout: 10000,
         });
-
       } catch (e) {
-        console.log("Failed to navigate from rush hour page:", e);
+        console.log("Searching for products...");
+        await page.waitForSelector("#twotabsearchtextbox", { visible: true });
+        await page.type("#twotabsearchtextbox", searchParams, { delay: 50 });
+        await page.keyboard.press("Enter");
+        await page.waitForNavigation({
+          waitUntil: "networkidle2",
+          timeout: 10000,
+        });
         const pageContent = await page.content();
         console.log("Falulty Page: " + pageContent);
-        throw new Error("Rush hour page bypass failed");
       }
     }
 
@@ -341,10 +345,10 @@ async function scrapeAmazon(searchParams: string) {
 
           let uniqueID = "";
           const name = findText(el, nameSelectors);
-          const price= findText(el, priceSelectors);
-          if(name && price){
+          const price = findText(el, priceSelectors);
+          if (name && price) {
             uniqueID = name + " | " + price;
-          }else{
+          } else {
             uniqueID = "N/A";
           }
 
@@ -542,7 +546,6 @@ async function scrapeFlipkart(searchParams: string) {
             ? link
             : `https://www.flipkart.com${link}`;
 
-                    
           // Get details
           let details = "";
           for (const selector of detailsSelectors) {
@@ -566,15 +569,14 @@ async function scrapeFlipkart(searchParams: string) {
             }
           }
 
-          
           let uniqueID = "";
           const name = findText(el, nameSelectors);
-          const price= findText(el, priceSelectors);
-          const finalName = details ? `${name} ${details}` : name; 
+          const price = findText(el, priceSelectors);
+          const finalName = details ? `${name} ${details}` : name;
 
-          if(name && price){
+          if (name && price) {
             uniqueID = name + " | " + price;
-          }else{
+          } else {
             uniqueID = "N/A";
           }
 
