@@ -422,7 +422,7 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
               </div>
             </div>
             {/* Price Comparison - Right Side */}
-            <div className="grid grid-cols-2 gap-3 md:gap-6 w-full lg:w-3/8">
+            <div className="grid grid-cols-2 gap-6 md:gap-6 w-full lg:w-3/8">
               {/* Amazon Price */}
               {product.prices.amazon ? (
                 <div className="relative">
