@@ -168,10 +168,7 @@ async function scrapeAmazon(searchParams: string) {
 
     if (captchaDetected) {
       console.log("Amazon bot detection triggered - attempting bypass");
-      // Wait a bit to simulate human behavior
       await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Try clicking any "I'm not a robot" button if present
       try {
         await page.click('input[type="submit"]');
         await page.waitForNavigation({
@@ -182,7 +179,6 @@ async function scrapeAmazon(searchParams: string) {
         console.log("No clickable captcha button found");
       }
 
-      // If still on captcha, try reload
       const stillCaptcha = await page.evaluate(() => {
         return document.body.textContent?.includes("captcha");
       });
@@ -215,21 +211,23 @@ async function scrapeAmazon(searchParams: string) {
         setTimeout(resolve, 2000 + Math.random() * 300)
       );
 
-      // Click on the "Go to the Amazon.in home page" link
       try {
+        console.log("Navigating to Homepage...");
         await page.click('a[href*="amazon.in/ref=cs_503_link"]');
         await page.waitForNavigation({
           waitUntil: "networkidle2",
           timeout: 10000,
         });
 
-        // Now search again from the home page with the search box
-        await page.type("#twotabsearchtextbox", searchParams);
-        await page.click('input[type="submit"]');
+        console.log("Searching for products...");
+        await page.waitForSelector('#twotabsearchtextbox', { visible: true });
+        await page.type('#twotabsearchtextbox', searchParams, { delay: 50 });
+        await page.keyboard.press('Enter');
         await page.waitForNavigation({
           waitUntil: "networkidle2",
           timeout: 10000,
         });
+
       } catch (e) {
         console.log("Failed to navigate from rush hour page:", e);
         const pageContent = await page.content();
