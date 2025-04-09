@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Suspense } from "react";
 import Head from "next/head";
 import Chatbot from "@/components/Chatbot";
+import { CompareProvider } from "@/contexts/CompareContext";
 
 const inter = Funnel_Display({ subsets: ["latin"] });
 
@@ -54,8 +55,12 @@ export default function RootLayout({
         <div className="min-h-screen flex flex-col">
           <Header />
           <main className="flex-1 mx-2 sm:mx-8 md:mx-12 lg:mx-14">
-            <Suspense>{children}<Chatbot/></Suspense>
-            
+            <CompareProvider>
+              <Suspense>
+                {children}
+                <Chatbot />
+              </Suspense>
+            </CompareProvider>
           </main>
           <Footer />
           <Toaster />

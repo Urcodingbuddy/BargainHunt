@@ -7,70 +7,66 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Star, ExternalLink, ArrowLeft } from "lucide-react";
-import {
-  normalizeProductData,
-  scrapeAndStoreProduct,
-} from "@/lib/ProductMatching";
+// import {
+//   normalizeProductData,
+//   scrapeAndStoreProduct,
+// } from "@/lib/ProductMatching";
 import type { NormalizedProduct } from "@/lib/ProductMatching";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Search, X } from "lucide-react";
 import { PRODUCT_CATEGORIES, type ProductCategory } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+import { useCompare } from "@/contexts/CompareContext";
 
 export default function ComparePage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [products, setProducts] = useState<NormalizedProduct[]>(
-    normalizeProductData()
-  );
-  const [isLoading, setIsLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] =
-    useState<ProductCategory | null>(null);
+  const { toast } = useToast();
+  const {
+    products,
+    isLoading,
+    searchQuery,
+    selectedCategory,
+    fetchProducts,
+    setSearchQuery,
+    setSelectedCategory,
+  } = useCompare();
+
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchParams = useSearchParams();
 
+  // Process URL search params on initial load and param changes
   useEffect(() => {
     const query = searchParams.get("q");
     const category = searchParams.get("category") as ProductCategory | null;
 
-    if (query) {
+    // Only fetch if params differ from current state to avoid unnecessary API calls
+    const shouldFetch = (
+      query && 
+      (query !== searchQuery || 
+      (category !== selectedCategory && category !== null))
+    );
+
+    if (query && query !== searchQuery) {
       setSearchQuery(query);
-      if (category) {
-        setSelectedCategory(category);
-      }
-      fetchProducts(query, category);
-    } else if (category) {
+    }
+    
+    if (category && category !== selectedCategory) {
       setSelectedCategory(category);
     }
-  }, [searchParams]);
 
-  const fetchProducts = async (
-    query: string,
-    category?: ProductCategory | null
-  ) => {
-    setIsLoading(true);
-    try {
-      const scrapedProducts = await scrapeAndStoreProduct(
-        query,
-        category || undefined
-      );
-      setProducts(scrapedProducts.length > 0 ? scrapedProducts : []);
-      setIsSearchOpen(false); // Close the popup after successful search
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      setProducts([]);
-    } finally {
-      setIsLoading(false);
+    if (shouldFetch) {
+      fetchProducts(query, category);
     }
-  };
+  }, [searchParams, searchQuery, selectedCategory]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery.trim() || !hasChanges) return;
     fetchProducts(searchQuery, selectedCategory);
+    setIsSearchOpen(false);
     setHasChanges(false);
   };
 
@@ -83,6 +79,16 @@ export default function ComparePage() {
     setSelectedCategory(category);
     setHasChanges(true);
   };
+
+  useEffect(()=>{
+    if (products.length === 0 && !isLoading) {
+      toast({
+        title: "No products found",
+        description: "Try searching for something else.",
+        variant: "destructive",
+      });
+    }
+  },[toast])
 
   useEffect(() => {
     let isThrottled = false;
@@ -124,7 +130,6 @@ export default function ComparePage() {
   const closeSearch = () => {
     setIsSearchOpen(false);
   };
-
   return (
     <div className="container mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold mb-8">Compare Prices</h1>
@@ -338,13 +343,6 @@ export default function ComparePage() {
           {products.map((product) => (
             <ProductComparisonCard key={product.id} product={product} />
           ))}
-          {products.length === 0 && !isLoading && (
-            <ToastAction altText={"No products found"}>
-            alttext="No products found"
-            message="No products found. Please try a different search."
-            action="Try Again"      
-          </ToastAction>
-          )}
         </div>
       )}
     </div>
