@@ -7,10 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Star, ExternalLink, ArrowLeft } from "lucide-react";
-// import {
-//   normalizeProductData,
-//   scrapeAndStoreProduct,
-// } from "@/lib/ProductMatching";
 import type { NormalizedProduct } from "@/lib/ProductMatching";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -33,7 +29,6 @@ export default function ComparePage() {
   } = useCompare();
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [hasChanges, setHasChanges] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchParams = useSearchParams();
 
@@ -42,42 +37,31 @@ export default function ComparePage() {
     const query = searchParams.get("q");
     const category = searchParams.get("category") as ProductCategory | null;
 
-    // Only fetch if params differ from current state to avoid unnecessary API calls
-    const shouldFetch = (
-      query && 
-      (query !== searchQuery || 
-      (category !== selectedCategory && category !== null))
-    );
-
-    if (query && query !== searchQuery) {
+   
+    if(query){
       setSearchQuery(query);
-    }
-    
-    if (category && category !== selectedCategory) {
+      if(category){
+        setSelectedCategory(category);
+      }
+      fetchProducts(query, category);
+    }else if (category) {
       setSelectedCategory(category);
     }
-
-    if (shouldFetch) {
-      fetchProducts(query, category);
-    }
-  }, [searchParams, searchQuery, selectedCategory]);
+    
+  }, [searchParams]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!searchQuery.trim() || !hasChanges) return;
     fetchProducts(searchQuery, selectedCategory);
     setIsSearchOpen(false);
-    setHasChanges(false);
   };
 
   const handleSearchInputChange = (value: string) => {
     setSearchQuery(value);
-    setHasChanges(true);
   };
 
   const handleCategoryChange = (category: ProductCategory | null) => {
     setSelectedCategory(category);
-    setHasChanges(true);
   };
 
   useEffect(()=>{
@@ -290,6 +274,7 @@ export default function ComparePage() {
                       <li>
                         <Link
                           href="/compare?q=sony%20wh-1000xm5"
+                          onClick={closeSearch}
                           className="text-purple-400 hover:text-purple-300 flex items-center gap-2"
                         >
                           <ArrowLeft className="h-4 w-4" />
@@ -321,7 +306,7 @@ export default function ComparePage() {
                 <Button
                   type="submit"
                   className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-                  disabled={!hasChanges || isLoading}
+                  disabled={isLoading}
                 >
                   {isLoading ? "Searching..." : "Search Products"}
                 </Button>
