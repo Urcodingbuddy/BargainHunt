@@ -77,6 +77,8 @@ export function Footer() {
             <div className="flex space-x-6 text-gray-400">
               <Link
                 href="https://github.com/Urcodingbuddy"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-purple-600"
               >
                 <Github className="h-5 w-5" />
@@ -84,6 +86,8 @@ export function Footer() {
               </Link>
               <Link
                 href="https://x.com/PetheAnsh"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-purple-600"
               >
                 <Twitter className="h-5 w-5" />
@@ -91,6 +95,8 @@ export function Footer() {
               </Link>
               <Link
                 href="https://www.linkedin.com/in/petheansh/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-purple-600"
               >
                 <Linkedin className="h-5 w-5" />
