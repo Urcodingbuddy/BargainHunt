@@ -422,7 +422,7 @@ async function scrapeFlipkart(searchParams: string) {
     page.on("request", (req) => {
       const resourceType = req.resourceType();
       if (
-        resourceType === "image" ||
+        
         resourceType === "stylesheet" ||
         resourceType === "font" ||
         resourceType === "media"
