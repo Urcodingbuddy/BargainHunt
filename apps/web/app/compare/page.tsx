@@ -419,14 +419,14 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
                 )}
 
                 {/* Additional details if available */}
-                {product.availability && (
+                {product.availability != "N/A" && (
                   <div className="text-xs sm:text-sm text-gray-400 ">
                     Availability:{" "}
                     <span className="text-white">{product.availability}</span>
                   </div>
                 )}
 
-                {product.boughtInPastMonth && (
+                {product.boughtInPastMonth != "M.R.P:"  && (
                   <div className="text-sm text-gray-400 mb-2">
                     <span className="text-white">
                       {product.boughtInPastMonth}
@@ -488,7 +488,7 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
                     <h4 className="text-sm md:text-lg font-bold mb-2">
                       Flipkart
                     </h4>
-                    {product.prices.flipkart.originalPrice && (
+                    {product.prices.flipkart.originalPrice != "N/A" && (
                       <div className="text-xs md:text-sm text-gray-400 line-through">
                         {product.prices.flipkart.originalPrice}
                       </div>
