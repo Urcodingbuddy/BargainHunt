@@ -2,7 +2,7 @@
 
 import type React from "react";
 import Spline from "@splinetool/react-spline";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -28,51 +28,73 @@ export default function ComparePage() {
     setSelectedCategory,
   } = useCompare();
 
+  // Transient UI state for input value - separate from application state
+  const [inputValue, setInputValue] = useState(searchQuery);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchParams = useSearchParams();
+  
 
-  // Process URL search params on initial load and param changes
+  
+  // Track if initial URL processing has occurred
+  const initialLoadProcessed = useRef(false);
+
+  // Handle URL parameter changes
   useEffect(() => {
     const query = searchParams.get("q");
     const category = searchParams.get("category") as ProductCategory | null;
+  
+    // If the query changes in the URL, update the input value and trigger the API call
+    if (query && query !== searchQuery) {
+      setSearchQuery(query); // Update the search query state
+      setInputValue(query); // Update the input box value
+      fetchProducts(query, category); // Trigger the API call
+    }
 
-   
-    if(query){
-      setSearchQuery(query);
-      if(category){
-        setSelectedCategory(category);
-      }
-      fetchProducts(query, category);
-    }else if (category) {
+    if (category !== selectedCategory) {
       setSelectedCategory(category);
     }
-    
-  }, [searchQuery, searchParams]);
-
-  const handleSearch = async (e: React.FormEvent) => {
+  }, [searchQuery]);
+  const handleSearch = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    fetchProducts(searchQuery, selectedCategory);
+    
+    setSearchQuery(searchParams.get("q") || inputValue);
+    
+    
+    fetchProducts(inputValue, selectedCategory);
+    
+    
     setIsSearchOpen(false);
-  };
+    
+    const url = new URL(window.location.href);
+    url.searchParams.set("q", inputValue);
+    if (selectedCategory) {
+      url.searchParams.set("category", selectedCategory);
+    } else {
+      url.searchParams.delete("category");
+    }
+    window.history.replaceState({}, "", url.toString());
+  }, [inputValue, selectedCategory, fetchProducts, setSearchQuery]);
+  const handleSearchInputChange = useCallback((value: string) => {
+    setInputValue(value);
+  }, []);
 
-  const handleSearchInputChange = (value: string) => {
-    setSearchQuery(value);
-  };
-
-  const handleCategoryChange = (category: ProductCategory | null) => {
+  const handleCategoryChange = useCallback((category: ProductCategory | null) => {
     setSelectedCategory(category);
-  };
+  }, [setSelectedCategory]);
 
-  useEffect(()=>{
-    if (products.length === 0 && !isLoading) {
+  useEffect(() => {
+    if (products.length === 0 && isLoading && initialLoadProcessed.current) {
       toast({
-        title: "No products found",
-        description: "Try searching for something else.",
-        variant: "destructive",
+        title: "Searching for products...",
+        description: "This may take a few seconds.",
+        duration: 2000,
+        action: <Button variant="link" onClick={closeSearch}>Close</Button>,
+        className: "bg-black/20 border-white/10 text-white",
+        variant: "default",
       });
     }
-  },[toast])
+  }, [products.length, isLoading, toast]);
 
   useEffect(() => {
     let isThrottled = false;
@@ -104,16 +126,25 @@ export default function ComparePage() {
     };
   }, []);
 
-  const openSearch = () => {
+  // Modal open/close handlers
+  const openSearch = useCallback(() => {
     setIsSearchOpen(true);
     setTimeout(() => {
       searchInputRef.current?.focus();
     }, 100);
-  };
+  }, []);
 
-  const closeSearch = () => {
+  const closeSearch = useCallback(() => {
     setIsSearchOpen(false);
-  };
+  }, []);
+  
+  // Reset input value when modal opens to match current search query
+  useEffect(() => {
+    if (isSearchOpen) {
+      setInputValue(searchQuery);
+    }
+  }, [isSearchOpen, searchQuery]);
+  // Rest of the component remains unchanged
   return (
     <div className="container mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold mb-8">Compare Prices</h1>
@@ -124,7 +155,7 @@ export default function ComparePage() {
           type="text"
           placeholder="Search for products to compare..."
           className="bg-[#111827] border-gray-700 focus-visible:ring-purple-500 rounded-md cursor-pointer pr-10"
-          value={searchQuery}
+          value={inputValue}
           onClick={openSearch}
           readOnly
         />
@@ -168,7 +199,7 @@ export default function ComparePage() {
                 </button>
               </div>
 
-              {/* Search Form */}
+              
               <form onSubmit={handleSearch} className="p-4 space-y-4">
                 <div className="relative">
                   <Input
@@ -176,7 +207,7 @@ export default function ComparePage() {
                     type="text"
                     placeholder="Search for products..."
                     className="bg-black/20 border-white/10 text-white placeholder:text-white/50 pr-10"
-                    value={searchQuery}
+                    value={inputValue}
                     onChange={(e) => handleSearchInputChange(e.target.value)}
                   />
                   <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50 h-4 w-4" />

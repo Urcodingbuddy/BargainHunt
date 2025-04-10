@@ -2,7 +2,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { normalizeProductData, scrapeAndStoreProduct } from "@/lib/ProductMatching";
+import { scrapeAndStoreProduct } from "@/lib/ProductMatching";
 import type { NormalizedProduct } from "@/lib/ProductMatching";
 import type { ProductCategory } from "@/lib/utils";
 
