@@ -45,7 +45,7 @@ const Comparisons: { title: string; href: string; description: string }[] = [
       "The Canon EOS R10 features a 24.2 MP CMOS sensor, 4K video recording, and advanced autofocus capabilities, making it ideal for both photography enthusiasts and professionals.",
   },
   {
-    title: "Samsung 55-Inch QN90B Neo QLED 4K Smart TV",
+    title: "Samsung 55-Inch Neo QLED 4K TV",
     href: "/compare?q=Samsung+QN90B+55-Inch",
     description:
       "The Samsung QN90B offers Quantum Matrix Technology, Neo Quantum Processor 4K, and Object Tracking Sound+, delivering an immersive viewing experience with stunning picture quality.",
