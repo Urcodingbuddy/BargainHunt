@@ -73,7 +73,7 @@ export function NavigationClient() {
                     className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                     href="/"
                   >
-                    <img src="./bargaintHuntIcon" alt="Icon" />
+                    <img src="./bargainHunt Logo.png" alt="Icon" />
 
                     <div className="mb-2 mt-4 text-lg font-medium">
                       Bargain<span className="text-purple-600">Hunt</span>
