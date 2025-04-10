@@ -93,7 +93,7 @@ export function NavigationClient() {
                 Discover our comprehensive shopping guides to make informed and
                 efficient purchasing decisions.
               </ListItem>
-              <ListItem href="/aboutus" title="About Us">
+              <ListItem href="/about" title="About Us">
                 Learn more about our mission and the team behind BargainHunt.
               </ListItem>
             </ul>
