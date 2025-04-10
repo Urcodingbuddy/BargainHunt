@@ -157,19 +157,19 @@ export default function ComparePage() {
       <h1 className="text-3xl font-bold mb-8">Compare Prices</h1>
 
       {/* Search Input that opens popup */}
-      <div className="mb-8 max-w-xl relative">
+      <div className="mb-8 max-w-xl relative group">
         <Input
           type="text"
           placeholder="Search for products to compare..."
-          className="bg-[#111827] border-gray-700 focus-visible:ring-purple-500 rounded-md cursor-pointer pr-10"
+          className="bg-gradient-to-r from-[#2a2e37] to-[#1c1f26] border border-gray-600 focus-visible:ring-2 focus-visible:ring-purple-500 rounded-lg cursor-pointer pr-12 text-white placeholder-gray-400 shadow-md transition-all duration-300 ease-in-out group-hover:shadow-lg"
           value={inputValue}
           onClick={openSearch}
           readOnly
         />
-        <span className="absolute text-sm rounded-sm right-16 px-2 py-1 top-1/6 bg-purple-600 text-white pointer-events-none">
+        <span className="absolute text-xs rounded-md right-16 px-2 py-1 top-1/2 transform -translate-y-1/2 bg-purple-600 text-white pointer-events-none shadow-md">
           ⌘ + <span>K</span>
         </span>
-        <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white h-5 w-5 pointer-events-none" />
+        <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-purple-400 h-5 w-5 pointer-events-none group-hover:text-purple-300 transition-colors duration-300" />
       </div>
 
       {/* Search Popup */}
@@ -177,7 +177,7 @@ export default function ComparePage() {
         <>
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            className="fixed inset-0 bg-black/50 backdrop-blur-md z-40"
             onClick={closeSearch}
           />
 
@@ -188,21 +188,21 @@ export default function ComparePage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="relative w-full max-w-md rounded-lg border backdrop-blur-2xl shadow-xl"
+              className="relative w-full max-w-md rounded-lg bg-gradient-to-br from-black/70 to-gray-800/70 backdrop-blur-xl shadow-2xl border border-gray-700"
             >
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-white/10 p-4">
-                <h2 className="text-lg font-medium text-white">
+              <div className="flex items-center justify-between border-b border-gray-600 p-4">
+                <h2 className="text-lg font-semibold text-white">
                   Search Products
                 </h2>
+                <span className="absolute text-xs rounded-md right-16 px-2 py-1 top-8 transform -translate-y-1/2 bg-purple-600 text-white pointer-events-none shadow-md">
+                  ⌘ + <span>K</span>
+                </span>
                 <button
                   onClick={closeSearch}
-                  className="rounded-full p-1 text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+                  className="rounded-full p-1 text-gray-400 hover:bg-gray-700 hover:text-white transition-colors"
                 >
-                  <span className="absolute text-sm rounded-sm right-16 px-2 py-1 top-4 bg-purple-600 text-white pointer-events-none">
-                    ⌘ + <span>K</span>
-                  </span>
-                  <X className="h-4 w-4" />
+                  <X className="h-5 w-5" />
                 </button>
               </div>
 
@@ -212,137 +212,16 @@ export default function ComparePage() {
                     ref={searchInputRef}
                     type="text"
                     placeholder="Search for products..."
-                    className="bg-black/20 border-white/10 text-white placeholder:text-white/50 pr-10"
+                    className="bg-gray-900/50 border-gray-600 text-white placeholder:text-gray-400 pr-10 focus:ring-2 focus:ring-purple-500"
                     value={inputValue}
                     onChange={(e) => handleSearchInputChange(e.target.value)}
                   />
-                  <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50 h-4 w-4" />
-                </div>
-
-                <div className="flex flex-col md:flex-row justify-between gap-2 h-80">
-                  {/* Categories */}
-                  <div className="space-y-2 pr-5 md:w-1/3 overflow-y-scroll scroll-smooth ultra-scrollbar select-none">
-                    <h3 className="text-xs font-medium text-white/70">
-                      Categories
-                    </h3>
-                    <div className="flex flex-col gap-2">
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant={
-                          selectedCategory === null ? "default" : "outline"
-                        }
-                        onClick={() => handleCategoryChange(null)}
-                        className={`text-xs ${
-                          selectedCategory === null
-                            ? "bg-purple-600 hover:bg-purple-700 text-white"
-                            : "bg-black/20 border-white/10 text-white hover:bg-white/10"
-                        }`}
-                      >
-                        All Categories
-                      </Button>
-                      {Object.keys(PRODUCT_CATEGORIES).map((category) => (
-                        <Button
-                          key={category}
-                          type="button"
-                          size="sm"
-                          variant={
-                            selectedCategory === category
-                              ? "default"
-                              : "outline"
-                          }
-                          onClick={() =>
-                            handleCategoryChange(category as ProductCategory)
-                          }
-                          className={`text-xs ${
-                            selectedCategory === category
-                              ? "bg-purple-600 hover:bg-purple-700 text-white"
-                              : "bg-black/20 border-white/10 text-white hover:bg-white/10"
-                          }`}
-                        >
-                          {category.charAt(0).toUpperCase() + category.slice(1)}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Popular Products */}
-                  <Card className="bg-black/20 px-4 py-7.5 rounded-lg">
-                    <h3 className="text-xl font-bold mb-4">
-                      Trending Searches
-                    </h3>
-                    <ul className="space-y-2">
-                      <li>
-                        <Link
-                          href="/compare?q=iphone%2015%20pro"
-                          className="text-purple-400 hover:text-purple-300 flex items-center gap-2"
-                        >
-                          <ArrowLeft className="h-4 w-4" />
-                          iPhone 15 Pro
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/compare?q=samsung%20galaxy%20s24"
-                          className="text-purple-400 hover:text-purple-300 flex items-center gap-2"
-                        >
-                          <ArrowLeft className="h-4 w-4" />
-                          Samsung Galaxy S24
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/compare?q=macbook%20air%20m3"
-                          className="text-purple-400 hover:text-purple-300 flex items-center gap-2"
-                        >
-                          <ArrowLeft className="h-4 w-4" />
-                          MacBook Air M3
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/compare?q=sony%20wh-1000xm5"
-                          className="text-purple-400 hover:text-purple-300 flex items-center gap-2"
-                        >
-                          <ArrowLeft className="h-4 w-4" />
-                          Sony WH-1000XM5
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/compare?q=sony%20wh-1000xm5"
-                          onClick={closeSearch}
-                          className="text-purple-400 hover:text-purple-300 flex items-center gap-2"
-                        >
-                          <ArrowLeft className="h-4 w-4" />
-                          Sony WH-1000XM5
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/compare?q=sony%20wh-1000xm5"
-                          className="text-purple-400 hover:text-purple-300 flex items-center gap-2"
-                        >
-                          <ArrowLeft className="h-4 w-4" />
-                          Sony WH-1000XM5
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/compare?q=sony%20wh-1000xm5"
-                          className="text-purple-400 hover:text-purple-300 flex items-center gap-2"
-                        >
-                          <ArrowLeft className="h-4 w-4" />
-                          Sony WH-1000XM5
-                        </Link>
-                      </li>
-                    </ul>
-                  </Card>
+                  <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                 </div>
                 {/* Search Button */}
                 <Button
                   type="submit"
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-md"
                   disabled={isLoading}
                 >
                   {isLoading ? "Searching..." : "Search Products"}
