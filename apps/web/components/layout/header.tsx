@@ -49,49 +49,6 @@ export function Header() {
             Bargain<span className="text-purple-500">Hunt</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:block relative" ref={navRef}>
-            <nav className="flex items-center space-x-8">
-              <Link
-                href="/"
-                data-active={isActive("/")}
-                className={`text-sm ${isActive("/") ? "text-purple-500" : "text-gray-300 hover:text-white"}`}
-              >
-                Home
-              </Link>
-              <Link
-                href="/compare"
-                data-active={isActive("/compare")}
-                className={`text-sm ${isActive("/compare") ? "text-purple-500" : "text-gray-300 hover:text-white"}`}
-              >
-                Compare
-              </Link>
-              <Link
-                href="/guides"
-                data-active={isActive("/guides")}
-                className={`text-sm ${isActive("/guides") ? "text-purple-500" : "text-gray-300 hover:text-white"}`}
-              >
-                Guides
-              </Link>
-              <Link
-                href="/blog"
-                data-active={isActive("/blog")}
-                className={`text-sm ${isActive("/blog") ? "text-purple-500" : "text-gray-300 hover:text-white"}`}
-              >
-                Blog
-              </Link>
-
-              {/* Animated underline */}
-              <div
-                className="absolute -bottom-1 h-0.5 bg-purple-600 transition-all duration-300 ease-in-out"
-                style={{
-                  width: `${activeWidth}px`,
-                  left: `${activeOffset}px`,
-                }}
-              />
-            </nav>
-          </div>
-
           {/* User Icon and Search Button */}
           <div className="hidden md:flex w-40 items-center justify-between">
           <ModalWrapper />
