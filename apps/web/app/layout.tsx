@@ -9,6 +9,7 @@ import { Suspense } from "react";
 import Head from "next/head";
 import Chatbot from "@/components/Chatbot";
 import { CompareProvider } from "@/contexts/CompareContext";
+import { NavigationClient } from "@/components/Navigation-client";
 
 const inter = Funnel_Display({ subsets: ["latin"] });
 
@@ -54,6 +55,9 @@ export default function RootLayout({
       <body className={`${inter.className} mini-scrollbar`}>
         <div className="min-h-screen flex flex-col">
           <Header />
+            <nav className="hidden md:block z-1000 pointer-events-auto absolute top-3 left-1/2 transform -translate-x-1/2">
+            <NavigationClient />
+            </nav>
           <main className="flex-1 mx-2 sm:mx-8 md:mx-12 lg:mx-14">
             <CompareProvider>
               <Suspense>
