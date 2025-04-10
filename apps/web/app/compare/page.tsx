@@ -15,6 +15,7 @@ import { PRODUCT_CATEGORIES, type ProductCategory } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { useToast } from "@/components/ui/use-toast";
 import { useCompare } from "@/contexts/CompareContext";
+import { Lens } from "@/components/ui/lense";
 
 export default function ComparePage() {
   const { toast } = useToast();
@@ -33,9 +34,7 @@ export default function ComparePage() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchParams = useSearchParams();
-  
 
-  
   // Track if initial URL processing has occurred
   const initialLoadProcessed = useRef(false);
 
@@ -43,7 +42,7 @@ export default function ComparePage() {
   useEffect(() => {
     const query = searchParams.get("q");
     const category = searchParams.get("category") as ProductCategory | null;
-  
+
     // If the query changes in the URL, update the input value and trigger the API call
     if (query && query !== searchQuery) {
       setSearchQuery(query); // Update the search query state
@@ -55,33 +54,37 @@ export default function ComparePage() {
       setSelectedCategory(category);
     }
   }, [searchQuery]);
-  const handleSearch = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    setSearchQuery(searchParams.get("q") || inputValue);
-    
-    
-    fetchProducts(inputValue, selectedCategory);
-    
-    
-    setIsSearchOpen(false);
-    
-    const url = new URL(window.location.href);
-    url.searchParams.set("q", inputValue);
-    if (selectedCategory) {
-      url.searchParams.set("category", selectedCategory);
-    } else {
-      url.searchParams.delete("category");
-    }
-    window.history.replaceState({}, "", url.toString());
-  }, [inputValue, selectedCategory, fetchProducts, setSearchQuery]);
+  const handleSearch = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+
+      setSearchQuery(searchParams.get("q") || inputValue);
+
+      fetchProducts(inputValue, selectedCategory);
+
+      setIsSearchOpen(false);
+
+      const url = new URL(window.location.href);
+      url.searchParams.set("q", inputValue);
+      if (selectedCategory) {
+        url.searchParams.set("category", selectedCategory);
+      } else {
+        url.searchParams.delete("category");
+      }
+      window.history.replaceState({}, "", url.toString());
+    },
+    [inputValue, selectedCategory, fetchProducts, setSearchQuery]
+  );
   const handleSearchInputChange = useCallback((value: string) => {
     setInputValue(value);
   }, []);
 
-  const handleCategoryChange = useCallback((category: ProductCategory | null) => {
-    setSelectedCategory(category);
-  }, [setSelectedCategory]);
+  const handleCategoryChange = useCallback(
+    (category: ProductCategory | null) => {
+      setSelectedCategory(category);
+    },
+    [setSelectedCategory]
+  );
 
   useEffect(() => {
     if (products.length === 0 && isLoading && initialLoadProcessed.current) {
@@ -89,7 +92,11 @@ export default function ComparePage() {
         title: "Searching for products...",
         description: "This may take a few seconds.",
         duration: 2000,
-        action: <Button variant="link" onClick={closeSearch}>Close</Button>,
+        action: (
+          <Button variant="link" onClick={closeSearch}>
+            Close
+          </Button>
+        ),
         className: "bg-black/20 border-white/10 text-white",
         variant: "default",
       });
@@ -137,7 +144,7 @@ export default function ComparePage() {
   const closeSearch = useCallback(() => {
     setIsSearchOpen(false);
   }, []);
-  
+
   // Reset input value when modal opens to match current search query
   useEffect(() => {
     if (isSearchOpen) {
@@ -199,7 +206,6 @@ export default function ComparePage() {
                 </button>
               </div>
 
-              
               <form onSubmit={handleSearch} className="p-4 space-y-4">
                 <div className="relative">
                   <Input
@@ -387,13 +393,22 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
           <div className="flex flex-col lg:flex-row gap-6 w-full">
             <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-5/8">
               {/* Product Image */}
-              <div className="relative w-full sm:max-w-[150px] min-h-[150px] sm:h-full flex justify-center border bg-[#fefcfc] rounded-lg">
-                <img
-                  src={product.image || "/placeholder.svg"}
-                  alt={product.title}
-                  className="w-[100px] h-auto object-contain"
-                />
+
+              <div className="relative w-full sm:max-w-[150px] min-h-[150px] sm:h-full flex justify-center items-center border bg-[#fefcfc] rounded-lg">
+                <Lens
+                  zoomFactor={2}
+                  lensSize={100}
+                  isStatic={false}
+                  ariaLabel="Zoom Area"
+                >
+                  <img
+                    src={product.image || "/placeholder.svg"}
+                    alt={product.title}
+                    className="w-[120px] h-auto object-contain cursor-none px-4 py-2"
+                  />
+                </Lens>
               </div>
+
               {/* Product Details */}
 
               <div className="flex flex-col">
@@ -426,7 +441,7 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
                   </div>
                 )}
 
-                {product.boughtInPastMonth != "M.R.P:"  && (
+                {product.boughtInPastMonth != "M.R.P:" && (
                   <div className="text-sm text-gray-400 mb-2">
                     <span className="text-white">
                       {product.boughtInPastMonth}
