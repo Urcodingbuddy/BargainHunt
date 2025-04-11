@@ -273,7 +273,7 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
             <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-5/8">
               {/* Product Image */}
 
-              <div className="relative w-full sm:max-w-[150px] min-h-[150px] sm:h-full flex justify-center items-center border bg-[#fefcfc] rounded-lg">
+              <div className="relative w-full sm:max-w-[180px] min-h-[200px] sm:h-full flex justify-center items-center border bg-[#fefcfc] rounded-lg">
                 <Lens
                   zoomFactor={2}
                   lensSize={100}
@@ -283,7 +283,7 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
                   <img
                     src={product.image || "/placeholder.svg"}
                     alt={product.title}
-                    className="w-[120px] h-auto object-contain cursor-none px-4 py-2"
+                    className="w-[160px] h-auto object-contain cursor-none px-4 py-2"
                   />
                 </Lens>
               </div>
