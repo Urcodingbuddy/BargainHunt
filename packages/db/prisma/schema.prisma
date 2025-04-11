@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Guide {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  title         String
+  date          DateTime
+  author        String
+  category      String
+  readTime      String
+  image         String
+  content       String // stored as HTML or Markdown
+  relatedPosts  RelatedPost[]
+}
+
+model RelatedPost {
+  id        String @id @default(cuid())
+  title     String
+  category  String
+  image     String
+  slug      String
+  guideId   String
+  guide     Guide @relation(fields: [guideId], references: [id])
+}
+model User{
+  id        String @id @default(cuid())
+  name      String
+  email     String @unique
+  profileUrl String
+  createdAt DateTime @default(now())
+}
