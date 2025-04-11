@@ -2,8 +2,8 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-    await prisma.relatedPost.deleteMany();
-    await prisma.guide.deleteMany();
+    
+    // await prisma.guide.deleteMany();
 
   await prisma.guide.create({
     data: {
@@ -11,6 +11,8 @@ async function main() {
       title: "How to Find the Best Deals on Electronics items ?",
       date: new Date("2023-05-15"),
       author: "Sarah Johnson",
+      description:
+        "Learn expert strategies for comparing prices, timing your purchases, and using price tracking tools to save big on smartphones, laptops, and other gadgets.",
       category: "Shopping Tips",
       readTime: "8 min read",
       image:
@@ -63,24 +65,6 @@ async function main() {
       <h2>Conclusion</h2>
       <p>Finding the best deals on electronics requires research, timing, and patience. By using price comparison tools, timing your purchases strategically, and layering multiple savings strategies, you can save significantly on your next electronics purchase.</p>
       `,
-      relatedPosts: {
-        create: [
-          {
-            title: "Amazon vs Flipkart: Which Offers Better Prices?",
-            category: "Price Comparison",
-            image:
-              "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=600&h=400&auto=format&fit=crop",
-            slug: "amazon-vs-flipkart-price-comparison",
-          },
-          {
-            title: "Ultimate Seasonal Sales Guide: When to Buy What ?",
-            category: "Shopping Calendar",
-            image:
-              "https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=600&h=400&auto=format&fit=crop",
-            slug: "seasonal-sales-guide",
-          },
-        ],
-      },
     },
   });
 
@@ -90,6 +74,8 @@ async function main() {
       title: "Amazon vs Flipkart: Which Offers Better Prices?",
       date: new Date("2024-06-02"),
       author: "Rahul Sharma",
+      description:
+        "A comprehensive analysis of pricing strategies, discount patterns, and exclusive deals on both platforms to help you decide where to shop for maximum savings.",
       category: "Price Comparison",
       readTime: "10 min read",
       image:
@@ -167,25 +153,6 @@ async function main() {
       <h2>Conclusion</h2>
       <p>There's no clear winner in the Amazon vs Flipkart price battle. The better platform depends on what you're buying, when you're buying it, and what payment methods you use. For the best deals, we recommend checking both platforms before making a purchase—or simply using BargainHunt to do the comparison for you automatically.</p>
       `,
-      relatedPosts: {
-        create: [
-          {
-            title: "How to Find the Best Deals on Electronics items ?",
-            category: "Shopping Tips",
-            image:
-              "https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=600&h=400&auto=format&fit=crop",
-            slug: "find-best-electronics-deals",
-          },
-          {
-            title:
-              "10 Browser Extensions That Help You Save Money While Shopping Online",
-            category: "Shopping Tools",
-            image:
-              "https://images.unsplash.com/photo-1610986603166-f78428624e76?q=80&w=600&h=400&auto=format&fit=crop",
-            slug: "browser-extensions-save-money",
-          },
-        ],
-      },
     },
   });
 
@@ -196,6 +163,8 @@ async function main() {
       date: new Date("2023-06-28"),
       author: "Rahul Sharma",
       category: "Shopping Calendar",
+      description:
+      "Discover the best times of year to purchase different product categories for maximum discounts, from electronics and appliances to clothing and furniture.",
       readTime: "9 min read",
       image: "https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=2000&h=1000&auto=format&fit=crop",
       content: `
@@ -282,23 +251,7 @@ async function main() {
         
         <h2>Conclusion</h2>
         <p>Timing your purchases according to these seasonal patterns can result in savings of 20-60% depending on the product category. Combine this knowledge with BargainHunt's price comparison tools to ensure you're always getting the best possible deal.</p>
-      `,
-      relatedPosts: {
-        create: [
-          {
-            title: "Amazon vs Flipkart: Which Offers Better Prices?",
-        category: "Price Comparison",
-        image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=600&h=400&auto=format&fit=crop",
-        slug: "amazon-vs-flipkart-price-comparison",
-          },
-          {
-            title: "How to Find the Best Deals on Electronics items ?",
-        category: "Shopping Tips",
-        image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=600&h=400&auto=format&fit=crop",
-        slug: "find-best-electronics-deals",
-          },
-        ],
-      },
+      `
     },
   });
 }
