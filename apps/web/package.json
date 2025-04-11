@@ -29,6 +29,7 @@
     "lucide-react": "^0.484.0",
     "motion": "^12.6.2",
     "next": "^15.2.1",
+    "next-auth": "^4.24.11",
     "puppeteer": "^24.3.1",
     "puppeteer-core": "^24.3.1",
     "react": "^19.0.0",
