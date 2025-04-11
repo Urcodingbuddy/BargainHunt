@@ -146,13 +146,13 @@ export default function AboutPage() {
             <div className="order-2 md:order-1">
               <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">The Developer</h2>
               <p className="text-gray-300 mb-4 sm:mb-6 text-sm sm:text-base">
-                BargainHunt was created by <span className="text-md font-mono border py-1 px-2 rounded-full">Ansh Pethe</span>, a passionate software
+                BargainHunt was created by <span className="text-md font-mono border text-pink-500 py-1 px-2 rounded-full">Ansh Pethe</span> , a passionate software
                 engineer committed to creating efficient and user-centric web
                 applications.
               </p>
               <p className="text-gray-300 mb-6 sm:mb-8 text-sm sm:text-base">
                 With a background in full-stack development and a keen interest
-                in e-commerce technologies, <span className="text-md font-mono border py-1 px-2 rounded-full">Ansh</span> built BargainHunt to
+                in e-commerce technologies, <span className="text-sm font-mono border inline-flex justify-evenly items-center text-pink-500 py-1 px-2 rounded-full"><Github className="h-4 text-pink-500" />Urcodingbuddy</span> built BargainHunt to
                 solve a common problem faced by online shoppers - finding the
                 best deals without spending hours searching across multiple
                 websites.
