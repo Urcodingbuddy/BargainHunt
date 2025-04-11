@@ -6,7 +6,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Star, ExternalLink, ArrowLeft } from "lucide-react";
+import { Star, ExternalLink, ArrowLeft, ArrowRight } from "lucide-react";
 import type { NormalizedProduct } from "@/lib/ProductMatching";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -221,10 +221,11 @@ export default function ComparePage() {
                 {/* Search Button */}
                 <Button
                   type="submit"
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-md"
+                  className={`w-full flex items-center justify-center gap-2 cursor-pointer bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-md ${isLoading ? "cursor-wait" : ""}`}
                   disabled={isLoading}
                 >
                   {isLoading ? "Searching..." : "Search Products"}
+                  <ArrowRight className="h-5 w-5" />
                 </Button>
               </form>
             </motion.div>
