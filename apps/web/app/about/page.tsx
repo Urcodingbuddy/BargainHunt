@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Github, Mail, ExternalLink } from 'lucide-react';
+import { Github, Mail, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -26,7 +26,9 @@ export default function AboutPage() {
         <section className="py-10 sm:py-12 md:py-16 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="order-2 md:order-1">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Our Mission</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">
+                Our Mission
+              </h2>
               <p className="text-gray-300 mb-4 sm:mb-6 text-sm sm:text-base">
                 At BargainHunt, we're on a mission to simplify the
                 bargain-hunting process by aggregating deals from multiple
@@ -57,7 +59,9 @@ export default function AboutPage() {
 
         {/* Key Features Section */}
         <Card className="py-10 sm:py-12 md:py-16 px-4 md:px-6 lg:px-8 mx-auto bg-transperent backdrop-blur-3xl rounded-xl my-8 sm:my-10">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center">Key Features</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center">
+            Key Features
+          </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 md:gap-10">
             <Card className="bg-transparent backdrop-blur-3xl p-6 sm:p-8 rounded-xl border border-gray-800">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-600/20 rounded-lg flex items-center justify-center mb-4 sm:mb-6">
@@ -130,7 +134,9 @@ export default function AboutPage() {
                   />
                 </svg>
               </div>
-              <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Advanced Filtering</h3>
+              <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">
+                Advanced Filtering
+              </h3>
               <p className="text-gray-400 text-sm sm:text-base">
                 Easily filter deals by category, price range, discount
                 percentage, and more to quickly find exactly what you're looking
@@ -144,31 +150,51 @@ export default function AboutPage() {
         <section className="py-10 sm:py-12 md:py-16 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto rounded-xl">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="order-2 md:order-1">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">The Developer</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">
+                The Developer
+              </h2>
               <p className="text-gray-300 mb-4 sm:mb-6 text-sm sm:text-base">
-                BargainHunt was created by <span className="text-md font-mono border text-pink-500 py-1 px-2 rounded-full">Ansh Pethe</span> , a passionate software
-                engineer committed to creating efficient and user-centric web
-                applications.
+                BargainHunt was created by{" "}
+                <span className="text-md font-mono border text-pink-500 py-1 px-2 rounded-full">
+                  Ansh Pethe
+                </span>{" "}
+                , a passionate software engineer committed to creating efficient
+                and user-centric web applications.
               </p>
               <p className="text-gray-300 mb-6 sm:mb-8 text-sm sm:text-base">
                 With a background in full-stack development and a keen interest
-                in e-commerce technologies, <span className="text-sm font-mono border inline-flex justify-evenly items-center text-pink-500 py-1 px-2 rounded-full"><Github className="h-4 text-pink-500" />Urcodingbuddy</span> built BargainHunt to
-                solve a common problem faced by online shoppers - finding the
-                best deals without spending hours searching across multiple
-                websites.
+                in e-commerce technologies,
+                <Link href={"https://github.com/Urcodingbuddy"}
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                  <span className="text-sm font-mono border inline-flex justify-evenly items-center text-pink-500 py-1 px-2 rounded-full">
+                    <Github className="h-4 text-pink-500" />
+                    Urcodingbuddy
+                  </span>
+                </Link>
+                built BargainHunt to solve a common problem faced by online
+                shoppers - finding the best deals without spending hours
+                searching across multiple websites.
               </p>
 
-              <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">GitHub Repositories</h3>
+              <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">
+                GitHub Repositories
+              </h3>
               <div className="space-y-3 sm:space-y-4">
                 <Link
-                  href="#"
+                  href="https://github.com/Urcodingbuddy/BargainHunt"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-[#111111] rounded-lg hover:bg-[#1a1a1a] transition-colors"
                 >
                   <div>
                     <Github className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-sm sm:text-base truncate">BargainHunt</h4>
+                    <h4 className="font-medium text-sm sm:text-base truncate">
+                      BargainHunt
+                    </h4>
                     <p className="text-xs sm:text-sm text-gray-400 line-clamp-2">
                       Compare prices, discover discounts, and make smarter
                       shopping decisions with our real-time price comparison
@@ -181,13 +207,17 @@ export default function AboutPage() {
                 </Link>
                 <Link
                   href="https://github.com/Urcodingbuddy/Cleven.Studio"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-[#111111] rounded-lg hover:bg-[#1a1a1a] transition-colors"
                 >
                   <div>
                     <Github className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-sm sm:text-base truncate">Cleven.Studio</h4>
+                    <h4 className="font-medium text-sm sm:text-base truncate">
+                      Cleven.Studio
+                    </h4>
                     <p className="text-xs sm:text-sm text-gray-400 line-clamp-2">
                       Cleven Studios makes maintaining, optimizing, and
                       enhancing your site effortless. Reliable. Scalable.
@@ -199,13 +229,17 @@ export default function AboutPage() {
                 </Link>
                 <Link
                   href="https://github.com/Urcodingbuddy/Medium_Social-App"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-[#111111] rounded-lg hover:bg-[#1a1a1a] transition-colors"
                 >
                   <div>
                     <Github className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-sm sm:text-base truncate">Medium Social</h4>
+                    <h4 className="font-medium text-sm sm:text-base truncate">
+                      Medium Social
+                    </h4>
                     <p className="text-xs sm:text-sm text-gray-400 line-clamp-2">
                       A website that provides functionality to post your
                       thoughts news and anything you want
@@ -231,7 +265,9 @@ export default function AboutPage() {
         {/* Contact Section */}
         <Card className="py-10 sm:py-12 md:py-16 px-4 md:px-6 lg:px-8 mx-auto bg-transparent backdrop-blur-3xl rounded-xl my-8 sm:my-10">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Get In Touch</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">
+              Get In Touch
+            </h2>
             <p className="text-gray-300 mb-6 sm:mb-8 text-sm sm:text-base px-4">
               Have questions, suggestions, or feedback? Interested in
               collaborating with us? We would be delighted to hear from you and
@@ -241,15 +277,19 @@ export default function AboutPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 sm:mb-12 px-4">
               <Button className="bg-purple-600 border-2 border-purple-600 hover:text-white hover:bg-transparent hover:border-2 inline-flex items-center justify-center px-4 py-2 text-white w-full sm:w-auto">
                 <Mail className="mr-2 h-4 w-4" />
-                <Link href={"mailto:anshpethe110@gmail.com?subject=Developer%20Requirements"}>
+                <Link
+                  href={
+                    "mailto:anshpethe110@gmail.com?subject=Developer%20Requirements"
+                  }
+                >
                   Email Us
                 </Link>
               </Button>
               <Button className="border-purple-600 cursor-pointer text-purple-600 bg-transparent hover:bg-transparent border-2 hover:text-white w-full sm:w-auto">
                 <Github className="mr-2 h-4 w-4" />
-                <Link 
-                  href={"https://github.com/Urcodingbuddy"} 
-                  target="_blank" 
+                <Link
+                  href={"https://github.com/Urcodingbuddy"}
+                  target="_blank"
                   rel="noopener noreferrer"
                 >
                   Follow on GitHub
