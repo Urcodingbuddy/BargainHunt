@@ -335,8 +335,14 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
               {product.prices.amazon ? (
                 <div className="relative">
                   <div className="bg-[#130e054d] backdrop-blur-3xl border-2 p-4 rounded-lg h-full flex flex-col justify-evenly">
-                    <h4 className="text-sm md:text-lg font-bold mb-2">
-                      Amazon
+                    <h4 className="text-sm flex justify-between   items-center md:text-lg font-bold mb-2">
+                      Amazon <span className="h-8 w-8 flex justify-center items-center rounded bg-neutral-300">
+                        <img
+                          className="h-7 w-7 p-0.5 saturate-180 contrast-185"
+                          src="./amazon-icon.svg"
+                          alt=""
+                        />
+                      </span>
                     </h4>
                     {product.prices.amazon.originalPrice && (
                       <div className="text-xs md:text-sm text-gray-400 line-through">
@@ -379,8 +385,8 @@ function ProductComparisonCard({ product }: { product: NormalizedProduct }) {
               {product.prices.flipkart ? (
                 <div className="relative">
                   <div className="bg-[#0b0912c2] backdrop-blur-3xl border-2 p-4 rounded-lg h-full flex flex-col justify-evenly">
-                    <h4 className="text-sm md:text-lg font-bold mb-2">
-                      Flipkart
+                    <h4 className="flex justify-between items-center text-sm md:text-lg font-bold mb-2">
+                      Flipkart <img className="h-8" src="./flipkart-icon.svg" alt="" />
                     </h4>
                     {product.prices.flipkart.originalPrice != "N/A" && (
                       <div className="text-xs md:text-sm text-gray-400 line-through">
