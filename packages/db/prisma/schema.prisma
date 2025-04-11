@@ -14,27 +14,18 @@ datasource db {
 }
 
 model Guide {
-  id            String   @id @default(cuid())
-  slug          String   @unique
-  title         String
-  date          DateTime
-  author        String
-  category      String
-  readTime      String
-  image         String
-  content       String // stored as HTML or Markdown
-  relatedPosts  RelatedPost[]
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  category    String
+  date        DateTime
+  image       String
+  content     String
+  author      String
+  readTime    String
 }
 
-model RelatedPost {
-  id        String @id @default(cuid())
-  title     String
-  category  String
-  image     String
-  slug      String
-  guideId   String
-  guide     Guide @relation(fields: [guideId], references: [id])
-}
 model User{
   id        String @id @default(cuid())
   name      String
