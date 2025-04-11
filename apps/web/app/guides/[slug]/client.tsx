@@ -14,12 +14,6 @@ type Post = {
   readTime: string
   image: string
   content: string
-  relatedPosts: Array<{
-    title: string
-    category: string
-    image: string
-    slug: string
-  }>
 }
 
 export default function GuidePostClient({ post }: { post: Post }) {

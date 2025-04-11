@@ -15,9 +15,6 @@ export default async function GuidePage({ params }: { params: Params }) {
   try {
     post = await prisma.guide.findUnique({
       where: { slug },
-      include: {
-        relatedPosts: true,
-      },
     });
   } catch (error) {
     console.error("Error fetching guide:", error);
@@ -26,7 +23,7 @@ export default async function GuidePage({ params }: { params: Params }) {
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen text-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-3xl font-bold mb-4">Guide Not Found</h1>
           <p className="mb-6">
@@ -40,6 +37,14 @@ export default async function GuidePage({ params }: { params: Params }) {
     );
   }
 
+  const relatedGuides = await prisma.guide.findMany({
+    where: {
+      // category: post.category,
+      NOT: { id: post.id },
+    },
+    take: 3,
+  });
+ 
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-3xl mx-auto">
@@ -84,29 +89,33 @@ export default async function GuidePage({ params }: { params: Params }) {
         <div className="border-t border-gray-800 mt-12 pt-8">
           <h3 className="text-xl font-bold mb-6">Related Guides</h3>
           <div className="grid md:grid-cols-2 gap-6">
-            {post.relatedPosts.map((relatedPost, index) => (
-              <Link href={`/guides/${relatedPost.slug}`} className="group" key={index}>
-                <div className="space-y-3">
-                  <div className="relative h-48 rounded-lg overflow-hidden border border-gray-800 group-hover:border-purple-500/50 transition-colors">
-                    <Image
-                      src={relatedPost.image || "/placeholder.svg"}
-                      alt={`${relatedPost.title} thumbnail`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 text-xs text-purple-500 mb-2">
-                      <BrainCircuit className="h-4 w-4" />
-                      <span>{relatedPost.category}</span>
-                    </div>
-                    <h3 className="font-medium group-hover:text-purple-400 transition-colors">
-                      {relatedPost.title}
-                    </h3>
-                  </div>
+          {relatedGuides.map((relatedPost) => (
+            <Link
+              href={`/guides/${relatedPost.slug}`}
+              key={relatedPost.id}
+              className="group"
+            >
+              <div className="space-y-3">
+                <div className="relative h-48 rounded-lg overflow-hidden border border-gray-800 group-hover:border-purple-500/50 transition-colors">
+                  <Image
+                    src={relatedPost.image || "/placeholder.svg"}
+                    alt={`${relatedPost.title} thumbnail`}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
-              </Link>
-            ))}
+                <div>
+                  <div className="flex items-center gap-2 text-xs text-purple-500 mb-2">
+                    <BrainCircuit className="h-4 w-4" />
+                    <span>{relatedPost.category}</span>
+                  </div>
+                  <h3 className="font-medium group-hover:text-purple-400 transition-colors">
+                    {relatedPost.title}
+                  </h3>
+                </div>
+              </div>
+            </Link>
+          ))}
           </div>
         </div>
       </div>
