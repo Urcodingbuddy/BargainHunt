@@ -37,13 +37,18 @@ export default async function GuidePage({ params }: { params: Params }) {
     );
   }
 
-  const relatedGuides = await prisma.guide.findMany({
-    where: {
-      // category: post.category,
-      NOT: { id: post.id },
-    },
-    take: 3,
-  });
+  let relatedGuides: any[] = [];
+  try {
+    relatedGuides = await prisma.guide.findMany({
+      where: {
+        // category: post.category,
+        NOT: { id: post.id },
+      },
+      take: 3,
+    });
+  } catch (error) {
+    console.error("Error fetching related guides:", error);
+  }
  
   return (
     <div className="container mx-auto px-4 py-12">

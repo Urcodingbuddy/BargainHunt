@@ -14,12 +14,16 @@ import { JSX } from "react";
 const prisma = new PrismaClient();
 
 export default async function Home() {
-  const featuredGuides = await prisma.guide.findMany({
-    orderBy: {
-      date: "desc",
-    },
-    take: 3,
-  });
+  let featuredGuides: any[] = [];
+
+  try {
+    featuredGuides = await prisma.guide.findMany({
+      orderBy: { date: "desc" },
+      take: 3,
+    });
+  } catch (err) {
+    console.error("Prisma error:", err);
+  }
 
   const iconMap: Record<string, JSX.Element> = {
     "Shopping Tips": <BrainCircuit className="h-5 w-5" />,
