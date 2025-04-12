@@ -30,6 +30,13 @@ model User{
   id        String @id @default(cuid())
   name      String
   email     String @unique
-  profileUrl String
+  auth_type AuthType
+  phone     String? @unique
+  imageUrl String
   createdAt DateTime @default(now())
+}
+
+enum AuthType {
+  GOOGLE
+  GITHUB
 }
