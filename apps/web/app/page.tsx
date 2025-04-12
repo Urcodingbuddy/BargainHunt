@@ -24,8 +24,6 @@ export default async function Home() {
     console.error("Prisma error:", err);
   }
 
-  console.log("Featured Guides:", featuredGuides);
-
   if (!featuredGuides) {
     return (
       <div className="min-h-screen text-white flex items-center justify-center">
