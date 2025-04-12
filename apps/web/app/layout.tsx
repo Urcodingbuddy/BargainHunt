@@ -10,6 +10,7 @@ import Head from "next/head";
 import Chatbot from "@/components/Chatbot";
 import { CompareProvider } from "@/contexts/CompareContext";
 import { NavigationClient } from "@/components/Navigation-client";
+import { Providers } from "../Provider";
 
 const inter = Funnel_Display({ subsets: ["latin"] });
 
@@ -42,6 +43,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <Providers>
+      
       <Head>
         <meta property="og:title" content="BargainHunt" />
         <meta property="og:type" content="E-commerce Compare" />
@@ -70,6 +73,7 @@ export default function RootLayout({
           <Toaster />
         </div>
       </body>
+      </Providers>
     </html>
   );
 }
