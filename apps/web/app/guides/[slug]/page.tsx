@@ -89,7 +89,7 @@ export default async function GuidePage({ params }: { params: Params }) {
         <div className="border-t border-gray-800 mt-12 pt-8">
           <h3 className="text-xl font-bold mb-6">Related Guides</h3>
           <div className="grid md:grid-cols-2 gap-6">
-          {relatedGuides.map((relatedPost) => (
+          {relatedGuides.map((relatedPost:any) => (
             <Link
               href={`/guides/${relatedPost.slug}`}
               key={relatedPost.id}
