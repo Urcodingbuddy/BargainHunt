@@ -8,7 +8,8 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "postinstall": "prisma generate"
+    "db:generate": "cd packages/db && npx prisma generate",
+    "postinstall": "npm run db:generate"
   },
   "devDependencies": {
     "prettier": "^3.5.3",
