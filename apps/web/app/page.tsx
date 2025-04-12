@@ -72,7 +72,7 @@ export default async function Home() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-        {featuredGuides.map((guide) => (
+        {featuredGuides.map((guide:any) => (
           <FeaturedCard
             key={guide.id}
             title={guide.title}
