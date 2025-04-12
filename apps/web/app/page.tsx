@@ -1,4 +1,4 @@
-
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BrainCircuit, CalendarSearch , Cpu, Eye } from "lucide-react";
@@ -14,8 +14,7 @@ import { JSX } from "react";
 const prisma = new PrismaClient();
 
 export default async function Home() {
-  let featuredGuides: any[] = [];
-
+  let featuredGuides : any[] = [];
   try {
     featuredGuides = await prisma.guide.findMany({
       orderBy: { date: "desc" },
@@ -23,6 +22,19 @@ export default async function Home() {
     });
   } catch (err) {
     console.error("Prisma error:", err);
+  }
+
+  console.log("Featured Guides:", featuredGuides);
+
+  if (!featuredGuides) {
+    return (
+      <div className="min-h-screen text-white flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold mb-4">No Guides Found</h1>
+          <p className="mb-6">We couldn't find any guides at the moment.</p>
+        </div>
+      </div>
+    );
   }
 
   const iconMap: Record<string, JSX.Element> = {

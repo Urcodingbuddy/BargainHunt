@@ -8,7 +8,6 @@ const prisma = new PrismaClient();
 
 type Params = Promise<{ slug: string }>;
 
-// This is a server component
 export default async function GuidePage({ params }: { params: Params }) {
   const { slug } = await params;
   let post;
