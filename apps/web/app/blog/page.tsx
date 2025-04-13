@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { PrismaClient } from "@prisma/client";
+import { Clock } from "lucide-react";
 const prisma = new PrismaClient();
 
 export default async function BlogPage() {
@@ -40,7 +41,7 @@ export default async function BlogPage() {
                 <div className="text-xs text-purple-500 mb-2">{article.category}</div>
                 <h3 className="font-medium group-hover:text-purple-400 transition-colors">{article.title}</h3>
                 <p className="text-gray-400 text-sm mt-2 line-clamp-2">{article.description}</p>
-                <div className="text-xs text-gray-500 mt-3">{article.date}</div>
+                <div className="text-xs flex gap-2 text-gray-500 mt-3"><Clock className="h-4 w-4" />{article.date.toDateString()}</div>
               </div>
             </div>
           </Link>
