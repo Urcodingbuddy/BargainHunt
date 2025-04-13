@@ -1,12 +1,12 @@
 "use client"
-
 import { useToast } from "@/components/ui/use-toast"
 import { useEffect } from "react"
 import { Share2, Twitter, Facebook, Linkedin } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Playwrite_CO_Guides } from "next/font/google"
 
-// Define the post type
-type Post = {
+// Define the Guide type
+type Guide = {
   title: string
   category: string
   date: string
@@ -16,22 +16,22 @@ type Post = {
   content: string
 }
 
-export default function GuidePostClient({ post }: { post: Post }) {
+export default function GuideGuideClient({ Guides }: { Guides: Guide }) {
   const { toast } = useToast()
 
   useEffect(() => {
-    if (!post) {
+    if (!Guides) {
       toast({
         title: "Guide not found",
         description: "The requested guide could not be found.",
         variant: "destructive",
       })
     }
-  }, [post, toast])
+  }, [Guides, toast])
 
   const handleShare = (platform: string) => {
     const url = window.location.href
-    const text = `Check out this guide: ${post.title}`
+    const text = `Check out this guide: ${Guides.title}`
 
     let shareUrl = ""
 
