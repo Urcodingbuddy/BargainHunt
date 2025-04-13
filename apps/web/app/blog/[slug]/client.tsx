@@ -5,39 +5,33 @@ import { useEffect } from "react";
 import { Share2, Twitter, Facebook, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// Define the post type
-type Post = {
-  title: string;
-  category: string;
-  date: string;
-  author: string;
-  readTime: string;
-  image: string;
-  content: string;
-  relatedPosts: Array<{
-    title: string;
-    category: string;
-    image: string;
-    slug: string;
-  }>;
+// Define the Article type
+type Article = {
+  title: string
+  category: string
+  date: string
+  author: string
+  readTime: string
+  image: string
+  content: string
 };
 
-export default function BlogPostClient({ post }: { post: Post }) {
+export default function BlogArticlelient({ Article }: { Article: Article }) {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!post) {
+    if (!Article) {
       toast({
         title: "Post not found",
-        description: "The requested blog post could not be found.",
+        description: "The requested blog Article could not be found.",
         variant: "destructive",
       });
     }
-  }, [post, toast]);
+  }, [Article, toast]);
 
   const handleShare = (platform: string) => {
     const url = window.location.href;
-    const text = `Check out this article: ${post.title}`;
+    const text = `Check out this article: ${Article.title}`;
 
     let shareUrl = "";
 
