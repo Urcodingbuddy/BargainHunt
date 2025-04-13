@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import Image from "next/image"
 import Link from "next/link"
 import { PrismaClient } from "@prisma/client";
@@ -18,7 +19,7 @@ export default async function BlogPage() {
     return (
       <div className="min-h-screen text-white flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">No Guides Found</h1>
+          <h1 className="text-3xl font-bold mb-4">No Articles Found</h1>
           <p className="mb-6">There are no guides available at this time.</p>
         </div>
       </div>
