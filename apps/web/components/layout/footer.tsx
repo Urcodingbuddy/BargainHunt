@@ -35,8 +35,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="hover:text-white">
-                  Blog
+                <Link href="/blogs" className="hover:text-white">
+                  Blogs
                 </Link>
               </li>
             </ul>

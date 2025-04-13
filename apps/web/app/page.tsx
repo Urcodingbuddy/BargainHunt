@@ -125,7 +125,15 @@ export default async function Home() {
       </section>
 
       <section className="mb-20 ">
-        <h2 className="text-2xl font-bold mb-8">Recent Articles</h2>
+      <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-bold">Recent Articles</h2>
+          <Link
+            href="/blogs"
+            className="text-purple-500 hover:text-purple-400 text-sm flex items-center gap-2 pointer-events-auto z-5"
+          >
+            View all <Eye className="h-4 w-4" />
+          </Link>
+        </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {recentAritcles.map((article:any) => (
             <ArticleCard

@@ -85,7 +85,7 @@ export function NavigationClient() {
                   </Link>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/blog" title="Articles">
+              <ListItem href="/blogs" title="Articles">
                 Explore Our Articles to Stay Informed in E-commerce and Maximize
                 Your Savings.
               </ListItem>

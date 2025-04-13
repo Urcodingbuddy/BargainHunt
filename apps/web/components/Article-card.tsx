@@ -11,7 +11,7 @@ export default function ArticleCard({
     image,
   }: any) {
     return (
-      <Link href={`/blog/${slug}`} className="group">
+      <Link href={`/blogs/${slug}`} className="group">
         <div className="space-y-3">
           <div className="relative h-48 rounded-lg overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-colors">
             <Image

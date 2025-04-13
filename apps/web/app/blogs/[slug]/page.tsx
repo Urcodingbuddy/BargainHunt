@@ -64,7 +64,7 @@ export default async function BlogPost({ params }: { params: Params }) {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-3xl mx-auto">
-        <Link href="/blog" className="inline-flex items-center text-gray-400 hover:text-white mb-8">
+        <Link href="/blogs" className="inline-flex items-center text-gray-400 hover:text-white mb-8">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to articles
         </Link>
@@ -103,7 +103,7 @@ export default async function BlogPost({ params }: { params: Params }) {
           <h3 className="text-xl font-bold mb-6">Related Articles</h3>
           <div className="grid md:grid-cols-2 gap-6">
             {relatedArticles.map((relatedPost, index) => (
-              <Link href={`/blog/${relatedPost.slug}`} className="group" key={index}>
+              <Link href={`/blogs/${relatedPost.slug}`} className="group" key={index}>
                 <div className="space-y-3">
                   <div className="relative h-48 rounded-lg overflow-hidden border border-gray-800 group-hover:border-purple-500/50 transition-colors">
                     <Image

@@ -116,11 +116,11 @@ export function Header() {
                   Guides
                 </Link>
                 <Link
-                  href="/blog"
-                  className={` text-sm font-semibold ${isActive("/blog") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
+                  href="/blogs"
+                  className={` text-sm font-semibold ${isActive("/blogs") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
                   onClick={closeMenu}
                 >
-                  Blog
+                  Blogs
                 </Link>
                 <Link href="/compare">
                   <Button

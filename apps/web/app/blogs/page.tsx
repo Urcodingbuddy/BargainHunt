@@ -27,12 +27,12 @@ export default async function BlogPage() {
 
   return (
     <div className="container mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-6">Blog</h1>
+      <h1 className="text-3xl font-bold mb-6">Blogs</h1>
       <p className="text-gray-400 mb-8">Tips, tricks, and insights to help you save money while shopping online.</p>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.map((article) => (
-          <Link href={`/blog/${article.slug}`} key={article.slug} className="group">
+          <Link href={`/blogs/${article.slug}`} key={article.slug} className="group">
             <div className="space-y-3">
               <div className="relative h-48 rounded-lg overflow-hidden border border-gray-800 group-hover:border-purple-500/50 transition-colors">
                 <Image src={article.image || "/placeholder.svg"} alt={article.title} fill className="object-cover" />
