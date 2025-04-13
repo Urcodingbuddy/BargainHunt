@@ -13,6 +13,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Product {
+  id                    String @id @default(cuid())
+  title                 String
+  normalizedTitle       String
+  category              String
+  brand                 String
+  image                 String
+  amazonPrice           String
+  flipkartPrice         String
+  amazonReview          String
+  flipkartReview        String
+  amazonLink            String
+  flipkartLink          String
+  flipkartRating        String
+  amazonRating          String
+  amazonOriginalPrice   String
+  flipkartOriginalPrice String
+  availability          String
+  boughtInLastMonth     String
+  source                String
+  matchScore            String
+  LastUpdated           DateTime @default(now())
+}
+
 model Guide {
   id          String   @id @default(cuid())
   slug        String   @unique
@@ -25,7 +49,8 @@ model Guide {
   author      String
   readTime    String
 }
-model Article{
+
+model Article {
   id          String   @id @default(cuid())
   slug        String   @unique
   title       String
@@ -37,13 +62,14 @@ model Article{
   author      String
   readTime    String
 }
-model User{
-  id        String @id @default(cuid())
+
+model User {
+  id        String   @id @default(cuid())
   name      String
-  email     String @unique
+  email     String   @unique
   auth_type AuthType
-  phone     String? @unique
-  imageUrl String
+  phone     String?  @unique
+  imageUrl  String
   createdAt DateTime @default(now())
 }
 
