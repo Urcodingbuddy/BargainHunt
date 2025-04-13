@@ -5,9 +5,7 @@ import { Button } from "@/components/ui/button";
 import GuidePostClient from "./client";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-
 type Params = Promise<{ slug: string }>;
-
 export default async function GuidePage({ params }: { params: Params }) {
   const { slug } = await params;
   let post;
@@ -19,7 +17,6 @@ export default async function GuidePage({ params }: { params: Params }) {
     console.error("Error fetching guide:", error);
     post = null;
   }
-
   if (!post) {
     return (
       <div className="min-h-screen text-white flex items-center justify-center">
