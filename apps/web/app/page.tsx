@@ -35,6 +35,29 @@ export default async function Home() {
     );
   }
 
+
+  let recentAritcles : any[] = [];
+  try {
+    recentAritcles  = await prisma.article.findMany({
+      orderBy: { date: "desc" },
+      take: 3,
+    });
+  } catch (err) {
+    console.error("Prisma error:", err);
+  }
+  if (!recentAritcles) {
+    return (
+      <div className="min-h-screen text-white flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold mb-4">No Guides Found</h1>
+          <p className="mb-6">We couldn't find any guides at the moment.</p>
+        </div>
+      </div>
+    );
+  }
+
+
+
   const iconMap: Record<string, JSX.Element> = {
     "Shopping Tips": <BrainCircuit className="h-5 w-5" />,
     "Price Comparison": <Cpu className="h-5 w-5" />,
@@ -104,30 +127,17 @@ export default async function Home() {
       <section className="mb-20 ">
         <h2 className="text-2xl font-bold mb-8">Recent Articles</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <ArticleCard
-            title="10 Browser Extensions That Help You Save Money While Shopping Online"
-            description="Discover the best browser add-ons that automatically find coupon codes, compare prices, and alert you to price drops on your favorite products."
-            category="Shopping Tools"
-            date="July 5, 2023"
-            slug="browser-extensions-save-money"
-            image="https://images.unsplash.com/photo-1610986603166-f78428624e76?q=80&w=600&h=400&auto=format&fit=crop"
-          />
-          <ArticleCard
-            title="How to Read Price History Charts to Make Smarter Purchases"
-            description="Learn to interpret price fluctuation patterns to determine if a 'sale' is really a good deal or just clever marketing."
-            category="Smart Shopping"
-            date="July 18, 2023"
-            slug="read-price-history-charts"
-            image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&h=400&auto=format&fit=crop"
-          />
-          <ArticleCard
-            title="The Psychology of Discounts: Don't Fall for These Pricing Tricks"
-            description="Understand the psychological tactics retailers use to make deals seem better than they are, and how to spot genuine bargains."
-            category="Consumer Psychology"
-            date="August 3, 2023"
-            slug="psychology-of-discounts"
-            image="https://images.unsplash.com/photo-1607082350899-7e105aa886ae?q=80&w=600&h=400&auto=format&fit=crop"
-          />
+          {recentAritcles.map((article:any) => (
+            <ArticleCard
+              key={article.id}
+              title={article.title}
+              description={article.description}
+              category={article.category}
+              date={article.date.toDateString()}
+              slug={article.slug}
+              image={article.image}
+            />
+          ))}
         </div>
       </section>
 
