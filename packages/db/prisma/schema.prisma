@@ -22,16 +22,16 @@ model Product {
   image                 String
   amazonPrice           String
   flipkartPrice         String
-  amazonReview          String
-  flipkartReview        String
+  amazonReview          String?
+  flipkartReview        String?
   amazonLink            String
   flipkartLink          String
-  flipkartRating        String
-  amazonRating          String
-  amazonOriginalPrice   String
-  flipkartOriginalPrice String
-  availability          String
-  boughtInLastMonth     String
+  flipkartRating        String?
+  amazonRating          String?
+  amazonOriginalPrice   String?
+  flipkartOriginalPrice String?
+  availability          String?
+  boughtInLastMonth     String?
   source                String
   matchScore            String
   LastUpdated           DateTime @default(now())
