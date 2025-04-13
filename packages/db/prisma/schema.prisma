@@ -25,7 +25,18 @@ model Guide {
   author      String
   readTime    String
 }
-
+model Article{
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  category    String
+  date        DateTime
+  image       String
+  content     String
+  author      String
+  readTime    String
+}
 model User{
   id        String @id @default(cuid())
   name      String
