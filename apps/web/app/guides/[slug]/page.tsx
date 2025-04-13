@@ -37,7 +37,6 @@ export default async function GuidePage({ params }: { params: Params }) {
   try {
     relatedGuides = await prisma.guide.findMany({
       where: {
-        // category: post.category,
         NOT: { id: post.id },
       },
       take: 3,
