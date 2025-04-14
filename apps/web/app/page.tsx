@@ -86,7 +86,7 @@ export default async function Home() {
                   Compare Prices
                 </Button>
               </Link>
-              <Link href="/guides">
+              <Link href="/compare">
                 <Button className="bg-transparent hover:text-yellow-500 border-2 hover:bg-black/60 cursor-pointer pointer-events-auto rounded-md text-white">
                   Live Search <Zap className="ml-2 h-4 w-4 inline-block " />
                 </Button>
