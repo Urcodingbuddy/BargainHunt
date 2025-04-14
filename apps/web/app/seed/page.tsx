@@ -8,9 +8,20 @@ import { Lens } from "@/components/ui/lense";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/inputv2";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import axios from "axios";
+import { title } from "process";
 
 export default function SeedPage() {
   const { products } = useCompare();
+  const [categoryInputs, setCategoryInputs] = useState<Record<string, string>>({});
+const [brandInputs, setBrandInputs] = useState<Record<string, string>>({});
+const [savingStatus, setSavingStatus] = useState<Record<string, boolean>>({});
+
+const handleCategoryChange = (id: string, value: string) => {
+  setCategoryInputs((prev) => ({ ...prev, [id]: value }));
+};
+
   return (
     <div className="grid grid-cols-1 gap-8 py-10 px-4 max-w-7xl mx-auto">
       {products.map((product) => (
