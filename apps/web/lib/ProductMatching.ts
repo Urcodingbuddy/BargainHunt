@@ -1,3 +1,4 @@
+import { createId } from '@paralleldrive/cuid2';
 import {
   detectCategory,
   extractSpecsByCategory,
@@ -367,7 +368,7 @@ export function normalizeProductData(
 
     return {
       uniqueID: amazonProduct.uniqueID,
-      id: `amazon-${normalizedTitle.replace(/\s+/g, "-")}-${counter++}`,
+      id: createId(),
       title: amazonProduct.name,
       normalizedTitle,
       category,
@@ -380,13 +381,13 @@ export function normalizeProductData(
       price: numericPrice,
       originalPrice: numericOriginalPrice,
       prices: {
-        amazon: {
-          price: amazonProduct.price,
-          originalPrice: amazonProduct.originalPrice,
-          numericValue: numericPrice,
-          discount: amazonProduct.discount,
-          link: amazonProduct.link,
-        },
+      amazon: {
+        price: amazonProduct.price,
+        originalPrice: amazonProduct.originalPrice,
+        numericValue: numericPrice,
+        discount: amazonProduct.discount,
+        link: amazonProduct.link,
+      },
       },
       specs,
     };
