@@ -221,17 +221,17 @@ function Products({ product }: { product: any }) {
                       {product.flipkartPrice}
                     </div>
 
-                    <Button className="w-full text-xs mt-2 bg-blue-500 hover:bg-blue-600 text-white font-bold">
                       <Link
                         href={product.flipkartLink || "#"}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center"
                       >
+                    <Button className="w-full cursor-pointer text-xs mt-2 bg-blue-500 hover:bg-blue-600 text-white font-bold">
                         Buy on Flipkart{" "}
                         <ExternalLink className="ml-1 h-3 w-3" />
-                      </Link>
                     </Button>
+                      </Link>
                   </div>
                   {bestPrice === "flipkart" &&
                     product.amazonPrice !== "N/A" && (
