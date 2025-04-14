@@ -1,17 +1,23 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
     try {
-        const data = await request.json();
-
-    const savedProduct = await prisma.product.create({
-        data,
-    })
-    return NextResponse.json(savedProduct, { status: 201 });
+      const { products } = await req.json();
+  
+      if (!Array.isArray(products)) {
+        return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+      }
+  
+      await prisma.product.createMany({
+        data: products,
+        skipDuplicates: true, // Skip duplicates if any
+      });
+  
+      return NextResponse.json({ success: true });
     } catch (error) {
-        console.error('Error saving product:', error);
-        return NextResponse.json({ error: 'Failed to save product' }, { status: 500 });
+      console.error("Failed to save products", error);
+      return NextResponse.json({ error: "Internal error" }, { status: 500 });
     }
-}
+  }
