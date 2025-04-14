@@ -1,37 +1,138 @@
 "use client";
-import { Star, ExternalLink } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import type { NormalizedProduct } from "@/lib/ProductMatching";
-import Link from "next/link";
+import { useState, useEffect } from "react";
 import { useCompare } from "@/contexts/CompareContext";
-import { Lens } from "@/components/ui/lense";
+// import SeedProductsCard from "@/components/SeedProductsCard"; // assume this is the child card component
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/inputv2";
-import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
 import axios from "axios";
-import { title } from "process";
+import type { NormalizedProduct } from "@/lib/ProductMatching";
+import { Lens } from "@/components/ui/lense";
+import { Card } from "@/components/ui/card";
+import { ExternalLink, Star } from "lucide-react";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/inputv2";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 export default function SeedPage() {
   const { products } = useCompare();
-  const [categoryInputs, setCategoryInputs] = useState<Record<string, string>>({});
-const [brandInputs, setBrandInputs] = useState<Record<string, string>>({});
-const [savingStatus, setSavingStatus] = useState<Record<string, boolean>>({});
 
-const handleCategoryChange = (id: string, value: string) => {
-  setCategoryInputs((prev) => ({ ...prev, [id]: value }));
-};
+  const [categoryInputs, setCategoryInputs] = useState<Record<string, string>>(
+    {}
+  );
+  const [brandInputs, setBrandInputs] = useState<Record<string, string>>({});
+  const [selectedProducts, setSelectedProducts] = useState<
+  Record<string, boolean>
+  >({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [savedIDs, setSavedIDs] = useState<Set<string>>(new Set());
 
+  const handleCategoryChange = (id: string, value: string) => {
+    setCategoryInputs((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleBrandChange = (id: string, value: string) => {
+    setBrandInputs((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSelectionChange = (id: string, checked: boolean) => {
+    setSelectedProducts((prev) => ({ ...prev, [id]: checked }));
+  };
+
+  const handleSaveSelected = async () => {
+    setIsSaving(true);
+    const selected = products.filter((p) => selectedProducts[p.id]);
+
+    const payload = selected.map((product) => {
+      const category =
+        categoryInputs[product.id] || product.category || "uncategorized";
+      const brand = brandInputs[product.id] || "unknown";
+
+      return {
+        uniqueId: product.uniqueID,
+        title: product.title,
+        normalizedTitle: product.normalizedTitle,
+        category,
+        brand,
+        image: product.image,
+        amazonPrice: product.prices.amazon?.price || "N/A",
+        flipkartPrice: product.prices.flipkart?.price || "N/A",
+        amazonReview: product.reviews?.toString(),
+        flipkartReview: product.reviews?.toString(),
+        amazonLink: product.prices.amazon?.link || "#",
+        flipkartLink: product.prices.flipkart?.link || "#",
+        amazonRating: product.rating?.toString(),
+        flipkartRating: product.rating?.toString(),
+        amazonOriginalPrice: product.prices.amazon?.originalPrice,
+        flipkartOriginalPrice: product.prices.flipkart?.originalPrice,
+        availability: product.availability || "N/A",
+        boughtInLastMonth: product.boughtInPastMonth,
+        source: product.source || "amazon",
+        matchScore: product.matchedSpecs?.toString() || "0",
+      };
+    });
+
+    
+    try {
+      await axios.post("/api/save-product", { products: payload });
+      alert("Products saved successfully!");
+    } catch (error) {
+      console.error("Saving failed:", error);
+      alert("Error while saving products");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+  
   return (
-    <div className="grid grid-cols-1 gap-8 py-10 px-4 max-w-7xl mx-auto">
-      {products.map((product) => (
-        <SeedProductsCard key={product.id} product={product} />
-      ))}
+    <div className="max-w-7xl mx-auto px-4 py-10 space-y-6">
+      <div className="flex justify-end">
+        <Button
+          onClick={handleSaveSelected}
+          className="bg-green-600 hover:bg-green-500"
+          disabled={isSaving}
+        >
+          {isSaving ? "Saving..." : "Save Selected"}
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 gap-8">
+        {products.map((product) => (
+          <SeedProductsCard
+            key={product.id}
+            product={product}
+            checked={!!selectedProducts[product.id]}
+            onCheckboxChange={(checked) =>
+              handleSelectionChange(product.id, checked)
+            }
+            onCategoryChange={(val) => handleCategoryChange(product.id, val)}
+            onBrandChange={(val) => handleBrandChange(product.id, val)}
+            categoryValue={categoryInputs[product.id] || ""}
+            brandValue={brandInputs[product.id] || ""} // Check if the product is already saved
+          />
+        ))}
+      </div>
     </div>
   );
 }
 
-function SeedProductsCard({ product }: { product: NormalizedProduct }) {
+interface Props {
+  product: NormalizedProduct;
+  checked: boolean;
+  onCheckboxChange: (checked: boolean) => void;
+  onCategoryChange: (val: string) => void;
+  onBrandChange: (val: string) => void;
+  categoryValue: string;
+  brandValue: string;
+}
+
+function SeedProductsCard({
+  product,
+  checked,
+  onCheckboxChange,
+  onCategoryChange,
+  onBrandChange,
+}: Props) {
   const amazonPrice = product.prices.amazon?.numericValue;
   const flipkartPrice = product.prices.flipkart?.numericValue;
 
@@ -48,6 +149,14 @@ function SeedProductsCard({ product }: { product: NormalizedProduct }) {
   if (amazonPrice && flipkartPrice) {
     return (
       <Card className="bg-black/40 backdrop-blur-xl border border-gray-800 overflow-hidden rounded-xl shadow-lg">
+        <div className="absolute top-4 right-4 z-10">
+         <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onCheckboxChange(e.target.checked)}
+          className="w-full cursor-pointer bg-green-600 hover:bg-green-500 text-white font-medium"
+        />
+        </div> 
         <div className="p-6">
           <div className="flex flex-col lg:flex-row gap-6 w-full">
             <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-3/5">
@@ -220,20 +329,21 @@ function SeedProductsCard({ product }: { product: NormalizedProduct }) {
                   <div className="w-full h-px bg-gray-800 my-3"></div>
 
                   <div className="space-y-3 mt-auto">
-                    <label
-                      htmlFor="brandName"
-                      className="text-sm text-gray-300 font-medium"
-                    >
-                      Brand Name
-                    </label>
                     <Input
-                      id="brandName"
-                      placeholder="Enter in LowerCase"
+                      id="category"
+                      required
+                      placeholder="Category"
+                      defaultValue={product.category || ""}
+                      onChange={(e) => onCategoryChange(e.target.value)}
                       className="bg-black/30 border-gray-700 focus:border-purple-500 text-white"
                     />
-                    <Button className="w-full bg-green-600 hover:bg-green-500 text-white font-medium">
-                      Save
-                    </Button>
+                    <Input
+                      id="brand"
+                      required
+                      placeholder="Brand"
+                      onChange={(e) => onBrandChange(e.target.value)}
+                      className="bg-black/30 border-gray-700 focus:border-purple-500 text-white"
+                    />
                   </div>
                 </div>
               </Card>
