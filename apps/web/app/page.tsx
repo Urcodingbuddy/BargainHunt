@@ -1,12 +1,11 @@
 export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { BrainCircuit, CalendarSearch , Cpu, Eye } from "lucide-react";
+import { BrainCircuit, CalendarSearch, Cpu, Eye, LucideBolt, Zap } from "lucide-react";
 import ProductCarousel from "@/components/product-carousel";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { InteractiveGridPattern } from "@/components/ui/intrective-grid-pattern";
 import { cn } from "@/lib/utils";
-import {SubscribeEmail, SubscribeButton} from "@/components/Subscribe-email";
 import FeaturedCard from "@/components/Featured-cards";
 import ArticleCard from "@/components/Article-card";
 import { PrismaClient } from "@prisma/client";
@@ -14,7 +13,7 @@ import { JSX } from "react";
 const prisma = new PrismaClient();
 
 export default async function Home() {
-  let featuredGuides : any[] = [];
+  let featuredGuides: any[] = [];
   try {
     featuredGuides = await prisma.guide.findMany({
       orderBy: { date: "desc" },
@@ -35,10 +34,9 @@ export default async function Home() {
     );
   }
 
-
-  let recentAritcles : any[] = [];
+  let recentAritcles: any[] = [];
   try {
-    recentAritcles  = await prisma.article.findMany({
+    recentAritcles = await prisma.article.findMany({
       orderBy: { date: "desc" },
       take: 3,
     });
@@ -56,12 +54,10 @@ export default async function Home() {
     );
   }
 
-
-
   const iconMap: Record<string, JSX.Element> = {
     "Shopping Tips": <BrainCircuit className="h-5 w-5" />,
     "Price Comparison": <Cpu className="h-5 w-5" />,
-    "Shopping Calendar": <CalendarSearch  className="h-5 w-5" />,
+    "Shopping Calendar": <CalendarSearch className="h-5 w-5" />,
   };
 
   return (
@@ -84,10 +80,17 @@ export default async function Home() {
               decisions with our real-time price comparison tool.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="bg-purple-600 cursor-pointer pointer-events-auto hover:bg-purple-700 rounded-md text-white">
-                <Link href="/compare">Compare Prices</Link>
-              </Button>
-              <SubscribeButton/>
+              <Link href="/products">
+                {" "}
+                <Button className="bg-purple-600 cursor-pointer pointer-events-auto hover:bg-purple-700 rounded-md text-white">
+                  Compare Prices
+                </Button>
+              </Link>
+              <Link href="/guides">
+                <Button className="bg-transparent hover:text-yellow-500 border-2 hover:bg-black/60 cursor-pointer pointer-events-auto rounded-md text-white">
+                  Live Search <Zap className="ml-2 h-4 w-4 inline-block " />
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="relative w-full h-[14rem] sm:h-[16rem] md:h-[18rem] lg:h-[24rem] rounded-xl overflow-hidden border-2">
@@ -109,23 +112,23 @@ export default async function Home() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-        {featuredGuides.map((guide:any) => (
-          <FeaturedCard
-            key={guide.id}
-            title={guide.title}
-            description={guide.description}
-            image={guide.image}
-            date={guide.date.toDateString()}
-            category={guide.category}
-            icon={iconMap[guide.category] || <Eye className="h-5 w-5" />}
-            slug={guide.slug}
-          />
-        ))}
+          {featuredGuides.map((guide: any) => (
+            <FeaturedCard
+              key={guide.id}
+              title={guide.title}
+              description={guide.description}
+              image={guide.image}
+              date={guide.date.toDateString()}
+              category={guide.category}
+              icon={iconMap[guide.category] || <Eye className="h-5 w-5" />}
+              slug={guide.slug}
+            />
+          ))}
         </div>
       </section>
 
       <section className="mb-20 ">
-      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold">Recent Articles</h2>
           <Link
             href="/blogs"
@@ -135,7 +138,7 @@ export default async function Home() {
           </Link>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {recentAritcles.map((article:any) => (
+          {recentAritcles.map((article: any) => (
             <ArticleCard
               key={article.id}
               title={article.title}
@@ -148,10 +151,6 @@ export default async function Home() {
           ))}
         </div>
       </section>
-
-      <SubscribeEmail />
     </div>
   );
 }
-
-
