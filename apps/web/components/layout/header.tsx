@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { Menu, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { HiMiniUser } from "react-icons/hi2";
 import ModalWrapper from "@/components/Dynamic-popup";
 
 
@@ -50,7 +49,7 @@ export function Header() {
           </Link>
 
           {/* User Icon and Search Button */}
-          <div className="hidden md:flex w-40 items-center justify-between">
+          <div className="hidden md:flex gap-3 lg:gap-5  items-center justify-between">
           <ModalWrapper />
             <Link href="/compare">
               <Button
@@ -60,7 +59,7 @@ export function Header() {
                 className="cursor-pointer bg-purple-600 text-white hover:border-white hover:text-gray-200 border border-transparent flex items-center gap-2"
               >
                 <Search className="h-5 w-5" />
-                <span>Search</span>
+                <span className="hidden lg:block">Search</span>
               </Button>
             </Link>
           </div>
