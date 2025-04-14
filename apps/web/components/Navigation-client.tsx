@@ -54,16 +54,12 @@ export function NavigationClient() {
             const isActive = pathname === "/products";
 
             return (
-              <Link href="/products" passHref legacyBehavior>
-                <NavigationMenuLink
-                  className={cn(
-                    navigationMenuTriggerStyle(),
-                    isActive ? "text-purple-600 font-semibold" : "text-current"
-                  )}
-                >
-                  <NavigationMenuTrigger>Products</NavigationMenuTrigger>
-                </NavigationMenuLink>
-              </Link>
+              <Link href={"/products"} passHref legacyBehavior>
+              <NavigationMenuTrigger className={cn(
+                navigationMenuTriggerStyle(),
+                isActive ? "text-purple-600 font-semibold" : "text-current"
+              )}>Products</NavigationMenuTrigger>
+            </Link>
             );
           })()}
           <NavigationMenuContent>
@@ -120,15 +116,11 @@ export function NavigationClient() {
             const isActive = pathname === "/compare";
 
             return (
-              <Link href="/compare" passHref legacyBehavior>
-                <NavigationMenuLink
-                  className={cn(
-                    navigationMenuTriggerStyle(),
-                    isActive ? "text-purple-600 font-semibold" : "text-current"
-                  )}
-                >
-                  <NavigationMenuTrigger>Live Search</NavigationMenuTrigger>
-                </NavigationMenuLink>
+              <Link href={"/compare"} passHref legacyBehavior>
+              <NavigationMenuTrigger className={cn(
+                navigationMenuTriggerStyle(),
+                isActive ? "text-purple-600 font-semibold" : "text-current"
+              )}>Live Search</NavigationMenuTrigger>
               </Link>
             );
           })()}
@@ -215,14 +207,12 @@ export function NavigationClient() {
             const isActive = pathname === "/about" || pathname === "/blogs" || pathname === "/guides" || pathname === "/terms" || pathname === "/privacy";
 
             return (
-              <NavigationMenuLink
-                className={cn(
+              <Link href={"/about"} passHref legacyBehavior>
+                <NavigationMenuTrigger className={cn(
                   navigationMenuTriggerStyle(),
                   isActive ? "text-purple-600 font-semibold" : "text-current"
-                )}
-              >
-                <NavigationMenuTrigger>More</NavigationMenuTrigger>
-              </NavigationMenuLink>
+                )}>More</NavigationMenuTrigger> 
+                </Link>
             );
           })()}
           <NavigationMenuContent>
