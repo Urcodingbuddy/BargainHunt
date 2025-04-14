@@ -1,5 +1,5 @@
 "use client";
-import { usePathname } from "next/navigation";
+
 import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -23,22 +23,49 @@ import {
   LucideShoppingCart,
   LucideInfo,
 } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export function NavigationClient() {
   return (
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <Link href="/" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              <CustomNavLink href="/">Home</CustomNavLink>
-            </NavigationMenuLink>
-          </Link>
+          {(() => {
+            const pathname = usePathname();
+            const isActive = pathname === "/";
+
+            return (
+              <Link href="/" passHref legacyBehavior>
+                <NavigationMenuLink
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    isActive ? "text-purple-600 font-semibold" : "text-current"
+                  )}
+                >
+                  Home
+                </NavigationMenuLink>
+              </Link>
+            );
+          })()}
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link href="/compare" legacyBehavior passHref>
-            <NavigationMenuTrigger>Products</NavigationMenuTrigger>
-          </Link>
+          {(() => {
+            const pathname = usePathname();
+            const isActive = pathname === "/products";
+
+            return (
+              <Link href="/products" passHref legacyBehavior>
+                <NavigationMenuLink
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    isActive ? "text-purple-600 font-semibold" : "text-current"
+                  )}
+                >
+                  <NavigationMenuTrigger>Products</NavigationMenuTrigger>
+                </NavigationMenuLink>
+              </Link>
+            );
+          })()}
           <NavigationMenuContent>
             <ul className="grid gap-2 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
@@ -88,7 +115,23 @@ export function NavigationClient() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Live Search</NavigationMenuTrigger>
+          {(() => {
+            const pathname = usePathname();
+            const isActive = pathname === "/compare";
+
+            return (
+              <Link href="/compare" passHref legacyBehavior>
+                <NavigationMenuLink
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    isActive ? "text-purple-600 font-semibold" : "text-current"
+                  )}
+                >
+                  <NavigationMenuTrigger>Live Search</NavigationMenuTrigger>
+                </NavigationMenuLink>
+              </Link>
+            );
+          })()}
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
               <ListItem
@@ -167,7 +210,21 @@ export function NavigationClient() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>More</NavigationMenuTrigger>
+          {(() => {
+            const pathname = usePathname();
+            const isActive = pathname === "/about" || pathname === "/blogs" || pathname === "/guides" || pathname === "/terms" || pathname === "/privacy";
+
+            return (
+              <NavigationMenuLink
+                className={cn(
+                  navigationMenuTriggerStyle(),
+                  isActive ? "text-purple-600 font-semibold" : "text-current"
+                )}
+              >
+                <NavigationMenuTrigger>More</NavigationMenuTrigger>
+              </NavigationMenuLink>
+            );
+          })()}
           <NavigationMenuContent>
             <ul className="grid gap-2 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
@@ -229,9 +286,8 @@ const ListItem = React.forwardRef<
   return (
     <li>
       <NavigationMenuLink asChild>
-        <Link
+        <a
           ref={ref}
-          href={props.href || "#"} // Ensure href is always a valid string
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
             className
@@ -242,34 +298,9 @@ const ListItem = React.forwardRef<
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </p>
-        </Link>
+        </a>
       </NavigationMenuLink>
     </li>
   );
 });
 ListItem.displayName = "ListItem";
-
-function CustomNavLink({
-  href,
-  children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) {
-  const pathname = usePathname();
-
-  const isActive = pathname === href;
-
-  return (
-    <Link href={href} passHref legacyBehavior>
-      <NavigationMenuLink
-        className={cn(
-          navigationMenuTriggerStyle(),
-          isActive ? "text-purple-500 font-semibold" : "text-muted-foreground"
-        )}
-      >
-        {children}
-      </NavigationMenuLink>
-    </Link>
-  );
-}
