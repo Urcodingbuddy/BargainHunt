@@ -14,7 +14,8 @@ datasource db {
 }
 
 model Product {
-  id                    String @id @default(cuid())
+  id                    String   @id @default(cuid())
+  uniqueId              String?   @unique
   title                 String
   normalizedTitle       String
   category              String
