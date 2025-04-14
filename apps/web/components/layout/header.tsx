@@ -7,6 +7,7 @@ import { Menu, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import ModalWrapper from "@/components/Dynamic-popup";
+import { ScrollProgress } from "../ui/scroll-progress";
 
 
 export function Header() {
@@ -41,6 +42,7 @@ export function Header() {
 
   return (
     <header className="border-b z-30 border-gray-800 bg-gradient-to-b from-black via-black/100 to-transparent h-16 flex items-center justify-center overflow-x-hidden">
+      <ScrollProgress className="top-0" />
       <div className="@container w-full px-4 mx-2 sm:mx-8 md:mx-12 lg:mx-14 overflow-hidden">
         <div className="flex items-center justify-between h-full">
           {/* Logo */}
