@@ -5,11 +5,15 @@ import { Card } from "@/components/ui/card";
 import { useEffect } from "react";
 export default function ProductsPage() {
   const {
-    search, setSearch,
-    category, setCategory,
-    brand, setBrand,
-    categories, brands,
-    products
+    search,
+    setSearch,
+    category,
+    setCategory,
+    brand,
+    setBrand,
+    categories,
+    brands,
+    products,
   } = useProductFilters();
 
   useEffect(() => {
@@ -34,8 +38,10 @@ export default function ProductsPage() {
           className="p-2 bg-gray-800 text-white rounded border border-gray-700"
         >
           <option value="">All Categories</option>
-          {categories.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
           ))}
         </select>
 
@@ -46,32 +52,34 @@ export default function ProductsPage() {
           disabled={!category}
         >
           <option value="">All Brands</option>
-          {brands.map(br => (
-            <option key={br} value={br}>{br}</option>
+          {brands.map((br) => (
+            <option key={br} value={br}>
+              {br}
+            </option>
           ))}
         </select>
       </div>
 
       {/* Products */}
       <div className="grid grid-cols-1 gap-6">
-        {products.map(product => (
-          <ProductComparisonCard key={product.id} product={product} />
+        {products.map((product) => (
+          <Products key={product.id} product={product} />
         ))}
       </div>
     </div>
   );
 }
 
-
-
 import { Star, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Lens } from "@/components/ui/lense";
 
-function ProductComparisonCard({ product }: { product: any }) {
+function Products({ product }: { product: any }) {
   const amazonPrice = parseFloat(product.amazonPrice.replace(/[^\d.]/g, ""));
-  const flipkartPrice = parseFloat(product.flipkartPrice.replace(/[^\d.]/g, ""));
+  const flipkartPrice = parseFloat(
+    product.flipkartPrice.replace(/[^\d.]/g, "")
+  );
 
   let bestPrice = "none";
   if (!isNaN(amazonPrice) && !isNaN(flipkartPrice)) {
@@ -106,39 +114,34 @@ function ProductComparisonCard({ product }: { product: any }) {
 
               {/* Product Details */}
               <div className="flex flex-col">
-                <h3 className="text-sm md:text-lg font-bold text-white mb-2">{product.title}</h3>
+                <h3 className="text-sm md:text-lg font-bold text-white mb-2">
+                  {product.title}
+                </h3>
 
-                <div className="text-sm text-gray-300 mb-2">Brand: <span className="text-white">{product.brand}</span></div>
+                <div className="text-sm text-gray-300 mb-2">
+                  Brand: <span className="text-white">{product.brand}</span>
+                </div>
 
                 {/* Amazon Rating & Reviews */}
-                {(product.amazonRating !== "N/A" || product.amazonReview !== "N/A") && (
+                {(product.amazonRating !== "N/A" ||
+                  product.amazonReview !== "N/A") && (
                   <div className="text-xs text-yellow-400">
                     {product.amazonRating !== "N/A" && (
-                      <span className="mr-2">Amazon: {product.amazonRating} ★</span>
+                      <span className="mr-2">
+                        Amazon: {product.amazonRating} ★
+                      </span>
                     )}
                     {product.amazonReview !== "N/A" && (
                       <span>({product.amazonReview} reviews)</span>
                     )}
                   </div>
                 )}
-
-                {/* Flipkart Rating & Reviews */}
-                {(product.flipkartRating !== "N/A" || product.flipkartReview !== "N/A") && (
-                  <div className="text-xs text-yellow-400">
-                    {product.flipkartRating !== "N/A" && (
-                      <span className="mr-2">Flipkart: {product.flipkartRating} ★</span>
-                    )}
-                    {product.flipkartReview !== "N/A" && (
-                      <span>({product.flipkartReview} reviews)</span>
-                    )}
-                  </div>
-                )}
-
-                {product.boughtInLastMonth !== "N/A" && product.boughtInLastMonth !== "M.R.P:" && (
-                  <div className="text-sm text-green-400 mt-2">
-                    {product.boughtInLastMonth}
-                  </div>
-                )}
+                {product.boughtInLastMonth !== "N/A" &&
+                  product.boughtInLastMonth !== "M.R.P:" && (
+                    <div className="text-sm text-green-400 mt-2">
+                      {product.boughtInLastMonth}
+                    </div>
+                  )}
               </div>
             </div>
 
@@ -151,7 +154,11 @@ function ProductComparisonCard({ product }: { product: any }) {
                     <h4 className="text-sm flex justify-between items-center md:text-lg font-bold mb-2">
                       Amazon
                       <span className="h-8 w-8 flex justify-center items-center rounded bg-neutral-300">
-                        <img className="h-7 w-7" src="/amazon-icon.svg" alt="Amazon" />
+                        <img
+                          className="h-7 w-7"
+                          src="/amazon-icon.svg"
+                          alt="Amazon"
+                        />
                       </span>
                     </h4>
                     {product.amazonOriginalPrice !== "N/A" && (
@@ -159,30 +166,35 @@ function ProductComparisonCard({ product }: { product: any }) {
                         {product.amazonOriginalPrice}
                       </div>
                     )}
-                    <div className={`text-md md:text-2xl font-bold ${bestPrice === "amazon" ? "text-green-500" : "text-white"}`}>
+                    <div
+                      className={`text-md md:text-2xl font-bold ${bestPrice === "amazon" ? "text-green-500" : "text-white"}`}
+                    >
                       {product.amazonPrice}
                     </div>
 
-                    <Button className="w-full text-xs mt-2 bg-amber-500 hover:bg-amber-600 text-black font-bold">
-                      <Link
-                        href={product.amazonLink || "#"}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center"
-                      >
+                    <Link
+                      href={product.amazonLink || "#"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center"
+                    >
+                      <Button className="w-full cursor-pointer text-xs mt-2 bg-amber-500 hover:bg-amber-600 text-black font-bold">
                         Buy on Amazon <ExternalLink className="ml-1 h-3 w-3" />
-                      </Link>
-                    </Button>
+                      </Button>
+                    </Link>
                   </div>
-                  {bestPrice === "amazon" && product.flipkartPrice !== "N/A" && (
-                    <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-                      Best Price
-                    </div>
-                  )}
+                  {bestPrice === "amazon" &&
+                    product.flipkartPrice !== "N/A" && (
+                      <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                        Best Price
+                      </div>
+                    )}
                 </div>
               ) : (
                 <div className="bg-blend-darken border-2 p-4 rounded-lg flex items-center justify-center">
-                  <p className="text-gray-400 text-center text-sm">Not available on Amazon</p>
+                  <p className="text-gray-400 text-center text-sm">
+                    Not available on Amazon
+                  </p>
                 </div>
               )}
 
@@ -191,14 +203,21 @@ function ProductComparisonCard({ product }: { product: any }) {
                 <div className="relative">
                   <div className="bg-[#0b0912c2] backdrop-blur-3xl border-2 p-4 rounded-lg h-full flex flex-col justify-evenly">
                     <h4 className="flex justify-between items-center text-sm md:text-lg font-bold mb-2">
-                      Flipkart <img className="h-8" src="/flipkart-icon.svg" alt="Flipkart" />
+                      Flipkart{" "}
+                      <img
+                        className="h-8"
+                        src="/flipkart-icon.svg"
+                        alt="Flipkart"
+                      />
                     </h4>
                     {product.flipkartOriginalPrice !== "N/A" && (
                       <div className="text-xs text-gray-400 line-through">
                         {product.flipkartOriginalPrice}
                       </div>
                     )}
-                    <div className={`text-md md:text-2xl font-bold ${bestPrice === "flipkart" ? "text-green-500" : "text-white"}`}>
+                    <div
+                      className={`text-md md:text-2xl font-bold ${bestPrice === "flipkart" ? "text-green-500" : "text-white"}`}
+                    >
                       {product.flipkartPrice}
                     </div>
 
@@ -209,19 +228,23 @@ function ProductComparisonCard({ product }: { product: any }) {
                         rel="noopener noreferrer"
                         className="flex items-center justify-center"
                       >
-                        Buy on Flipkart <ExternalLink className="ml-1 h-3 w-3" />
+                        Buy on Flipkart{" "}
+                        <ExternalLink className="ml-1 h-3 w-3" />
                       </Link>
                     </Button>
                   </div>
-                  {bestPrice === "flipkart" && product.amazonPrice !== "N/A" && (
-                    <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-                      Best Price
-                    </div>
-                  )}
+                  {bestPrice === "flipkart" &&
+                    product.amazonPrice !== "N/A" && (
+                      <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                        Best Price
+                      </div>
+                    )}
                 </div>
               ) : (
                 <div className="bg-blend-darken border-2 p-4 rounded-lg flex items-center justify-center">
-                  <p className="text-gray-400 text-center text-sm">Not available on Flipkart</p>
+                  <p className="text-gray-400 text-center text-sm">
+                    Not available on Flipkart
+                  </p>
                 </div>
               )}
             </div>
