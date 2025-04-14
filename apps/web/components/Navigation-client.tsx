@@ -1,5 +1,5 @@
 "use client";
-
+import { usePathname } from "next/navigation";
 import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -12,7 +12,17 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { LucideLaptop, LucideSmartphone, LucideRefrigerator, LucideCamera, LucideTv, LucideWatch, LucideNewspaper, LucideShoppingCart, LucideInfo } from "lucide-react";
+import {
+  LucideLaptop,
+  LucideSmartphone,
+  LucideRefrigerator,
+  LucideCamera,
+  LucideTv,
+  LucideWatch,
+  LucideNewspaper,
+  LucideShoppingCart,
+  LucideInfo,
+} from "lucide-react";
 
 export function NavigationClient() {
   return (
@@ -21,7 +31,7 @@ export function NavigationClient() {
         <NavigationMenuItem>
           <Link href="/" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Home
+              <CustomNavLink href="/">Home</CustomNavLink>
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
@@ -30,43 +40,50 @@ export function NavigationClient() {
             <NavigationMenuTrigger>Products</NavigationMenuTrigger>
           </Link>
           <NavigationMenuContent>
-          <ul className="grid gap-2 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+            <ul className="grid gap-2 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
                 <NavigationMenuLink asChild>
                   <Link
                     className="flex h-full border-2 rounded-lg w-full select-none flex-col justify-end bg-gradient-to-b from-muted/50 to-muted no-underline outline-none focus:shadow-md"
                     href="/"
                   >
-                    <video loop autoPlay  className="rounded-lg" muted
-                     src="./e-commerce live.mp4"></video>
+                    <video
+                      loop
+                      autoPlay
+                      className="rounded-lg"
+                      muted
+                      src="./e-commerce live.mp4"
+                    ></video>
                   </Link>
                 </NavigationMenuLink>
               </li>
-                <ListItem href="/products" title="Phone's">
+              <ListItem href="/products" title="Phone's">
                 <div className="flex items-center">
-                  Discover the latest smartphones with Advanced technology and features.
+                  Discover the latest smartphones with Advanced technology and
+                  features.
                   <span className="mr-2 text-indigo-600">
-                  <LucideSmartphone className="w-6 h-6" />
+                    <LucideSmartphone className="w-6 h-6" />
                   </span>
                 </div>
-                </ListItem>
-                <ListItem href="/products" title="Laptop's">
+              </ListItem>
+              <ListItem href="/products" title="Laptop's">
                 <div className="flex items-center">
-                  Explore a wide range of laptops, from gaming to business, to suit your needs.
+                  Explore a wide range of laptops, from gaming to business, to
+                  suit your needs.
                   <span className="mr-2 text-indigo-600">
-                  <LucideLaptop className="w-6 h-6" />
+                    <LucideLaptop className="w-6 h-6" />
                   </span>
                 </div>
-                </ListItem>
-                <ListItem href="/products" title="Aplliance's">
+              </ListItem>
+              <ListItem href="/products" title="Aplliance's">
                 <div className="flex items-center">
-                  Find the best home appliances that combine functionality and style.
-                    <span className="mr-2 text-indigo-600">
+                  Find the best home appliances that combine functionality and
+                  style.
+                  <span className="mr-2 text-indigo-600">
                     <LucideRefrigerator className="w-6 h-6" />
-                    </span>
+                  </span>
                 </div>
-                </ListItem>
-        
+              </ListItem>
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
@@ -75,70 +92,76 @@ export function NavigationClient() {
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
               <ListItem
-              title="Samsung Galaxy S24 Ultra"
-              href="/compare?q=Samsung+Galaxy+S24+Ultra"
+                title="Samsung Galaxy S24 Ultra"
+                href="/compare?q=Samsung+Galaxy+S24+Ultra"
               >
-              <div className="flex items-center">
-              The Samsung Galaxy S24 Ultra features a 6.8-inch Dynamic AMOLED display and a versatile quad-camera setup...
-              <span className="ml-2 text-indigo-600">
-              <LucideSmartphone className="w-6 h-6" />
-              </span>
-              </div>
+                <div className="flex items-center">
+                  The Samsung Galaxy S24 Ultra features a 6.8-inch Dynamic
+                  AMOLED display and a versatile quad-camera setup...
+                  <span className="ml-2 text-indigo-600">
+                    <LucideSmartphone className="w-6 h-6" />
+                  </span>
+                </div>
               </ListItem>
               <ListItem
-              title="Apple Watch Series 9"
-              href="/compare?q=Apple+Watch+Series+9"
+                title="Apple Watch Series 9"
+                href="/compare?q=Apple+Watch+Series+9"
               >
-              <div className="flex items-center">
-              The Apple Watch Series 9 offers advanced health tracking features and improved battery life...
-              <span className="ml-2 text-indigo-600">
-              <LucideWatch className="w-6 h-6" />
-              </span>
-              </div>
+                <div className="flex items-center">
+                  The Apple Watch Series 9 offers advanced health tracking
+                  features and improved battery life...
+                  <span className="ml-2 text-indigo-600">
+                    <LucideWatch className="w-6 h-6" />
+                  </span>
+                </div>
               </ListItem>
               <ListItem
-              title="Asus vivobook 15"
-              href="/compare?q=asus+vivobook+15"
+                title="Asus vivobook 15"
+                href="/compare?q=asus+vivobook+15"
               >
-              <div className="flex items-center">
-              The Asus Vivobook 15 features a 15.6-inch FHD display and Intel Core i5 processor...
-              <span className="ml-2 text-indigo-600">
-              <LucideLaptop className="w-6 h-6" />
-              </span>
-              </div>
+                <div className="flex items-center">
+                  The Asus Vivobook 15 features a 15.6-inch FHD display and
+                  Intel Core i5 processor...
+                  <span className="ml-2 text-indigo-600">
+                    <LucideLaptop className="w-6 h-6" />
+                  </span>
+                </div>
               </ListItem>
               <ListItem
-              title="SAMSUNG Odyssey G35 Gaming Monitor"
-              href="/compare?q=SAMSUNG+Odyssey+G35"
+                title="SAMSUNG Odyssey G35 Gaming Monitor"
+                href="/compare?q=SAMSUNG+Odyssey+G35"
               >
-              <div className="flex items-center">
-              The SAMSUNG Odyssey G35 features a 144Hz and AMD FreeSync technology...
-              <span className="ml-2 text-indigo-600">
-              <LucideTv className="w-6 h-6" />
-              </span>
-              </div>
+                <div className="flex items-center">
+                  The SAMSUNG Odyssey G35 features a 144Hz and AMD FreeSync
+                  technology...
+                  <span className="ml-2 text-indigo-600">
+                    <LucideTv className="w-6 h-6" />
+                  </span>
+                </div>
               </ListItem>
               <ListItem
-              title="Canon EOS R10 Mirrorless Camera"
-              href="/compare?q=Canon+EOS+R7"
+                title="Canon EOS R10 Mirrorless Camera"
+                href="/compare?q=Canon+EOS+R7"
               >
-              <div className="flex items-center">
-              The Canon EOS R10 features a 24.2 MP CMOS sensor and advanced autofocus capabilities...
-              <span className="ml-2 text-indigo-600">
-              <LucideCamera className="w-6 h-6" />
-              </span>
-              </div>
+                <div className="flex items-center">
+                  The Canon EOS R10 features a 24.2 MP CMOS sensor and advanced
+                  autofocus capabilities...
+                  <span className="ml-2 text-indigo-600">
+                    <LucideCamera className="w-6 h-6" />
+                  </span>
+                </div>
               </ListItem>
               <ListItem
-              title="Samsung 55-Inch Neo QLED 4K TV"
-              href="/compare?q=Samsung+QN90B+55-Inch"
+                title="Samsung 55-Inch Neo QLED 4K TV"
+                href="/compare?q=Samsung+QN90B+55-Inch"
               >
-              <div className="flex items-center">
-              The Samsung QN90B offers Quantum Matrix Technology and stunning picture quality...
-              <span className="ml-2 text-indigo-600">
-              <LucideRefrigerator className="w-6 h-6" />
-              </span>
-              </div>
+                <div className="flex items-center">
+                  The Samsung QN90B offers Quantum Matrix Technology and
+                  stunning picture quality...
+                  <span className="ml-2 text-indigo-600">
+                    <LucideRefrigerator className="w-6 h-6" />
+                  </span>
+                </div>
               </ListItem>
             </ul>
           </NavigationMenuContent>
@@ -165,30 +188,32 @@ export function NavigationClient() {
                   </Link>
                 </NavigationMenuLink>
               </li>
-                <ListItem href="/blogs" title="Articles">
+              <ListItem href="/blogs" title="Articles">
                 <div className="flex items-center">
-                  Explore Our Articles to Stay Informed in E-commerce and Maximize Your Savings.
+                  Explore Our Articles to Stay Informed in E-commerce and
+                  Maximize Your Savings.
                   <span className="ml-2 text-indigo-600">
-                  <LucideNewspaper className="w-6 h-6" />
+                    <LucideNewspaper className="w-6 h-6" />
                   </span>
                 </div>
-                </ListItem>
-                <ListItem href="/guides" title="Shopping Guides">
+              </ListItem>
+              <ListItem href="/guides" title="Shopping Guides">
                 <div className="flex items-center">
-                  Discover our comprehensive shopping guides to  efficient purchasing.
+                  Discover our comprehensive shopping guides to efficient
+                  purchasing.
                   <span className="ml-2 text-indigo-600">
-                  <LucideShoppingCart className="w-6 h-6" />
+                    <LucideShoppingCart className="w-6 h-6" />
                   </span>
                 </div>
-                </ListItem>
-                <ListItem href="/about" title="About Us">
+              </ListItem>
+              <ListItem href="/about" title="About Us">
                 <div className="flex items-center">
                   Learn more about our mission and the team behind BargainHunt.
                   <span className="ml-2 text-indigo-600">
-                  <LucideInfo className="w-6 h-6" />
+                    <LucideInfo className="w-6 h-6" />
                   </span>
                 </div>
-                </ListItem>
+              </ListItem>
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
@@ -204,8 +229,9 @@ const ListItem = React.forwardRef<
   return (
     <li>
       <NavigationMenuLink asChild>
-        <a
+        <Link
           ref={ref}
+          href={props.href || "#"} // Ensure href is always a valid string
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
             className
@@ -216,9 +242,34 @@ const ListItem = React.forwardRef<
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </p>
-        </a>
+        </Link>
       </NavigationMenuLink>
     </li>
   );
 });
 ListItem.displayName = "ListItem";
+
+function CustomNavLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+
+  const isActive = pathname === href;
+
+  return (
+    <Link href={href} passHref legacyBehavior>
+      <NavigationMenuLink
+        className={cn(
+          navigationMenuTriggerStyle(),
+          isActive ? "text-purple-500 font-semibold" : "text-muted-foreground"
+        )}
+      >
+        {children}
+      </NavigationMenuLink>
+    </Link>
+  );
+}
