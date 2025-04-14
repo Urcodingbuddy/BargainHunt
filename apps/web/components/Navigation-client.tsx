@@ -44,9 +44,9 @@ export function NavigationClient() {
               </li>
                 <ListItem href="/products" title="Phone's">
                 <div className="flex items-center">
-                  Discover the latest smartphones with cutting-edge technology and features.
+                  Discover the latest smartphones with Advanced technology and features.
                   <span className="mr-2 text-indigo-600">
-                  <LucideSmartphone className="w-8 h-8" />
+                  <LucideSmartphone className="w-6 h-6" />
                   </span>
                 </div>
                 </ListItem>
@@ -54,7 +54,7 @@ export function NavigationClient() {
                 <div className="flex items-center">
                   Explore a wide range of laptops, from gaming to business, to suit your needs.
                   <span className="mr-2 text-indigo-600">
-                  <LucideLaptop className="w-8 h-8" />
+                  <LucideLaptop className="w-6 h-6" />
                   </span>
                 </div>
                 </ListItem>
@@ -62,7 +62,7 @@ export function NavigationClient() {
                 <div className="flex items-center">
                   Find the best home appliances that combine functionality and style.
                     <span className="mr-2 text-indigo-600">
-                    <LucideRefrigerator className="w-8 h-8" />
+                    <LucideRefrigerator className="w-6 h-6" />
                     </span>
                 </div>
                 </ListItem>
