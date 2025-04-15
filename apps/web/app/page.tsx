@@ -79,7 +79,7 @@ export default async function Home() {
               Compare prices, discover discounts, and make smarter shopping
               decisions with our real-time price comparison tool.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex justify-self-start items-center gap-4">
               <Link href="/products">
                 {" "}
                 <Button className="bg-purple-600 cursor-pointer pointer-events-auto hover:bg-purple-700 rounded-md text-white">
