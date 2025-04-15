@@ -23,6 +23,7 @@ export const authOptions: AuthOptions = {
     async signIn({ user, account, profile }) {
       const existingUser = await prisma.user.findUnique({
         where: { email: user.email! },
+        select: {modrator: true, id: true}
       });
       if (existingUser) {
         user.id = existingUser.id;
@@ -37,6 +38,7 @@ export const authOptions: AuthOptions = {
             imageUrl:
               profile?.avatar_url ?? profile?.picture ?? user.imageUrl ?? "",
             auth_type: account?.provider === "google" ? "GOOGLE" : "GITHUB",
+            modrator: false,
           },
         });
       }
@@ -44,6 +46,7 @@ export const authOptions: AuthOptions = {
     },
     async jwt({ token, user }) {
       if (user) {
+        token.modrator = user.modrator;
         token.id = user.id;
       }
       return token;
@@ -51,6 +54,7 @@ export const authOptions: AuthOptions = {
     async session({ session, token }: { session: Session; token: JWT }) {
       if (session.user) {
         session.user.id = token.id;
+        session.user.modrator = token.modrator as boolean;
       }
       return session;
     },
