@@ -1,13 +1,16 @@
 "use client";
-import { useState} from "react";
+import { useEffect, useState} from "react";
 import { useCompare } from "@/contexts/CompareContext";
 import SeedProductsCard from "@/components/SeedProductsCard";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import { Mail, Home, ShieldOff} from "lucide-react";
 
 export default function SeedPage() {
   const { products } = useCompare();
-
+  const { data: session, status } = useSession();
+  const [isModrator, setIsModrator] = useState<boolean | null>(null);
   const [categoryInputs, setCategoryInputs] = useState<Record<string, string>>(
     {}
   );
@@ -16,6 +19,21 @@ export default function SeedPage() {
     Record<string, boolean>
   >({});
   const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    const checkModStatus = async () => {
+      if (session?.user?.email) {
+        try {
+          const res = await axios.get(`/api/modrator?email=${session.user.email}`);
+          setIsModrator(res.data.modrator);
+        } catch (err) {
+          console.error("Error checking moderator status", err);
+          setIsModrator(false);
+        }
+      }
+    };
+    checkModStatus();
+  }, [session]);
 
   const handleCategoryChange = (id: string, value: string) => {
     setCategoryInputs((prev) => ({ ...prev, [id]: value }));
@@ -72,6 +90,35 @@ export default function SeedPage() {
       setIsSaving(false);
     }
   };
+
+  if (!isModrator) {
+    return (
+      <div className="max-w-xl mx-auto text-center py-24 px-4 space-y-6">
+        <h2 className="text-2xl font-semibold text-white flex justify-center items-center gap-2">Restricted Access<ShieldOff className="w-10 h-10" /></h2>
+        <p className="text-slate-200">
+          This page is restricted to <strong>BargainHunt Developers</strong>.
+          If you believe you should have access, please reach out to the development team.
+        </p>
+
+        <div className="flex justify-center gap-4 pt-6">
+          <a
+            href={`mailto:anshpethe110@gmail.com?subject=Request to access BargainHunt Seed page`}
+            className="inline-flex items-center px-4 py-2 border border-black text-black bg-white hover:bg-gray-100 transition rounded-lg"
+          >
+            <Mail className="w-4 h-4 mr-2" />
+            Contact Developer 
+          </a>
+          <a
+            href="/"
+            className="inline-flex items-center px-4 py-2 border border-black text-black bg-white hover:bg-gray-100 transition rounded-lg"
+          >
+            <Home className="w-4 h-4 mr-2" />
+            Return Home
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10 space-y-6">
