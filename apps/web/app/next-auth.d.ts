@@ -8,13 +8,14 @@ declare module "next-auth" {
     name: string;
     phone?: string | null;
     email: string;
-    auth_type?: "Google" | "Github";
+    auth_type?: "GOOGLE" | "GITHUB";
     imageUrl?: string | null;
     createdAt?: Date | null;
+    modrator: boolean;
   }
 
   interface Session extends DefaultSession {
-    user: User & { id: string };
+    user: User & { id: string , modrator: boolean };
   }
   
 interface Profile {
@@ -26,5 +27,6 @@ interface Profile {
 declare module "next-auth/jwt" {
   interface JWT {
     id: string;
+    modrator: boolean;
   }
 }
