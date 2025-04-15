@@ -19,13 +19,17 @@ export default function SeedPage() {
     Record<string, boolean>
   >({});
   const [isSaving, setIsSaving] = useState(false);
-  console.log(session?.user.modrator)
+
   useEffect(() => {
     const checkModStatus = async () => {
-      if (session?.user?.modrator) {
-        setIsModrator(true);
-      }else{
-        setIsModrator(false);
+      if (session?.user?.email) {
+        try {
+          const res = await axios.get(`/api/modrator?email=${session.user.email}`);
+          setIsModrator(res.data.modrator);
+        } catch (err) {
+          console.error("Error checking moderator status", err);
+          setIsModrator(false);
+        }
       }
     };
     checkModStatus();
