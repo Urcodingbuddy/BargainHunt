@@ -103,11 +103,11 @@ export function Header() {
                   Home
                 </Link>
                 <Link
-                  href="/compare"
-                  className={`text-sm font-semibold ${isActive("/compare") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
+                  href="/products"
+                  className={`text-sm font-semibold ${isActive("/products") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
                   onClick={closeMenu}
                 >
-                  Compare
+                  Products
                 </Link>
                 <Link
                   href="/guides"
