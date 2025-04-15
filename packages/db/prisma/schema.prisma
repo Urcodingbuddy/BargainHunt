@@ -71,6 +71,7 @@ model User {
   auth_type AuthType
   phone     String?  @unique
   imageUrl  String
+  modrator  Boolean? @default(false)
   createdAt DateTime @default(now())
 }
 
