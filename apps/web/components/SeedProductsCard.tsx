@@ -227,7 +227,7 @@ export default function SeedProductsCard({
                           id="category"
                           required
                           placeholder="Category"
-                          value={product.category || ""} 
+                          defaultValue={product.category || ""} 
                           onChange={(e) => onCategoryChange(e.target.value)}
                           className="bg-black/30 border-gray-700 focus:border-purple-500 text-white"
                         />
