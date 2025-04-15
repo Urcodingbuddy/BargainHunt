@@ -22,6 +22,7 @@ export async function GET(req: NextRequest) {
                 createdAt:true,
                 auth_type:true,
                 phone:true,
+                modrator: true,
             },
         });
 
