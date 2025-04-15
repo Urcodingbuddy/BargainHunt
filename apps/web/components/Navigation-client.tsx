@@ -55,11 +55,15 @@ export function NavigationClient() {
 
             return (
               <Link href={"/products"} passHref legacyBehavior>
-              <NavigationMenuTrigger className={cn(
-                navigationMenuTriggerStyle(),
-                isActive ? "text-purple-600 font-semibold" : "text-current"
-              )}>Products</NavigationMenuTrigger>
-            </Link>
+                <NavigationMenuTrigger
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    isActive ? "text-purple-600 font-semibold" : "text-current"
+                  )}
+                >
+                  Products
+                </NavigationMenuTrigger>
+              </Link>
             );
           })()}
           <NavigationMenuContent>
@@ -73,6 +77,8 @@ export function NavigationClient() {
                     <video
                       loop
                       autoPlay
+                      preload="metadata"
+                      poster="./thumbnail-preview-vid.png"
                       className="rounded-lg"
                       muted
                       src="./e-commerce live.mp4"
@@ -117,10 +123,14 @@ export function NavigationClient() {
 
             return (
               <Link href={"/compare"} passHref legacyBehavior>
-              <NavigationMenuTrigger className={cn(
-                navigationMenuTriggerStyle(),
-                isActive ? "text-purple-600 font-semibold" : "text-current"
-              )}>Live Search</NavigationMenuTrigger>
+                <NavigationMenuTrigger
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    isActive ? "text-purple-600 font-semibold" : "text-current"
+                  )}
+                >
+                  Live Search
+                </NavigationMenuTrigger>
               </Link>
             );
           })()}
@@ -204,15 +214,24 @@ export function NavigationClient() {
         <NavigationMenuItem>
           {(() => {
             const pathname = usePathname();
-            const isActive = pathname === "/about" || pathname === "/blogs" || pathname === "/guides" || pathname === "/terms" || pathname === "/privacy";
+            const isActive =
+              pathname === "/about" ||
+              pathname === "/blogs" ||
+              pathname === "/guides" ||
+              pathname === "/terms" ||
+              pathname === "/privacy";
 
             return (
               <Link href={"/about"} passHref legacyBehavior>
-                <NavigationMenuTrigger className={cn(
-                  navigationMenuTriggerStyle(),
-                  isActive ? "text-purple-600 font-semibold" : "text-current"
-                )}>More</NavigationMenuTrigger> 
-                </Link>
+                <NavigationMenuTrigger
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    isActive ? "text-purple-600 font-semibold" : "text-current"
+                  )}
+                >
+                  More
+                </NavigationMenuTrigger>
+              </Link>
             );
           })()}
           <NavigationMenuContent>
