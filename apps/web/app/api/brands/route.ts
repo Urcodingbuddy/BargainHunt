@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import prisma from "@repo/db"
 
 export async function GET(req: NextRequest) {
   const category = req.nextUrl.searchParams.get("category");
