@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Eye, Zap } from "lucide-react";
+import { Eye, Zap, BookHeadphones, Newspaper} from "lucide-react";
 import ProductCarousel from "@/components/product-carousel";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { InteractiveGridPattern } from "@/components/ui/intrective-grid-pattern";
@@ -51,10 +51,10 @@ export default async function Home() {
 
       <section className="mb-20">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold">Featured Guides</h2>
+          <h2 className="text-2xl font-bold gap-2 flex items-center">Featured Guides <BookHeadphones className="text-purple-600 h-6 w-6" /></h2>
           <Link
             href="/guides"
-            className="text-purple-500 hover:text-purple-400 text-sm flex items-center gap-2"
+            className="text-purple-500 pointer-events z-10 hover:text-yellow-500 text-sm flex items-center gap-2"
           >
             View all <Eye className="h-4 w-4" />
           </Link>
@@ -64,10 +64,10 @@ export default async function Home() {
 
       <section className="mb-20">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold">Recent Articles</h2>
+          <h2 className="text-2xl font-bold flex items-center gap-2">Recent Articles<Newspaper className="text-purple-600 h-6 w-6" /></h2> 
           <Link
             href="/blogs"
-            className="text-purple-500 hover:text-purple-400 text-sm flex items-center gap-2"
+            className="text-purple-500 pointer-events-auto z-10 hover:text-yellow-500 text-sm flex items-center gap-2"
           >
             View all <Eye className="h-4 w-4" />
           </Link>
