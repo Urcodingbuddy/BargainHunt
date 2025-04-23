@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-import Spline from "@splinetool/react-spline";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
