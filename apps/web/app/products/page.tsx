@@ -4,10 +4,11 @@ import { useProductFilters } from "@/lib/hooks/useProductFilters"
 import { useEffect } from "react"
 import { Search } from "lucide-react"
 import ProductCard from "@/components/ProductCard"
-import { title } from "process"
+import ProductComparisonCardSkeleton from "@/components/skeletons/ProductComparisonCardSkeleton";
+
 
 export default function ProductsPage() {
-  const { search, setSearch, category, setCategory, brand, setBrand, categories, brands, products } =
+  const { search, setSearch, category, setCategory, brand, setBrand, categories, brands, products, isLoading } =
     useProductFilters()
 
   useEffect(() => {
@@ -88,12 +89,22 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {/* Products */}
+      {isLoading ? (
+              <div className="grid grid-cols-1 gap-6">
+                <ProductComparisonCardSkeleton/>
+                <ProductComparisonCardSkeleton/>
+                <ProductComparisonCardSkeleton/>
+                <ProductComparisonCardSkeleton/>
+                <ProductComparisonCardSkeleton/>
+                <ProductComparisonCardSkeleton/>
+              </div>
+            ) : (
       <div className="grid grid-cols-1 gap-6">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
+      )}
     </div>
   )
 }
