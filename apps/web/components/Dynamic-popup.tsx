@@ -16,24 +16,24 @@ export default function ModalWrapper() {
     return (
       <>
         <Button
-              variant="ghost"
-              size="icon"
-              onClick={openSignup}
-              className={`rounded-full border-gray-700 hover:border-purple-600 border-2 flex justify-center items-center ${session ? "h-10 w-10" : "h-8 w-8"} cursor-pointer text-white hover:bg-gray-900`}
-            >
-                {session?.user.image ? (
-                <img
-                  src={session.user.image}
-                  alt="User Image"
-                  className="rounded-full w-8 h-8"
-                />
-                ) : (
-                <HiMiniUser className="w-6 h-6" />
-                )}
-            </Button>
+          variant="ghost"
+          size="icon"
+          onClick={openSignup}
+          className={`rounded-full border-gray-700 hover:border-purple-600 border-2 flex justify-center items-center ${session ? "h-10 w-10" : "h-8 w-8"} cursor-pointer text-white hover:bg-gray-900`}
+        >
+          {session?.user.image ? (
+            <img
+              src={session.user.image}
+              alt="User Image"
+              className="rounded-full w-8 h-8"
+            />
+          ) : (
+            <HiMiniUser className="w-7 h-7" /> // ⬅️ matches size perfectly
+          )}
+        </Button>
         <Modal isOpen={isSignupOpen} onClose={closeSignup}>
           <SignupForm />
         </Modal>
       </>
-    );
+    );    
   }
