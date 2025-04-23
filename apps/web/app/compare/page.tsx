@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 import { useToast } from "@/components/ui/use-toast";
 import { useCompare } from "@/contexts/CompareContext";
 import ProductComparisonCard from "@/components/PriceComparisonCard";
+import ProductComparisonCardSkeleton from "@/components/skeletons/ProductComparisonCardSkeleton";
 
 export default function ComparePage() {
   const { toast } = useToast();
@@ -230,12 +231,13 @@ export default function ComparePage() {
         </>
       )}
       {isLoading ? (
-        <div
-          className="relative h-5vh overflow-auto pointer-events-none"
-          onWheel={(e) => e.stopPropagation()}
-        >
-          <div className=" bg-[#0a0a0a] h-9 w-35 absolute right-5 bottom-5"></div>
-          <Spline scene="https://prod.spline.design/I0fZjdwinGcOCQNa/scene.splinecode" />
+        <div className="grid grid-cols-1 gap-6">
+          <ProductComparisonCardSkeleton/>
+          <ProductComparisonCardSkeleton/>
+          <ProductComparisonCardSkeleton/>
+          <ProductComparisonCardSkeleton/>
+          <ProductComparisonCardSkeleton/>
+          <ProductComparisonCardSkeleton/>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6">
