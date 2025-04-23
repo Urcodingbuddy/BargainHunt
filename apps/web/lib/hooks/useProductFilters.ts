@@ -3,6 +3,7 @@ import axios from "axios";
 
 export function useProductFilters() {
   const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [category, setCategory] = useState("");
   const [brand, setBrand] = useState("");
   const [categories, setCategories] = useState<string[]>([]);
@@ -10,27 +11,57 @@ export function useProductFilters() {
   const [products, setProducts] = useState<any[]>([]);
 
   useEffect(() => {
-    axios.get("/api/categories").then(res => setCategories(res.data));
+    const fetchCategories = async () => {
+      setIsLoading(true);
+      try {
+        const res = await axios.get("/api/categories");
+        setCategories(res.data);
+      } catch (err) {
+        console.error("Failed to fetch categories:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCategories();
   }, []);
 
   useEffect(() => {
-    if (!category) {
-      setBrand("");
-      setBrands([]);
-      return;
-    }
+    const fetchBrands = async () => {
+      if (!category) {
+        setBrand("");
+        setBrands([]);
+        return;
+      }
 
-    axios.get(`/api/brands?category=${category}`)
-      .then(res => setBrands(res.data));
+      setIsLoading(true);
+      try {
+        const res = await axios.get(`/api/brands?category=${category}`);
+        setBrands(res.data);
+      } catch (err) {
+        console.error("Failed to fetch brands:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBrands();
   }, [category]);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await axios.get("/api/products", {
-        params: { q: search, category, brand }
-      });
-      setProducts(res.data);
+      setIsLoading(true);
+      try {
+        const res = await axios.get("/api/products", {
+          params: { q: search, category, brand },
+        });
+        setProducts(res.data);
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+      } finally {
+        setIsLoading(false);
+      }
     };
+
     fetchProducts();
   }, [search, category, brand]);
 
@@ -43,6 +74,7 @@ export function useProductFilters() {
     setBrand,
     categories,
     brands,
-    products
+    products,
+    isLoading,
   };
 }
