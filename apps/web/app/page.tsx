@@ -83,7 +83,7 @@ export default async function Home() {
         <RecentArticlesSection />
       </section>
 
-      <section className="min-h-screen w-full py-16 px-4 md:px-8">
+      <section className="min-h-screen w-full  px-4 md:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-purple-500">
@@ -98,7 +98,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="min-h-screen w-full py-16 px-4 md:px-8">
+      <section className="min-h-screen w-full px-4 md:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
