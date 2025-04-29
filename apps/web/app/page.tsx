@@ -82,7 +82,7 @@ export default async function Home() {
         </div>
         <RecentArticlesSection />
       </section>
-      <section>
+      <section className="min-h-screen">
         <TestimonialClient />
       </section>
       <section className="min-h-screen">
