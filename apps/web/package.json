@@ -16,6 +16,7 @@
     "@radix-ui/react-navigation-menu": "^1.2.6",
     "@radix-ui/react-slot": "^1.1.2",
     "@radix-ui/react-toast": "^1.2.6",
+    "@radix-ui/react-tooltip": "^1.2.4",
     "@repo/ui": "*",
     "@sparticuz/chromium": "^133.0.0",
     "@splinetool/react-spline": "^4.0.0",
