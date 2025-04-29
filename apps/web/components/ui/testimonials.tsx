@@ -14,12 +14,9 @@ type Testimonial = {
 
 import { testimonials } from "@/lib/testimonialsData";
 
-export default function TestimonialClient(){
-    return(
-        <AnimatedTestimonials testimonials={testimonials} />
-    )
+export default function TestimonialClient() {
+  return <AnimatedTestimonials testimonials={testimonials} />;
 }
-
 
 export const AnimatedTestimonials = ({
   testimonials,
@@ -73,7 +70,9 @@ export const AnimatedTestimonials = ({
                   scale: isActive(index) ? 1 : 0.95,
                   z: isActive(index) ? 0 : -100,
                   rotate: isActive(index) ? 0 : rotations[index],
-                  zIndex: isActive(index) ? 40 : testimonials.length + 2 - index,
+                  zIndex: isActive(index)
+                    ? 40
+                    : testimonials.length + 2 - index,
                   y: isActive(index) ? [0, -80, 0] : 0,
                 }}
                 exit={{
