@@ -89,12 +89,12 @@ export function Header() {
           {isMenuOpen && (
             <motion.nav
               initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "220px", opacity: 1 }}
+              animate={{ opacity: 1 , height: 250}}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="absolute z-50 flex justify-end border-x border-b right-0 py-3 mx-2 sm:mx-8 md:mx-12 lg:mx-14 top-16 w-40 bg-transparent backdrop-blur-3xl rounded-b-lg shadow-lg overflow-hidden will-change-[height, opacity] pointer-events-auto"
+              className="absolute md:hidden z-50 flex justify-end border-x border-b right-2 py-2 mx-2 sm:mx-8 md:mx-12 lg:mx-14 top-16 w-40 bg-transparent backdrop-blur-3xl rounded-b-lg shadow-lg overflow-hidden will-change-[height, opacity] pointer-events-auto"
             >
-              <nav className="flex z-20 flex-col justify-evenly px-6 items-end w-full h-full space-y-4">
+              <nav className="flex z-20 flex-col justify-evenly px-6 items-end w-full space-y-4">
                 <Link
                   href="/"
                   className={`text-sm font-semibold ${isActive("/") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
@@ -122,6 +122,13 @@ export function Header() {
                   onClick={closeMenu}
                 >
                   Blogs
+                </Link>
+                <Link
+                  href="/about"
+                  className={` text-sm font-semibold ${isActive("/about") ? "text-purple-500 underline underline-offset-8" : "text-gray-300 hover:text-white"}`}
+                  onClick={closeMenu}
+                >
+                  About Us
                 </Link>
                 <Link href="/compare">
                   <Button
