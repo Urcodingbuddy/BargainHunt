@@ -25,6 +25,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/products" className="hover:text-white">
+                  Products Listing
+                </Link>
+              </li>
+              <li>
                 <Link href="/compare" className="hover:text-white">
                   Compare Prices
                 </Link>
