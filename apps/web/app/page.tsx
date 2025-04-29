@@ -12,14 +12,14 @@ import FAQ from "@/components/FAQ";
 
 export default async function Home() {
   return (
-    <main className="@container mx-auto px-4 py-16">
+    <main className="@container mx-auto px-4 mt-20 md:mt-25">
       <InteractiveGridPattern
         className={cn(
           "[mask-image:radial-gradient(35vw_circle_at_center,white,transparent)]",
           "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12"
         )}
       />
-      <section className="relative mb-20 pointer-events-none">
+      <section className="relative mb-20 md:mb-30 pointer-events-none">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h1 className="text-4xl md:text-6xl font-bold leading-tight">
@@ -82,11 +82,35 @@ export default async function Home() {
         </div>
         <RecentArticlesSection />
       </section>
-      <section className="min-h-screen">
-        <TestimonialClient />
+
+      <section className="min-h-screen w-full py-16 px-4 md:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-purple-500">
+              Testimonials
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Get answers to the most common questions about BargainHunt and how
+              it can help you save money.
+            </p>
+          </div>
+          <TestimonialClient />
+        </div>
       </section>
-      <section className="min-h-screen">
-        <FAQ/>
+
+      <section className="min-h-screen w-full py-16 px-4 md:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+              Frequently Asked <span className="text-purple-500">Questions</span>{" "}
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Get answers to the most common questions about BargainHunt and how
+              it can help you save money.
+            </p>
+          </div>
+          <FAQ />
+        </div>
       </section>
     </main>
   );
