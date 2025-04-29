@@ -70,16 +70,14 @@ export function Footer() {
 
           <div className="text-gray-400 space-y-4 flex flex-col flex-wrap">
             <h4 className="font-medium text-white">Contact Developer</h4>
-            <p>
+
+            <div className="flex space-x-6 text-gray-400">
               <Link
                 href="mailto:anshpethe110@gmail.com"
-                className="hover:text-purple-600 flex items-center space-x-2"
+                className="hover:text-purple-600 text-sm flex items-center space-x-2"
               >
                 <MailIcon className="h-5 w-5" />
-                <span>anshpethe110@gmail.com</span>
               </Link>
-            </p>
-            <div className="flex space-x-6 text-gray-400">
               <Link
                 href="https://github.com/Urcodingbuddy"
                 target="_blank"
