@@ -76,12 +76,12 @@ export default async function BlogPost({ params }: { params: Params }) {
 
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">{Article.title}</h1>
 
-        <div className="flex items-center gap-4 text-sm text-gray-400 mb-8">
+        <div className="flex items-center flex-wrap gap-4 text-xs md:text-sm text-gray-400 mb-8">
           <div className="flex items-center gap-1">
             <Clock className="h-4 w-4" />
             <span>{Article.readTime}</span>
           </div>
-          <div>{Article.date.toISOString()}</div>
+          <div>{Article.date.toDateString()}</div>
           <div>By {Article.author}</div>
         </div>
 

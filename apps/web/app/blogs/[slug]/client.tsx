@@ -7,13 +7,13 @@ import { Button } from "@/components/ui/button";
 
 // Define the Article type
 type Article = {
-  title: string
-  category: string
-  date: string
-  author: string
-  readTime: string
-  image: string
-  content: string
+  title: string;
+  category: string;
+  date: string;
+  author: string;
+  readTime: string;
+  image: string;
+  content: string;
 };
 
 export default function BlogArticlelient({ Article }: { Article: Article }) {
@@ -61,12 +61,13 @@ export default function BlogArticlelient({ Article }: { Article: Article }) {
   };
 
   return (
-    <div className="flex justify-between items-center mb-8">
-      <div className="flex gap-2">
+    <div className="grid sm:flex sm:justify-between sm:items-center gap-4 mb-8">
+      {/* Left Group (First 3 Buttons) */}
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:gap-4 w-full sm:w-auto">
         <Button
           variant="outline"
           size="sm"
-          className="h-8 px-3 border-gray-800 hover:bg-gray-900 rounded-md"
+          className="h-8 px-3 w-full border-gray-800 hover:bg-gray-900 rounded-md"
           onClick={() => handleShare("twitter")}
         >
           <Twitter className="h-4 w-4 mr-1" />
@@ -75,7 +76,7 @@ export default function BlogArticlelient({ Article }: { Article: Article }) {
         <Button
           variant="outline"
           size="sm"
-          className="h-8 px-3 border-gray-800 hover:bg-gray-900 rounded-md"
+          className="h-8 px-3 w-full border-gray-800 hover:bg-gray-900 rounded-md"
           onClick={() => handleShare("facebook")}
         >
           <Facebook className="h-4 w-4 mr-1" />
@@ -84,22 +85,26 @@ export default function BlogArticlelient({ Article }: { Article: Article }) {
         <Button
           variant="outline"
           size="sm"
-          className="h-8 px-3 border-gray-800 hover:bg-gray-900 rounded-md"
+          className="h-8 px-3 w-full border-gray-800 hover:bg-gray-900 rounded-md col-span-2 sm:col-span-1"
           onClick={() => handleShare("linkedin")}
         >
           <Linkedin className="h-4 w-4 mr-1" />
           Share
         </Button>
       </div>
-      <Button
-        variant="outline"
-        size="sm"
-        className="h-8 px-3 border-gray-800 hover:bg-gray-900 rounded-md"
-        onClick={() => handleShare("clipboard")}
-      >
-        <Share2 className="h-4 w-4 mr-1" />
-        Share
-      </Button>
+
+      {/* Right Group (Clipboard Button) */}
+      <div className="w-full sm:w-auto">
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 px-3 w-full sm:w-auto border-gray-800 hover:bg-gray-900 rounded-md"
+          onClick={() => handleShare("clipboard")}
+        >
+          <Share2 className="h-4 w-4 mr-1" />
+          Share
+        </Button>
+      </div>
     </div>
   );
 }
