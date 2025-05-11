@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Github, Mail, ExternalLink } from "lucide-react";
+import { Github, Mail, ExternalLink, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -12,8 +12,8 @@ export default function AboutPage() {
         <section className="relative py-12 sm:py-16 md:py-20 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="absolute inset-0 bg-[url('/placeholder.svg?height=800&width=1600')] bg-cover bg-center opacity-10"></div>
           <div className="relative z-10 text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
-              About <span className="text-purple-600">BargainHunt</span>
+            <h1 className="flex flex-col text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
+              <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold"><span className="flex justify-center items-center gap-4">About<Info className="w-8 h-8"/></span></span><span className="text-md">Bargain<span className="text-purple-600">Hunt</span></span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl max-w-3xl mx-auto text-gray-300 px-4">
               Your ultimate destination for finding the best deals across the
@@ -24,8 +24,8 @@ export default function AboutPage() {
 
         {/* Mission Section */}
         <section className="py-10 sm:py-12 md:py-16 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-            <div className="order-2 md:order-1">
+          
+            
               <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">
                 Our Mission
               </h2>
@@ -46,15 +46,9 @@ export default function AboutPage() {
                 Our goal is to help you make smarter shopping decisions and save
                 money on every purchase.
               </p>
-            </div>
-            <div className="relative flex justify-center items-center order-1 md:order-2">
-              <img
-                src="./bargainHunt Logo.png"
-                alt="BargainHunt mission illustration"
-                className="object-cover p-2 sm:p-4 h-64 sm:h-80 md:h-96 w-auto"
-              />
-            </div>
-          </div>
+            
+  
+          
         </section>
 
         {/* Key Features Section */}
@@ -151,19 +145,22 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="order-2 md:order-1">
               <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">
-                The Developer
+                The Developer's
               </h2>
               <p className="text-gray-300 mb-4 sm:mb-6 text-sm sm:text-base">
                 BargainHunt was created by{" "}
                 <span className="text-md font-mono border text-pink-500 py-1 px-2 rounded-full">
                   Ansh Pethe
+                </span>{" "} & {" "} 
+                <span className="text-md font-mono border text-pink-500 py-1 px-2 rounded-full">
+                  Shriyanshu Trivedi
                 </span>{" "}
-                , a passionate software engineer committed to creating efficient
+                , passionate software engineers committed to creating efficient
                 and user-centric web applications.
               </p>
-              <p className="text-gray-300 mb-6 sm:mb-8 text-sm sm:text-base">
+              <p className="text-gray-300 mb-6 sm:mb-8 text-sm leading-8 sm:text-base">
                 With a background in full-stack development and a keen interest
-                in e-commerce technologies,
+                in {"  "}{"  "} e-commerce technologies,
                 <Link href={"https://github.com/Urcodingbuddy"}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -173,7 +170,18 @@ export default function AboutPage() {
                     Urcodingbuddy
                   </span>
                 </Link>
-                built BargainHunt to solve a common problem faced by online
+                -
+                <Link href={"https://github.com/C3-Shri"}
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                  <span className="text-sm font-mono border inline-flex justify-evenly items-center text-pink-500 py-1 px-2 rounded-full">
+                    <Github className="h-4 text-pink-500" />
+                    C3-Shri
+                  </span>
+                </Link>
+                
+                together built the platform of BargainHunt to solve a common problem faced by online
                 shoppers - finding the best deals without spending hours
                 searching across multiple websites.
               </p>
@@ -254,7 +262,7 @@ export default function AboutPage() {
 
             <div className="relative flex justify-center items-center order-1 md:order-2 border rounded-xl overflow-hidden h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh]">
               <img
-                src="./eren yeager4-3.jpg"
+                src="./developers.jpg"
                 alt="Developer profile"
                 className="object-cover w-full h-full"
               />
@@ -278,9 +286,7 @@ export default function AboutPage() {
               <Button className="bg-purple-600 border-2 border-purple-600 hover:text-white hover:bg-transparent hover:border-2 inline-flex items-center justify-center px-4 py-2 text-white w-full sm:w-auto">
                 <Mail className="mr-2 h-4 w-4" />
                 <Link
-                  href={
-                    "mailto:anshpethe110@gmail.com?subject=Developer%20Requirements"
-                  }
+                  href="mailto:anshpethe110@gmail.com,shriyanshu2004@gmail.com?subject=Developer%20Requirements"
                 >
                   Email Us
                 </Link>
