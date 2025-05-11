@@ -46,7 +46,6 @@ export function Footer() {
               </li>
             </ul>
           </div>
-
           <div>
             <h4 className="font-medium mb-4">Resources</h4>
             <ul className="space-y-2 text-sm text-gray-400">
